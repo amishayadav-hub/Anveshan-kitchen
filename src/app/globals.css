@@ -12,6 +12,15 @@
   --font-mono: var(--font-geist-mono);
 }
 
+/* Anveshan brand tokens — plain @theme so they register as named color
+   utilities (bg-anv-green, text-anv-cream, border-anv-cream-dark, etc.) */
+@theme {
+  --color-anv-green: #2D5016;
+  --color-anv-green-dark: #1E380D;
+  --color-anv-cream: #F5E6D3;
+  --color-anv-cream-dark: #E8D0B8;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;

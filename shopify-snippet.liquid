@@ -1,0 +1,40 @@
+{% comment %}
+  ── Anveshan Kitchen — Recipes Embed ─────────────────────────────
+  HOW TO ADD TO SHOPIFY:
+  1. Deploy this app (e.g. Vercel) and copy its URL.
+  2. Shopify Admin → Online Store → Themes → ⋯ → Edit code
+  3. Add a template: templates/page.recipes.liquid  → paste this whole file.
+  4. Online Store → Pages → Add page ("Recipes"), set its template to "recipes".
+  5. Replace APP_URL below with your deployed URL (NO trailing slash).
+
+  The iframe auto-resizes to fit content, and "Add to Cart" sends the
+  shopper to their real anveshan.farm cart.
+{% endcomment %}
+
+<div id="anveshan-recipes-root" style="width:100%; min-height:600px;"></div>
+
+<script>
+  (function () {
+    var APP_URL = "https://YOUR-APP.vercel.app"; // <-- your deployed app URL, no trailing slash
+    var root = document.getElementById("anveshan-recipes-root");
+    if (!root) return;
+
+    var iframe = document.createElement("iframe");
+    iframe.src = APP_URL + "/recipes";
+    iframe.title = "Anveshan Recipes";
+    iframe.setAttribute("scrolling", "no");
+    iframe.style.cssText = "width:100%; border:0; min-height:600px; display:block;";
+    root.appendChild(iframe);
+
+    window.addEventListener("message", function (e) {
+      if (e.origin !== APP_URL) return;       // only trust messages from our app
+      var data = e.data || {};
+      if (data.type === "anveshan-resize" && data.height) {
+        iframe.style.height = data.height + "px";   // auto-resize, no inner scrollbar
+      }
+      if (data.type === "anveshan-add-to-cart" && data.url) {
+        window.location.href = data.url;            // open the shopper's real cart
+      }
+    });
+  })();
+</script>

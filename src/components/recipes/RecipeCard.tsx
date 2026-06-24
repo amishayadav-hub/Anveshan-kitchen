@@ -1,0 +1,68 @@
+import Link from "next/link";
+import Image from "next/image";
+import { Recipe, CartItem, AnveshanProduct } from "@/types";
+import { getCategoryLabel, getSubLabel } from "@/lib/categories";
+import BuyRecipeButton from "@/components/ui/BuyRecipeButton";
+
+interface Props {
+  recipe: Recipe;
+  productMap?: Record<string, AnveshanProduct>;
+}
+
+export default function RecipeCard({ recipe, productMap = {} }: Props) {
+  const subLabel = getSubLabel(recipe.category, recipe.subCategory);
+  const categoryLabel = subLabel ?? getCategoryLabel(recipe.category);
+
+  // Resolve the recipe's Anveshan products (for image circles + cart)
+  const recipeProducts: AnveshanProduct[] = recipe.anveshanProducts
+    .map((id) => productMap[id])
+    .filter(Boolean);
+
+  const total = recipeProducts.reduce((sum, p) => sum + (p.price || 0), 0);
+
+  const cartItems: CartItem[] = recipeProducts
+    .map((p) => ({
+      shopifyVariantId: p.variants ? p.variants[0].shopifyVariantId : p.shopifyVariantId,
+      quantity: 1,
+      productName: p.name,
+    }))
+    .filter((i) => i.shopifyVariantId);
+
+  return (
+    <Link
+      href={`/recipes/${recipe.slug}`}
+      className="group block bg-white border border-gray-100 hover:border-anv-green/30 hover:shadow-md transition-all duration-200 rounded-xl overflow-hidden"
+    >
+      {/* Image — compact, recipes are supporting content */}
+      <div className="relative h-32 w-full bg-anv-cream/30 overflow-hidden">
+        <Image
+          src={recipe.image || "/placeholder-recipe.jpg"}
+          alt={recipe.name}
+          fill
+          className="object-cover group-hover:scale-[1.03] transition-transform duration-300"
+          sizes="(max-width:640px) 50vw, (max-width:1024px) 33vw, 25vw"
+        />
+        <span className="absolute top-2 left-2 bg-white/90 text-anv-green text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 rounded-full">
+          {categoryLabel}
+        </span>
+      </div>
+
+      {/* Content */}
+      <div className="p-3">
+        <h3 className="font-bold text-gray-900 text-sm leading-snug group-hover:text-anv-green transition-colors line-clamp-1">
+          {recipe.name}
+        </h3>
+        <p className="text-xs text-gray-500 mt-1 line-clamp-2 leading-relaxed">
+          {recipe.description}
+        </p>
+        <p className="text-xs text-gray-500 mt-2">
+          <span className="text-anv-green font-semibold">{recipeProducts.length} Anveshan</span>
+          {total > 0 && <> · ₹{total}</>}
+        </p>
+
+        {/* Buy row: product-image circles + Add to Cart pill */}
+        <BuyRecipeButton products={recipeProducts} items={cartItems} />
+      </div>
+    </Link>
+  );
+}
