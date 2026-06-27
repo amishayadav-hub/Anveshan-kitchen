@@ -45,6 +45,7 @@ export default function RecipeCard({ recipe, productMap = {} }: Props) {
         <span className="absolute top-2 left-2 bg-white/90 text-anv-green text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 rounded-full">
           {categoryLabel}
         </span>
+        <VegMark isVeg={recipe.isVeg !== false} />
       </div>
 
       {/* Content */}
@@ -64,5 +65,25 @@ export default function RecipeCard({ recipe, productMap = {} }: Props) {
         <BuyRecipeButton products={recipeProducts} items={cartItems} />
       </div>
     </Link>
+  );
+}
+
+// Standard veg / non-veg food mark (green square+dot / red square+triangle).
+function VegMark({ isVeg }: { isVeg: boolean }) {
+  const color = isVeg ? "border-green-600" : "border-red-600";
+  return (
+    <span
+      className="absolute top-2 right-2 bg-white/90 rounded-[4px] p-0.5"
+      title={isVeg ? "Vegetarian" : "Non-vegetarian"}
+      aria-label={isVeg ? "Vegetarian" : "Non-vegetarian"}
+    >
+      <span className={`flex w-3.5 h-3.5 items-center justify-center border-[1.5px] rounded-[3px] ${color}`}>
+        {isVeg ? (
+          <span className="w-1.5 h-1.5 rounded-full bg-green-600" />
+        ) : (
+          <span className="w-0 h-0 border-l-[3px] border-r-[3px] border-b-[5px] border-l-transparent border-r-transparent border-b-red-600" />
+        )}
+      </span>
+    </span>
   );
 }

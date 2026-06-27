@@ -1,0 +1,5 @@
+{
+  "count": 10000,
+  "dim": 384,
+  "model": "Xenova/all-MiniLM-L6-v2"
+}

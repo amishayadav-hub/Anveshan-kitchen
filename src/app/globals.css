@@ -15,8 +15,8 @@
 /* Anveshan brand tokens — plain @theme so they register as named color
    utilities (bg-anv-green, text-anv-cream, border-anv-cream-dark, etc.) */
 @theme {
-  --color-anv-green: #2D5016;
-  --color-anv-green-dark: #1E380D;
+  --color-anv-green: #235A49;
+  --color-anv-green-dark: #18402F;
   --color-anv-cream: #F5E6D3;
   --color-anv-cream-dark: #E8D0B8;
 }

@@ -42,6 +42,11 @@ export interface Recipe {
   steps: string[];
   anveshanProducts: string[]; // array of AnveshanProduct IDs used in this recipe
   tags?: string[];
+  isVeg?: boolean; // false = non-veg (contains meat/fish/egg); hidden in Veg Mode
+
+  intro?: string; // SEO/AEO lead paragraph that directly answers "what is X / how to make X"
+  faqs?: { question: string; answer: string }[]; // powers visible FAQ + FAQPage schema
+  tips?: string[]; // expert tips / variations (extra crawlable, answer-friendly content)
 }
 
 export interface CartItem {

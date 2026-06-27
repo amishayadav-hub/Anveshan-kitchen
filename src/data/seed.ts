@@ -3,6 +3,7 @@ dotenv.config({ path: ".env.local" });
 
 import { initializeApp } from "firebase/app";
 import { getFirestore, doc, setDoc } from "firebase/firestore";
+import { SEO_CONTENT } from "./seo-content";
 
 const app = initializeApp({
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -17,138 +18,143 @@ const db = getFirestore(app);
 
 // ─── PRODUCTS ──────────────────────────────────────────────────────────────
 
+// NOTE: shopifyVariantId / price / image below are REAL values pulled from the
+// Anveshan Products API (shopifyapp3.anveshan.tech) — see map-products.ts.
+// 4 internal products have no exact live SKU: khandsari & protein-atta are
+// pointed at their closest real product (Jaggery / Khapli Multigrain Atta);
+// moringa-powder & sattu have no live equivalent (empty variant → skipped in cart).
 const products = [
   {
     id: "khandsari",
-    shopifyVariantId: "REPLACE_WITH_SHOPIFY_VARIANT_ID",
-    name: "Khandsari (Unrefined Cane Sugar)",
-    image: "https://images.unsplash.com/photo-1615565016433-69797a5e3e11?w=800&q=80&auto=format&fit=crop",
-    price: 120,
+    shopifyVariantId: "47070925095104", // mapped to Jaggery Powder (no live khandsari SKU)
+    name: "Khandsari / Jaggery (Unrefined Sweetener)",
+    image: "https://cdn.shopify.com/s/files/1/0270/3346/9006/files/Artboard12_f22902d8-4e96-4490-b287-d58886566a1c.jpg?v=1765871764",
+    price: 105,
     category: "sweetener",
     whyAnveshan: "Single-crystallisation process retains natural molasses. No chemicals, no bleaching.",
   },
   {
     id: "ghee",
-    shopifyVariantId: "REPLACE_WITH_GIR_COW_VARIANT_ID",
+    shopifyVariantId: "43355933212864",
     name: "Pure Cow Ghee",
-    image: "https://images.unsplash.com/photo-1691480208637-6ed63aac6694?w=800&q=80&auto=format&fit=crop",
-    price: 750,
+    image: "https://cdn.shopify.com/s/files/1/0270/3346/9006/files/Artboard12_9aa0bb70-c8dd-4f7f-b2c0-81e248099162.jpg?v=1773726670",
+    price: 1250,
     category: "ghee",
     variants: [
       {
         type: "gir-cow",
         label: "Gir Cow",
-        shopifyVariantId: "REPLACE_WITH_GIR_COW_VARIANT_ID",
-        price: 999,
+        shopifyVariantId: "43355933212864",
+        price: 1250,
       },
       {
         type: "desi-cow",
         label: "Desi Cow",
-        shopifyVariantId: "REPLACE_WITH_DESI_COW_VARIANT_ID",
-        price: 750,
+        shopifyVariantId: "32459662557262",
+        price: 1045,
       },
       {
         type: "buffalo",
         label: "Buffalo",
-        shopifyVariantId: "REPLACE_WITH_BUFFALO_VARIANT_ID",
-        price: 650,
+        shopifyVariantId: "45791842533568",
+        price: 705,
       },
     ],
     whyAnveshan: "Bilona churned — curd to ghee, never cream to ghee. Richer taste, higher nutrition.",
   },
   {
     id: "groundnut-oil",
-    shopifyVariantId: "REPLACE_WITH_GROUNDNUT_OIL_VARIANT_ID",
+    shopifyVariantId: "43150198866112",
     name: "Wood-Pressed Groundnut Oil",
-    image: "https://images.unsplash.com/photo-1595265184704-637d01f03df4?w=800&q=80&auto=format&fit=crop",
+    image: "https://cdn.shopify.com/s/files/1/0270/3346/9006/files/Artboard_12_6.jpg?v=1763560050",
     price: 425,
     category: "oil",
     whyAnveshan: "Cold wood-pressed — zero heat, zero chemicals. Retains natural peanut flavour and nutrients.",
   },
   {
     id: "honey",
-    shopifyVariantId: "REPLACE_WITH_HONEY_VARIANT_ID",
+    shopifyVariantId: "46476687114432",
     name: "Wild Forest Honey",
-    image: "https://images.unsplash.com/photo-1587049352851-8d4e89133924?w=800&q=80&auto=format&fit=crop",
-    price: 380,
+    image: "https://cdn.shopify.com/s/files/1/0270/3346/9006/files/500gm.webp?v=1768374154",
+    price: 383,
     category: "sweetener",
     whyAnveshan: "Raw, unprocessed wild honey. No sugar added, no heating — enzymes and antioxidants fully intact.",
   },
   {
     id: "coconut-oil",
-    shopifyVariantId: "REPLACE_WITH_COCONUT_OIL_VARIANT_ID",
+    shopifyVariantId: "30393637404750",
     name: "Wood-Pressed Coconut Oil",
-    image: "https://images.unsplash.com/photo-1588413333412-82148535db53?w=800&q=80&auto=format&fit=crop",
-    price: 884,
+    image: "https://cdn.shopify.com/s/files/1/0270/3346/9006/files/Artboard_12_4_67bdeb46-61b8-457b-98cf-0d75038260b4.jpg?v=1763559751",
+    price: 977,
     category: "oil",
     whyAnveshan: "Cold wood-pressed from dried coconut — retains lauric acid and natural aroma lost in refined oil.",
   },
   {
     id: "khapli-atta",
-    shopifyVariantId: "REPLACE_WITH_KHAPLI_ATTA_VARIANT_ID",
+    shopifyVariantId: "46719452676288",
     name: "Cold-Pressed Khapli Atta",
-    image: "https://images.unsplash.com/photo-1627735483792-233bf632619b?w=800&q=80&auto=format&fit=crop",
+    image: "https://cdn.shopify.com/s/files/1/0270/3346/9006/files/khapli_aata.webp?v=1767422899",
     price: 240,
     category: "grain",
     whyAnveshan: "Ancient Emmer wheat — lower gluten, higher fibre and protein than modern wheat varieties.",
   },
   {
     id: "mustard-oil",
-    shopifyVariantId: "REPLACE_WITH_MUSTARD_OIL_VARIANT_ID",
+    shopifyVariantId: "30393367396430",
     name: "Wood-Pressed Mustard Oil",
-    image: "https://images.unsplash.com/photo-1552592074-ea7a91b851b3?w=800&q=80&auto=format&fit=crop",
-    price: 350,
+    image: "https://cdn.shopify.com/s/files/1/0270/3346/9006/files/Artboard12_2_422e0a2c-6179-4458-b457-da7ff2eb1385.jpg?v=1773726594",
+    price: 523,
     category: "oil",
     whyAnveshan: "Kachi ghani cold-pressed — retains the pungent aroma and natural antioxidants lost in refined mustard oil.",
   },
   {
     id: "sunflower-oil",
-    shopifyVariantId: "REPLACE_WITH_SUNFLOWER_OIL_VARIANT_ID",
-    name: "Cold-Pressed Sunflower Oil",
-    image: "https://images.unsplash.com/photo-1611608927037-4e8da6aa170e?w=800&q=80&auto=format&fit=crop",
-    price: 320,
+    shopifyVariantId: "43077260607680",
+    name: "Wood-Pressed Sunflower Oil",
+    image: "https://cdn.shopify.com/s/files/1/0270/3346/9006/files/Artboard12_1_7128c9f8-cd21-495d-a6ac-05b3af88c38b.jpg?v=1763558905",
+    price: 580,
     category: "oil",
     whyAnveshan: "Light, neutral and cold-pressed — no hexane, no bleaching, just clean cooking oil.",
   },
   {
     id: "sesame-oil",
-    shopifyVariantId: "REPLACE_WITH_SESAME_OIL_VARIANT_ID",
-    name: "Wood-Pressed Sesame Oil",
-    image: "https://images.unsplash.com/photo-1638324396229-632af05042dd?w=800&q=80&auto=format&fit=crop",
-    price: 480,
+    shopifyVariantId: "30393241829454",
+    name: "Wood-Pressed Black Sesame Oil",
+    image: "https://cdn.shopify.com/s/files/1/0270/3346/9006/files/Artboard_12_3_09eb1085-3955-4ff8-aee7-cf6d913dd15e.jpg?v=1763559549",
+    price: 750,
     category: "oil",
     whyAnveshan: "Cold wood-pressed til oil — deeply nutty and rich in natural sesamol antioxidants.",
   },
   {
     id: "olive-oil",
-    shopifyVariantId: "REPLACE_WITH_OLIVE_OIL_VARIANT_ID",
-    name: "Cold-Pressed Olive Oil",
-    image: "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=800&q=80&auto=format&fit=crop",
-    price: 850,
+    shopifyVariantId: "45426734530752",
+    name: "Extra Virgin Olive Oil",
+    image: "https://cdn.shopify.com/s/files/1/0270/3346/9006/files/Artboard12_b740ac29-b327-45cd-b764-e83483cbf015.jpg?v=1749576161",
+    price: 570,
     category: "oil",
     whyAnveshan: "Extra-virgin, first cold press — fruity, peppery and full of heart-healthy monounsaturated fats.",
   },
   {
     id: "multigrain-atta",
-    shopifyVariantId: "REPLACE_WITH_MULTIGRAIN_ATTA_VARIANT_ID",
-    name: "Multigrain Atta",
-    image: "https://images.unsplash.com/photo-1610725664285-7c57e6eeac3f?w=800&q=80&auto=format&fit=crop",
-    price: 220,
+    shopifyVariantId: "48130399207616",
+    name: "Khapli Multigrain Atta",
+    image: "https://cdn.shopify.com/s/files/1/0270/3346/9006/files/Frontcopy1.06.16PM1.08.54PM.webp?v=1775561230",
+    price: 360,
     category: "grain",
     whyAnveshan: "A balanced blend of wheat, millets and pulses — more fibre and protein than plain wheat flour.",
   },
   {
     id: "protein-atta",
-    shopifyVariantId: "REPLACE_WITH_PROTEIN_ATTA_VARIANT_ID",
-    name: "Protein Atta",
-    image: "https://images.unsplash.com/photo-1627735483792-233bf632619b?w=800&q=80&auto=format&fit=crop",
-    price: 320,
+    shopifyVariantId: "48130399207616", // mapped to Khapli Multigrain Atta (no live protein-atta SKU)
+    name: "Protein-Rich Khapli Multigrain Atta",
+    image: "https://cdn.shopify.com/s/files/1/0270/3346/9006/files/Frontcopy1.06.16PM1.08.54PM.webp?v=1775561230",
+    price: 360,
     category: "grain",
     whyAnveshan: "Fortified with plant protein from pulses and seeds — keeps you fuller for longer.",
   },
   {
     id: "moringa-powder",
-    shopifyVariantId: "REPLACE_WITH_MORINGA_VARIANT_ID",
+    shopifyVariantId: "", // no live Anveshan SKU — excluded from cart
     name: "Moringa Powder",
     image: "https://images.unsplash.com/photo-1632001605599-54f8b1c3fe3a?w=800&q=80&auto=format&fit=crop",
     price: 399,
@@ -157,7 +163,7 @@ const products = [
   },
   {
     id: "sattu",
-    shopifyVariantId: "REPLACE_WITH_SATTU_VARIANT_ID",
+    shopifyVariantId: "", // no live Anveshan SKU — excluded from cart
     name: "Roasted Sattu",
     image: "https://images.unsplash.com/photo-1586137712370-9b450509c587?w=800&q=80&auto=format&fit=crop",
     price: 199,
@@ -166,55 +172,55 @@ const products = [
   },
   {
     id: "turmeric-latte-mix",
-    shopifyVariantId: "REPLACE_WITH_TURMERIC_LATTE_VARIANT_ID",
-    name: "Turmeric Latte Mix",
-    image: "https://images.unsplash.com/photo-1615485500834-bc10199bc727?w=800&q=80&auto=format&fit=crop",
-    price: 449,
+    shopifyVariantId: "47258532577472",
+    name: "Turmeric Latte Ashwagandha Mix",
+    image: "https://cdn.shopify.com/s/files/1/0270/3346/9006/files/Artboard_12_12ec8eef-dde2-4635-8906-105c93273fdc.jpg?v=1767420716",
+    price: 370,
     category: "superfood",
     whyAnveshan: "A ready blend of turmeric, black pepper and warming spices for an effortless golden milk.",
   },
   {
     id: "ashwagandha-mix",
-    shopifyVariantId: "REPLACE_WITH_ASHWAGANDHA_VARIANT_ID",
-    name: "Ashwagandha Mix",
-    image: "https://images.unsplash.com/photo-1693996046865-19217d179161?w=800&q=80&auto=format&fit=crop",
-    price: 499,
+    shopifyVariantId: "47258532577472", // same live SKU as Turmeric Latte Ashwagandha Mix
+    name: "Ashwagandha Wellness Mix",
+    image: "https://cdn.shopify.com/s/files/1/0270/3346/9006/files/Artboard_12_12ec8eef-dde2-4635-8906-105c93273fdc.jpg?v=1767420716",
+    price: 370,
     category: "superfood",
     whyAnveshan: "An adaptogenic herbal blend to support calm, steady energy and restful sleep.",
   },
   {
     id: "saffron",
-    shopifyVariantId: "REPLACE_WITH_SAFFRON_VARIANT_ID",
-    name: "Pure Kashmiri Saffron",
-    image: "https://images.unsplash.com/photo-1615885108069-7d5bef9a7e22?w=800&q=80&auto=format&fit=crop",
-    price: 599,
+    shopifyVariantId: "43376001122496",
+    name: "Kashmiri Mongra Saffron",
+    image: "https://cdn.shopify.com/s/files/1/0270/3346/9006/files/safron-g-1g.jpg?v=1753953941",
+    price: 450,
     category: "spice",
     whyAnveshan: "Hand-picked long-stranded Mogra saffron — deep colour and aroma, never dyed or adulterated.",
   },
   {
     id: "jaggery-powder",
-    shopifyVariantId: "REPLACE_WITH_JAGGERY_VARIANT_ID",
+    shopifyVariantId: "47070925095104",
     name: "Jaggery Powder",
-    image: "https://images.unsplash.com/photo-1605196560547-b2f7281b7355?w=800&q=80&auto=format&fit=crop",
-    price: 160,
+    image: "https://cdn.shopify.com/s/files/1/0270/3346/9006/files/Artboard12_f22902d8-4e96-4490-b287-d58886566a1c.jpg?v=1765871764",
+    price: 105,
     category: "sweetener",
     whyAnveshan: "Chemical-free, sulphur-free gur powder — mineral-rich natural sweetness with a deep caramel note.",
   },
   {
     id: "amlaprash",
-    shopifyVariantId: "REPLACE_WITH_AMLAPRASH_VARIANT_ID",
+    shopifyVariantId: "46033354064064",
     name: "Amlaprash",
-    image: "https://images.unsplash.com/photo-1597481499750-3e6b22637e12?w=800&q=80&auto=format&fit=crop",
-    price: 549,
+    image: "https://cdn.shopify.com/s/files/1/0270/3346/9006/files/front.jpg?v=1773726357",
+    price: 343,
     category: "superfood",
     whyAnveshan: "An amla-based herbal jam packed with vitamin C and herbs — a daily immunity booster without refined sugar.",
   },
   {
     id: "dry-fruit-paak",
-    shopifyVariantId: "REPLACE_WITH_DRY_FRUIT_PAAK_VARIANT_ID",
-    name: "Dry Fruit Paak",
-    image: "https://images.unsplash.com/photo-1543158181-1274e5362710?w=800&q=80&auto=format&fit=crop",
-    price: 699,
+    shopifyVariantId: "47258508755136",
+    name: "Dry Fruit Paak Bites",
+    image: "https://cdn.shopify.com/s/files/1/0270/3346/9006/files/Artboard12_21d90bc8-2bac-44a7-9605-9e1a43ab806b.jpg?v=1765871043",
+    price: 345,
     category: "superfood",
     whyAnveshan: "A rich blend of nuts, seeds and ghee — a wholesome, naturally sweetened energy booster.",
   },
@@ -260,7 +266,7 @@ const recipes = [
     slug: "besan-ladoo",
     name: "Besan Ladoo",
     description: "Classic festive ladoos made with roasted gram flour, pure ghee, and khandsari. Two Anveshan products — ghee and khandsari — make all the difference in taste and nutrition.",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Desi_besan_ke_ladoo.jpg/640px-Desi_besan_ke_ladoo.jpg",
+    image: "https://upload.wikimedia.org/wikipedia/commons/2/2f/Desi_besan_ke_ladoo.jpg",
     prepTime: "15 min",
     cookTime: "30 min",
     servings: 20,
@@ -289,7 +295,7 @@ const recipes = [
     slug: "ghee-rice",
     name: "Ghee Rice",
     description: "Fragrant basmati rice cooked in pure bilona ghee with whole spices. Minimal ingredients, maximum flavour. Anveshan ghee is the only swap needed.",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Ghee_Rice_Plain_Pulav.JPG/800px-Ghee_Rice_Plain_Pulav.JPG",
+    image: "https://upload.wikimedia.org/wikipedia/commons/5/55/Ghee_Rice_Plain_Pulav.JPG",
     prepTime: "10 min",
     cookTime: "25 min",
     servings: 4,
@@ -361,7 +367,7 @@ const recipes = [
     slug: "moringa-mathri",
     name: "Moringa Mathri",
     description: "A nutrient-packed twist on the classic tea-time mathri using moringa powder and Anveshan's ancient khapli wheat atta. Flaky, crispy, and far better for you than the maida original.",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Masala_Mathri.JPG/800px-Masala_Mathri.JPG",
+    image: "https://upload.wikimedia.org/wikipedia/commons/e/ef/Masala_Mathri.JPG",
     prepTime: "20 min",
     cookTime: "25 min",
     servings: 30,
@@ -798,7 +804,7 @@ const recipes = [
     category: "oil",
     subCategory: "sunflower-oil",
     description: "Golden, crunchy mixed-vegetable fritters deep-fried in light Anveshan Sunflower Oil for the perfect rainy-day snack. The neutral, high-smoke-point oil keeps the pakoras crisp and grease-free.",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Onion_pakora_-_a.jpg/800px-Onion_pakora_-_a.jpg",
+    image: "https://upload.wikimedia.org/wikipedia/commons/c/cf/Onion_pakora_-_a.jpg",
     prepTime: "15 min",
     cookTime: "20 min",
     servings: 4,
@@ -1327,7 +1333,7 @@ const recipes = [
     category: "sweet",
     subCategory: null,
     description: "A classic gram-flour fudge slow-roasted in nutty Anveshan bilona ghee until golden and aromatic, then set into rich diamond pieces. Sweetened with unrefined khandsari for a clean, melt-in-the-mouth finish.",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/BESAN_CHAKKI_HOMEMADE_KOTA_003.jpg/640px-BESAN_CHAKKI_HOMEMADE_KOTA_003.jpg",
+    image: "https://upload.wikimedia.org/wikipedia/commons/9/90/BESAN_CHAKKI_HOMEMADE_KOTA_003.jpg",
     prepTime: "10 min",
     cookTime: "25 min",
     servings: 4,
@@ -2400,7 +2406,7 @@ const recipes = [
     ],
     "steps": ["Cut the sweet potatoes into matchstick fries and pat dry.", "Toss with cornflour, paprika, pepper and salt.", "Drizzle with groundnut oil and toss to coat.", "Air-fry at 200C for 15-18 minutes, shaking halfway.", "Warm the honey and drizzle over the hot fries.", "Scatter herbs and serve immediately."],
     "anveshanProducts": ["groundnut-oil", "honey"],
-    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Sweet_Potato_Fries_3.jpg/500px-Sweet_Potato_Fries_3.jpg"
+    "image": "https://images.unsplash.com/photo-1598679253544-2c97992403ea?w=1200&q=80&auto=format&fit=crop"
   },
   {
     "id": "bajra-methi-khakhra", "slug": "bajra-methi-khakhra", "name": "Bajra Methi Khakhra", "category": "snack", "subCategory": null,
@@ -2481,9 +2487,498 @@ const recipes = [
     ],
     "steps": ["Soak the saffron in 2 tbsp warm milk.", "Boil the milk, then simmer 8-10 minutes, stirring.", "Stir in cardamom and the bloomed saffron milk.", "Cool slightly to below boiling.", "Whisk in the jaggery powder off the heat so the milk does not split.", "Pour into glasses, top with nuts and serve warm."],
     "anveshanProducts": ["jaggery-powder", "saffron"],
-    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Kesaria_Doodh%28Saffron_Milk%29-Varanasi-UttarPradesh-DSC001.jpg/500px-Kesaria_Doodh%28Saffron_Milk%29-Varanasi-UttarPradesh-DSC001.jpg"
+    "image": "https://upload.wikimedia.org/wikipedia/commons/3/3c/A_cup_of_chilled_Badam_milk.jpg"
+  },
+  {
+    "id": "overnight-coconut-chia-pudding-strawberries",
+    "slug": "overnight-coconut-chia-pudding-strawberries",
+    "name": "Overnight Coconut Chia Pudding with Strawberries",
+    "category": "dessert",
+    "subCategory": null,
+    "description": "A make-ahead, no-cook dessert of creamy coconut chia pudding layered with juicy macerated strawberries. Sweetened with raw Anveshan Honey and a touch of Anveshan Khandsari instead of refined syrup, and enriched with a spoon of Anveshan Coconut Oil for a silky finish.",
+    "prepTime": "15 min",
+    "cookTime": "9 hrs chill",
+    "servings": 4,
+    "ingredients": [
+      { "name": "Wild Forest Honey", "quantity": "1", "unit": "tbsp", "anveshan": true, "anveshanProductId": "honey", "note": "Raw honey replaces maple syrup to sweeten the pudding" },
+      { "name": "Khandsari", "quantity": "2", "unit": "tbsp", "anveshan": true, "anveshanProductId": "khandsari", "note": "Unrefined khandsari macerates the strawberries without refined sugar" },
+      { "name": "Cold-Pressed Coconut Oil", "quantity": "1", "unit": "tsp", "anveshan": true, "anveshanProductId": "coconut-oil", "note": "Adds silky richness and a gentle coconut aroma" },
+      { "name": "Light coconut milk", "quantity": "1", "unit": "can (13.5 oz)", "anveshan": false },
+      { "name": "Chia seeds", "quantity": "5", "unit": "tbsp", "anveshan": false },
+      { "name": "Vanilla bean paste", "quantity": "1", "unit": "tsp", "anveshan": false },
+      { "name": "Salt", "quantity": "1", "unit": "pinch", "anveshan": false },
+      { "name": "Chopped strawberries", "quantity": "2", "unit": "cups", "anveshan": false }
+    ],
+    "steps": [
+      "In a medium bowl, whisk the coconut milk, chia seeds, Anveshan Honey, melted Anveshan Coconut Oil, vanilla bean paste and a pinch of salt. Cover and refrigerate to thicken for at least 1 hour, ideally overnight (about 9 hours).",
+      "Meanwhile, combine the chopped strawberries with the Anveshan Khandsari and let sit for 15-30 minutes so they release their juices.",
+      "Drain the excess liquid from the strawberries and set aside about 1/4 cup of strawberries for topping.",
+      "Divide the remaining strawberries among 4 (8 oz) jars, then spoon the chia pudding evenly over the strawberries.",
+      "Top with the reserved strawberries, cover the jars, and refrigerate overnight before serving."
+    ],
+    "servingSuggestion": "Great as a light dessert or breakfast — top with extra strawberries and a drizzle of Anveshan Honey.",
+    "anveshanProducts": ["honey", "khandsari", "coconut-oil"],
+    "image": "https://images.unsplash.com/photo-1651256785597-4efe48fd71f9?w=1200&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "strawberry-lemonade-cookies",
+    "slug": "strawberry-lemonade-cookies",
+    "name": "Strawberry Lemonade Cookies",
+    "category": "dessert",
+    "subCategory": null,
+    "description": "Soft, crackly sugar cookies that pair tangy lemon dough with sweet strawberry dough, rolled together and dusted in sugar. Made with cold-pressed Anveshan Sunflower Oil instead of refined vegetable oil, and coated in finely powdered Anveshan Khandsari in place of confectioner's sugar.",
+    "prepTime": "25 min",
+    "cookTime": "13 min",
+    "servings": 24,
+    "ingredients": [
+      { "name": "Cold-Pressed Sunflower Oil", "quantity": "2/3", "unit": "cup (divided)", "anveshan": true, "anveshanProductId": "sunflower-oil", "note": "Clean cold-pressed oil replaces refined vegetable oil" },
+      { "name": "Khandsari (finely powdered)", "quantity": "2/3", "unit": "cup", "anveshan": true, "anveshanProductId": "khandsari", "note": "Powdered unrefined khandsari coats the cookies instead of confectioner's sugar" },
+      { "name": "Lemon cake mix", "quantity": "1", "unit": "box (13-15 oz)", "anveshan": false },
+      { "name": "Strawberry cake mix", "quantity": "1", "unit": "box (13-15 oz)", "anveshan": false },
+      { "name": "Large eggs", "quantity": "4", "unit": "(divided)", "anveshan": false },
+      { "name": "Lemon juice", "quantity": "3", "unit": "tsp (divided)", "anveshan": false }
+    ],
+    "steps": [
+      "Preheat the oven to 350°F (180°C). Put the lemon cake mix in one bowl and the strawberry cake mix in a separate bowl.",
+      "To EACH bowl add 2 eggs, 1/3 cup Anveshan Sunflower Oil and 1.5 tsp lemon juice; mix each until fully combined.",
+      "Cover both bowls and refrigerate for at least 30 minutes. Line a baking sheet with parchment and spread the powdered Anveshan Khandsari on a plate.",
+      "Scoop 1 tbsp strawberry dough and 1 tbsp lemon dough, drop into the khandsari, toss to coat, then press the two together and roll into one ball; dust with more khandsari and place on the sheet.",
+      "Repeat with the remaining dough, spacing the balls apart.",
+      "Bake about 13 minutes until crackled on top and lightly golden underneath, turning the tray halfway if needed. Cool before serving."
+    ],
+    "servingSuggestion": "Lovely with iced tea or, fittingly, a glass of cold lemonade.",
+    "anveshanProducts": ["sunflower-oil", "khandsari"],
+    "image": "https://images.unsplash.com/photo-1609178715608-8feab06ae7d1?w=1200&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "sugar-cookie-dough-protein-bites",
+    "slug": "sugar-cookie-dough-protein-bites",
+    "name": "Sugar Cookie Dough Protein Bites",
+    "category": "dessert",
+    "subCategory": null,
+    "description": "No-bake, cream-coloured edible sugar-cookie-dough bites packed with protein from Anveshan Protein Atta. Bound with Anveshan Ghee and sweetened with unrefined Anveshan Khandsari — a wholesome, high-protein sweet treat with no eggs and no baking.",
+    "prepTime": "15 min",
+    "cookTime": "0 min",
+    "servings": 12,
+    "ingredients": [
+      { "name": "Protein Atta (heat-treated)", "quantity": "1.5", "unit": "cups", "anveshan": true, "anveshanProductId": "protein-atta", "note": "High-protein flour base; heat-treat before use since it is no-bake" },
+      { "name": "Bilona Ghee, softened", "quantity": "1/3", "unit": "cup", "anveshan": true, "anveshanProductId": "ghee", "note": "Binds the dough with a rich, buttery flavour" },
+      { "name": "Khandsari (powdered)", "quantity": "1/2", "unit": "cup", "anveshan": true, "anveshanProductId": "khandsari", "note": "Unrefined sweetener in place of icing sugar" },
+      { "name": "Vanilla extract", "quantity": "1", "unit": "tsp", "anveshan": false },
+      { "name": "Milk", "quantity": "2-3", "unit": "tbsp", "anveshan": false },
+      { "name": "Rainbow sprinkles", "quantity": "2", "unit": "tbsp", "anveshan": false },
+      { "name": "Pinch of salt", "quantity": "1", "unit": "pinch", "anveshan": false }
+    ],
+    "steps": [
+      "Heat-treat the Anveshan Protein Atta: spread it on a tray and bake at 175°C for 5-7 minutes (or microwave in 30-sec bursts to 75°C), then cool — this makes raw flour safe to eat.",
+      "Cream the softened Anveshan Ghee with the powdered Anveshan Khandsari until light and smooth.",
+      "Mix in the vanilla and salt, then fold in the cooled protein atta.",
+      "Add milk a tablespoon at a time until a soft, pliable cookie dough forms.",
+      "Fold in the sprinkles, then roll the dough into bite-sized balls.",
+      "Chill for 20 minutes to firm up; store in the fridge."
+    ],
+    "servingSuggestion": "A protein-rich snack or dessert straight from the fridge.",
+    "anveshanProducts": ["protein-atta", "ghee", "khandsari"],
+    "image": "https://images.unsplash.com/photo-1649634437312-c005a922d448?w=1200&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "lemon-protein-cookie",
+    "slug": "lemon-protein-cookie",
+    "name": "Lemon Protein Cookie",
+    "category": "dessert",
+    "subCategory": null,
+    "description": "Bright, zesty lemon cookies with a soft, protein-rich crumb from Anveshan Protein Atta. Made with Anveshan Ghee and unrefined Anveshan Khandsari instead of butter and white sugar — a guilt-free citrus treat.",
+    "prepTime": "15 min",
+    "cookTime": "12 min",
+    "servings": 18,
+    "ingredients": [
+      { "name": "Protein Atta", "quantity": "2", "unit": "cups", "anveshan": true, "anveshanProductId": "protein-atta", "note": "Gives the cookies a soft, high-protein crumb" },
+      { "name": "Bilona Ghee, softened", "quantity": "1/2", "unit": "cup", "anveshan": true, "anveshanProductId": "ghee", "note": "Replaces butter for a rich, tender cookie" },
+      { "name": "Khandsari", "quantity": "3/4", "unit": "cup", "anveshan": true, "anveshanProductId": "khandsari", "note": "Unrefined cane sugar in place of white sugar" },
+      { "name": "Large egg", "quantity": "1", "unit": "", "anveshan": false },
+      { "name": "Lemon juice", "quantity": "2", "unit": "tbsp", "anveshan": false },
+      { "name": "Lemon zest", "quantity": "1", "unit": "tbsp", "anveshan": false },
+      { "name": "Baking powder", "quantity": "1", "unit": "tsp", "anveshan": false },
+      { "name": "Pinch of salt", "quantity": "1", "unit": "pinch", "anveshan": false }
+    ],
+    "steps": [
+      "Preheat the oven to 180°C and line a baking sheet with parchment.",
+      "Cream the softened Anveshan Ghee with the Anveshan Khandsari until pale and fluffy.",
+      "Beat in the egg, lemon juice and lemon zest.",
+      "Mix in the Anveshan Protein Atta, baking powder and salt to form a soft dough.",
+      "Scoop tablespoons of dough onto the tray, spacing them apart, and flatten slightly.",
+      "Bake 11-12 minutes until the edges are set and lightly golden; cool on the tray before serving."
+    ],
+    "servingSuggestion": "Delicious with chai or coffee; dust with a little powdered khandsari if you like.",
+    "anveshanProducts": ["protein-atta", "ghee", "khandsari"],
+    "image": "https://images.unsplash.com/photo-1641557309674-771c5ec8dee5?w=1200&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "khapli-atta-sourdough", "slug": "khapli-atta-sourdough", "name": "Khapli Atta Sourdough Bread", "category": "atta", "subCategory": "khapli-atta",
+    "description": "A rustic, naturally leavened loaf built on nutty, easy-to-digest Anveshan Khapli Atta — an ancient emmer wheat that gives a deep wheaty crumb and gentler gluten. The crust is coaxed glossy with a brush of cold-pressed Anveshan Olive Oil.",
+    "prepTime": "40 min", "cookTime": "45 min", "servings": 4,
+    "ingredients": [
+      {"name":"Anveshan Khapli Atta","quantity":"4","unit":"cups","anveshan":true,"anveshanProductId":"khapli-atta","note":"ancient emmer wheat with gentler gluten and a nutty depth"},
+      {"name":"Active sourdough starter","quantity":"1","unit":"cup","anveshan":false},
+      {"name":"Water (lukewarm)","quantity":"1.5","unit":"cups","anveshan":false},
+      {"name":"Anveshan Olive Oil","quantity":"2","unit":"tbsp","anveshan":true,"anveshanProductId":"olive-oil","note":"cold-pressed, for a richer crumb and a glossy crust"},
+      {"name":"Salt","quantity":"2","unit":"tsp","anveshan":false},
+      {"name":"Honey","quantity":"1","unit":"tbsp","anveshan":false},
+      {"name":"Rice flour (for dusting)","quantity":"2","unit":"tbsp","anveshan":false}
+    ],
+    "steps": ["Whisk the starter, lukewarm water and honey until dissolved.","Add the Anveshan Khapli Atta, salt and 1 tbsp Anveshan Olive Oil; mix into a shaggy dough and rest 30 minutes.","Do 3 sets of stretch-and-folds 30 minutes apart, then bulk-ferment 4-5 hours until puffy.","Shape into a tight boule and place in a floured banneton.","Cold-proof in the fridge 8-12 hours overnight.","Preheat a Dutch oven to 240C; turn out the loaf, brush with the remaining Anveshan Olive Oil and score the top.","Bake covered 25 minutes, then uncovered 18-20 minutes until deep golden.","Cool completely on a rack before slicing."],
+    "anveshanProducts": ["khapli-atta","olive-oil"],
+    "image": "https://images.unsplash.com/photo-1585478259844-06d7b756b082?w=1200&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "multigrain-atta-pizza", "slug": "multigrain-atta-pizza", "name": "Multigrain Atta Pizza", "category": "atta", "subCategory": "multigrain-atta",
+    "description": "A crisp-yet-chewy homemade pizza base kneaded from fibre-rich Anveshan Multigrain Atta, brushed and drizzled with fruity Anveshan Olive Oil. A feel-good upgrade to takeaway pizza.",
+    "prepTime": "90 min", "cookTime": "15 min", "servings": 4,
+    "ingredients": [
+      {"name":"Anveshan Multigrain Atta","quantity":"3","unit":"cups","anveshan":true,"anveshanProductId":"multigrain-atta","note":"multi-grain blend for a fibre-rich, nutty, chewy base"},
+      {"name":"Warm water","quantity":"1.25","unit":"cups","anveshan":false},
+      {"name":"Instant yeast","quantity":"2","unit":"tsp","anveshan":false},
+      {"name":"Anveshan Olive Oil","quantity":"3","unit":"tbsp","anveshan":true,"anveshanProductId":"olive-oil","note":"cold-pressed, for a tender dough and fragrant finishing drizzle"},
+      {"name":"Salt","quantity":"1","unit":"tsp","anveshan":false},
+      {"name":"Pizza sauce","quantity":"0.75","unit":"cup","anveshan":false},
+      {"name":"Mozzarella cheese","quantity":"2","unit":"cups","anveshan":false},
+      {"name":"Cherry tomatoes, halved","quantity":"10","unit":"pieces","anveshan":false},
+      {"name":"Fresh basil","quantity":"1","unit":"handful","anveshan":false}
+    ],
+    "steps": ["Dissolve the yeast in warm water and let it foam 5 minutes.","Combine the Anveshan Multigrain Atta with salt, add the yeast water and 2 tbsp Anveshan Olive Oil, and knead 8-10 minutes into a smooth dough.","Cover and rise about 1 hour until doubled.","Knock back, divide in two and roll each into a thin round.","Brush with Anveshan Olive Oil, spread sauce and top with mozzarella and cherry tomatoes.","Bake at 250C for 12-15 minutes until golden and bubbling.","Finish with basil and a drizzle of Anveshan Olive Oil, then slice and serve."],
+    "anveshanProducts": ["multigrain-atta","olive-oil"],
+    "image": "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=1200&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "italian-herb-bread", "slug": "italian-herb-bread", "name": "Italian Herb Bread", "category": "atta", "subCategory": "multigrain-atta",
+    "description": "A soft, aromatic herb loaf made wholesome with fibre-packed Anveshan Multigrain Atta and perfumed with rosemary, oregano and garlic. A generous pour of Anveshan Olive Oil gives it a bakery-style softness and golden sheen.",
+    "prepTime": "75 min", "cookTime": "35 min", "servings": 4,
+    "ingredients": [
+      {"name":"Anveshan Multigrain Atta","quantity":"3.5","unit":"cups","anveshan":true,"anveshanProductId":"multigrain-atta","note":"hearty multi-grain blend that keeps the loaf moist and fibre-rich"},
+      {"name":"Warm water","quantity":"1.25","unit":"cups","anveshan":false},
+      {"name":"Instant yeast","quantity":"2.25","unit":"tsp","anveshan":false},
+      {"name":"Anveshan Olive Oil","quantity":"4","unit":"tbsp","anveshan":true,"anveshanProductId":"olive-oil","note":"cold-pressed, for softness within and a glossy herbed crust"},
+      {"name":"Dried oregano","quantity":"1.5","unit":"tsp","anveshan":false},
+      {"name":"Dried rosemary","quantity":"1","unit":"tsp","anveshan":false},
+      {"name":"Garlic, minced","quantity":"3","unit":"cloves","anveshan":false},
+      {"name":"Salt","quantity":"1.5","unit":"tsp","anveshan":false},
+      {"name":"Sugar","quantity":"1","unit":"tsp","anveshan":false}
+    ],
+    "steps": ["Activate the yeast and sugar in warm water 5-7 minutes until frothy.","Combine the Anveshan Multigrain Atta, salt, oregano, rosemary and garlic.","Add the yeast water and 3 tbsp Anveshan Olive Oil; knead 10 minutes into a soft, elastic dough.","Rise about 1 hour until doubled.","Shape into a loaf, proof 30 minutes more on a lined tray.","Brush with the remaining Anveshan Olive Oil and slash the top.","Bake at 220C for 30-35 minutes until deep golden and hollow-sounding.","Cool 20 minutes, then serve with extra Anveshan Olive Oil for dipping."],
+    "anveshanProducts": ["multigrain-atta","olive-oil"],
+    "image": "https://images.unsplash.com/photo-1596662894155-8196e1599aec?w=1200&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "cozy-veggie-korma", "slug": "cozy-veggie-korma", "name": "Cozy Veggie Korma", "category": "main-course", "subCategory": null,
+    "description": "A comforting, mildly spiced vegetable korma with its base bloomed in nutty Anveshan Groundnut Oil and finished with a spoon of aromatic Anveshan Ghee. A drizzle of raw Anveshan Honey rounds off the gravy with gentle sweetness.",
+    "prepTime": "20 min", "cookTime": "30 min", "servings": 4,
+    "ingredients": [
+      {"name":"Anveshan Groundnut Oil","quantity":"3","unit":"tbsp","anveshan":true,"anveshanProductId":"groundnut-oil","note":"clean nutty oil for sauteing the korma base"},
+      {"name":"Anveshan Ghee","quantity":"2","unit":"tbsp","anveshan":true,"anveshanProductId":"ghee","note":"bilona ghee for a glossy, restaurant-style finish"},
+      {"name":"Anveshan Honey","quantity":"1","unit":"tbsp","anveshan":true,"anveshanProductId":"honey","note":"raw honey to balance the warm spices"},
+      {"name":"Mixed vegetables (carrot, beans, peas, potato, cauliflower)","quantity":"4","unit":"cups","anveshan":false},
+      {"name":"Onion, finely chopped","quantity":"2","unit":"medium","anveshan":false},
+      {"name":"Tomato puree","quantity":"1","unit":"cup","anveshan":false},
+      {"name":"Cashew paste","quantity":"0.5","unit":"cup","anveshan":false},
+      {"name":"Ginger-garlic paste","quantity":"1.5","unit":"tbsp","anveshan":false},
+      {"name":"Korma spice mix","quantity":"2","unit":"tbsp","anveshan":false},
+      {"name":"Fresh cream","quantity":"0.25","unit":"cup","anveshan":false},
+      {"name":"Salt","quantity":"1.5","unit":"tsp","anveshan":false}
+    ],
+    "steps": ["Heat the Anveshan Groundnut Oil and saute the onions until soft and golden.","Add ginger-garlic paste, then the korma spices, and cook until fragrant.","Stir in tomato puree and cashew paste; cook until the oil separates.","Add the vegetables and salt, then 1 cup water; cover and simmer 15 minutes until tender.","Swirl in the cream for a silky gravy.","Stir in the Anveshan Honey to balance the spices.","Finish with the Anveshan Ghee for a glossy sheen.","Garnish with coriander and serve hot with rice or flatbread."],
+    "anveshanProducts": ["ghee","groundnut-oil","honey"],
+    "image": "https://images.unsplash.com/photo-1574343033363-59ab8b5d7710?w=1200&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "chicken-tinga-tacos", "slug": "chicken-tinga-tacos", "name": "Chicken Tinga Tacos", "category": "main-course", "subCategory": null,
+    "description": "Shredded chicken simmered in a smoky chipotle-tomato sauce bloomed in Anveshan Groundnut Oil, piled into soft homemade tortillas rolled from nutty Anveshan Khapli Atta.",
+    "prepTime": "25 min", "cookTime": "30 min", "servings": 4,
+    "ingredients": [
+      {"name":"Anveshan Groundnut Oil","quantity":"3","unit":"tbsp","anveshan":true,"anveshanProductId":"groundnut-oil","note":"high smoke point, ideal for searing the tinga sauce"},
+      {"name":"Anveshan Khapli Atta","quantity":"2","unit":"cups","anveshan":true,"anveshanProductId":"khapli-atta","note":"makes soft, pliable, easy-to-digest tortillas"},
+      {"name":"Boneless chicken thighs","quantity":"600","unit":"g","anveshan":false},
+      {"name":"Onion, sliced","quantity":"1","unit":"large","anveshan":false},
+      {"name":"Garlic, minced","quantity":"4","unit":"cloves","anveshan":false},
+      {"name":"Chipotle peppers in adobo","quantity":"2","unit":"pieces","anveshan":false},
+      {"name":"Tomatoes, chopped","quantity":"3","unit":"medium","anveshan":false},
+      {"name":"Ground cumin","quantity":"1","unit":"tsp","anveshan":false},
+      {"name":"Fresh coriander","quantity":"1","unit":"handful","anveshan":false},
+      {"name":"Lime","quantity":"1","unit":"","anveshan":false},
+      {"name":"Salt","quantity":"1","unit":"tsp","anveshan":false}
+    ],
+    "steps": ["Make the tortilla dough: mix Anveshan Khapli Atta with salt and ~3/4 cup warm water, knead soft, rest 20 minutes.","Poach the chicken in salted water 15 minutes, then shred.","Saute onion and garlic in 2 tbsp Anveshan Groundnut Oil until golden.","Blend tomatoes, chipotle, cumin and a splash of water into a sauce; simmer 8 minutes.","Fold in the shredded chicken, season, and cook 5 minutes until glossy.","Divide dough into 8 balls and roll thin.","Cook tortillas in a dry hot skillet ~1 minute per side, brushing with the remaining Anveshan Groundnut Oil.","Fill with chicken tinga, top with coriander and lime, and serve."],
+    "anveshanProducts": ["groundnut-oil","khapli-atta"],
+    "image": "https://images.unsplash.com/photo-1640983743761-4f0e0204bc58?w=1200&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "air-fryer-chicken-breast", "slug": "air-fryer-chicken-breast", "name": "Air Fryer Chicken Breast", "category": "main-course", "subCategory": null,
+    "description": "Juicy, golden chicken breast rubbed with fruity Anveshan Olive Oil and a spice blend, then finished with a sticky glaze of raw Anveshan Honey that caramelises into a glossy crust.",
+    "prepTime": "10 min", "cookTime": "18 min", "servings": 4,
+    "ingredients": [
+      {"name":"Anveshan Olive Oil","quantity":"2","unit":"tbsp","anveshan":true,"anveshanProductId":"olive-oil","note":"locks in moisture and adds fruity depth"},
+      {"name":"Anveshan Honey","quantity":"2","unit":"tbsp","anveshan":true,"anveshanProductId":"honey","note":"raw honey caramelises into a glossy spiced glaze"},
+      {"name":"Chicken breasts","quantity":"4","unit":"pieces","anveshan":false},
+      {"name":"Smoked paprika","quantity":"1.5","unit":"tsp","anveshan":false},
+      {"name":"Garlic powder","quantity":"1","unit":"tsp","anveshan":false},
+      {"name":"Black pepper","quantity":"0.5","unit":"tsp","anveshan":false},
+      {"name":"Red chilli flakes","quantity":"0.5","unit":"tsp","anveshan":false},
+      {"name":"Dijon mustard","quantity":"1","unit":"tsp","anveshan":false},
+      {"name":"Salt","quantity":"1","unit":"tsp","anveshan":false}
+    ],
+    "steps": ["Pat the chicken dry and pound to an even thickness.","Whisk 1 tbsp Anveshan Olive Oil with paprika, garlic powder, pepper, chilli flakes and salt into a paste.","Rub over the chicken and marinate 10 minutes.","Preheat air fryer to 190C and brush the basket with the remaining Anveshan Olive Oil.","Air-fry 9 minutes, then flip.","Mix the Anveshan Honey with Dijon and brush over the chicken.","Air-fry 7-9 minutes more until sticky and cooked to 74C.","Rest 5 minutes before slicing."],
+    "anveshanProducts": ["olive-oil","honey"],
+    "image": "https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?w=1200&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "baked-chicken-meatballs", "slug": "baked-chicken-meatballs", "name": "Baked Chicken Meatballs", "category": "main-course", "subCategory": null,
+    "description": "Tender oven-baked chicken meatballs bound with toasted Anveshan Khapli Atta breadcrumbs, brushed with Anveshan Olive Oil and finished with a glossy knob of Anveshan Ghee.",
+    "prepTime": "20 min", "cookTime": "22 min", "servings": 4,
+    "ingredients": [
+      {"name":"Anveshan Khapli Atta","quantity":"0.5","unit":"cup","anveshan":true,"anveshanProductId":"khapli-atta","note":"toasted into ancient-grain breadcrumbs that bind and lighten the meatballs"},
+      {"name":"Anveshan Olive Oil","quantity":"2","unit":"tbsp","anveshan":true,"anveshanProductId":"olive-oil","note":"brushed on for a golden exterior without deep frying"},
+      {"name":"Anveshan Ghee","quantity":"1","unit":"tbsp","anveshan":true,"anveshanProductId":"ghee","note":"melted over the hot meatballs for a rich, aromatic finish"},
+      {"name":"Ground chicken","quantity":"600","unit":"g","anveshan":false},
+      {"name":"Egg","quantity":"1","unit":"","anveshan":false},
+      {"name":"Garlic, minced","quantity":"3","unit":"cloves","anveshan":false},
+      {"name":"Parmesan, grated","quantity":"0.25","unit":"cup","anveshan":false},
+      {"name":"Fresh parsley, chopped","quantity":"2","unit":"tbsp","anveshan":false},
+      {"name":"Dried oregano","quantity":"1","unit":"tsp","anveshan":false},
+      {"name":"Salt","quantity":"1","unit":"tsp","anveshan":false},
+      {"name":"Black pepper","quantity":"0.5","unit":"tsp","anveshan":false}
+    ],
+    "steps": ["Preheat the oven to 200C and line a tray.","Toast 1/2 cup Anveshan Khapli Atta in a dry pan until fragrant to make coarse breadcrumbs.","Combine the chicken, egg, garlic, Parmesan, parsley, oregano, salt, pepper and the toasted Khapli Atta breadcrumbs.","Mix gently and roll into 16 meatballs.","Arrange on the tray and brush each with Anveshan Olive Oil.","Bake 18-22 minutes until golden and cooked to 74C.","Dot the hot meatballs with Anveshan Ghee so it melts and glazes them.","Garnish with parsley and serve."],
+    "anveshanProducts": ["olive-oil","khapli-atta","ghee"],
+    "image": "https://images.unsplash.com/photo-1515516969-d4008cc6241a?w=1200&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "spicy-peanut-soba-noodle-salad", "slug": "spicy-peanut-soba-noodle-salad", "name": "Spicy Peanut Soba Noodle Salad", "category": "main-course", "subCategory": null,
+    "description": "Fresh hand-cut noodles made from nutty Anveshan Khapli Atta and a touch of Anveshan Ghee, tossed cold with crunchy vegetables in a spicy peanut dressing built on toasty Anveshan Sesame Oil and raw Anveshan Honey.",
+    "prepTime": "40 min", "cookTime": "10 min", "servings": 4,
+    "ingredients": [
+      {"name":"Anveshan Khapli Atta","quantity":"2","unit":"cups","anveshan":true,"anveshanProductId":"khapli-atta","note":"makes firm, nutty fresh noodles that hold the dressing"},
+      {"name":"Anveshan Ghee","quantity":"1","unit":"tbsp","anveshan":true,"anveshanProductId":"ghee","note":"worked into the dough for supple, silky noodles"},
+      {"name":"Anveshan Sesame Oil","quantity":"2","unit":"tbsp","anveshan":true,"anveshanProductId":"sesame-oil","note":"toasty aroma that anchors the peanut dressing"},
+      {"name":"Anveshan Honey","quantity":"1.5","unit":"tbsp","anveshan":true,"anveshanProductId":"honey","note":"balances chilli and lime with natural sweetness"},
+      {"name":"Peanut butter","quantity":"3","unit":"tbsp","anveshan":false},
+      {"name":"Soy sauce","quantity":"2","unit":"tbsp","anveshan":false},
+      {"name":"Lime juice","quantity":"2","unit":"tbsp","anveshan":false},
+      {"name":"Red chilli, minced","quantity":"1","unit":"","anveshan":false},
+      {"name":"Carrot, julienned","quantity":"1","unit":"large","anveshan":false},
+      {"name":"Red bell pepper, sliced","quantity":"1","unit":"","anveshan":false},
+      {"name":"Spring onions, sliced","quantity":"3","unit":"","anveshan":false},
+      {"name":"Toasted sesame seeds","quantity":"1","unit":"tbsp","anveshan":false}
+    ],
+    "steps": ["Make the noodle dough: combine 2 cups Anveshan Khapli Atta with 1 tbsp Anveshan Ghee, a pinch of salt and ~1/2 cup water; knead 8 minutes into a firm dough.","Rest the dough 30 minutes.","Roll out very thinly, dust with flour, fold and slice into thin noodle strands.","Boil the fresh noodles 3-4 minutes, then drain and rinse cold.","Whisk the Anveshan Sesame Oil, peanut butter, Anveshan Honey, soy sauce, lime juice and chilli into a pourable dressing.","Combine the noodles with carrot, bell pepper and spring onions.","Pour over the dressing and toss to coat.","Chill briefly, scatter with sesame seeds and serve cold."],
+    "anveshanProducts": ["khapli-atta","ghee","sesame-oil","honey"],
+    "image": "https://images.unsplash.com/photo-1565976469782-7c92daebc42e?w=1200&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "antipasto-pasta-salad", "slug": "antipasto-pasta-salad", "name": "Delicioso Antipasto Pasta Salad", "category": "main-course", "subCategory": null,
+    "description": "A colourful Italian antipasto pasta salad loaded with mozzarella, olives, salami, peppers and cherry tomatoes, tossed in a bright herb vinaigrette built on fruity Anveshan Olive Oil and a touch of raw Anveshan Honey to balance the tang.",
+    "prepTime": "20 min", "cookTime": "12 min", "servings": 6,
+    "ingredients": [
+      {"name":"Anveshan Olive Oil","quantity":"1/3","unit":"cup","anveshan":true,"anveshanProductId":"olive-oil","note":"cold-pressed extra virgin oil for a fruity, peppery dressing"},
+      {"name":"Anveshan Honey","quantity":"1","unit":"tbsp","anveshan":true,"anveshanProductId":"honey","note":"raw honey rounds off the tangy vinaigrette"},
+      {"name":"Fusilli or penne pasta","quantity":"400","unit":"g","anveshan":false},
+      {"name":"Mozzarella balls","quantity":"1","unit":"cup","anveshan":false},
+      {"name":"Salami, sliced","quantity":"150","unit":"g","anveshan":false},
+      {"name":"Cherry tomatoes, halved","quantity":"1.5","unit":"cups","anveshan":false},
+      {"name":"Black olives","quantity":"1/2","unit":"cup","anveshan":false},
+      {"name":"Red onion, sliced","quantity":"1/2","unit":"medium","anveshan":false},
+      {"name":"Roasted red peppers, chopped","quantity":"1/2","unit":"cup","anveshan":false},
+      {"name":"Red wine vinegar","quantity":"3","unit":"tbsp","anveshan":false},
+      {"name":"Dried oregano","quantity":"1","unit":"tsp","anveshan":false},
+      {"name":"Salt and pepper","quantity":"1","unit":"tsp","anveshan":false}
+    ],
+    "steps": ["Cook the pasta in salted water until al dente, drain and rinse under cold water.","Whisk the Anveshan Olive Oil, red wine vinegar, Anveshan Honey, oregano, salt and pepper into a vinaigrette.","In a large bowl, combine the cooled pasta with the mozzarella, salami, cherry tomatoes, olives, red onion and roasted peppers.","Pour over the vinaigrette and toss until everything is well coated.","Chill for at least 30 minutes to let the flavours meld.","Toss again and adjust seasoning before serving cold."],
+    "anveshanProducts": ["olive-oil","honey"],
+    "image": "https://images.unsplash.com/photo-1662222516763-a05017d07018?w=1200&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "elegant-baked-potatoes", "slug": "elegant-baked-potatoes", "name": "Elegant Baked Potatoes", "category": "main-course", "subCategory": null,
+    "description": "Crisp-skinned, fluffy baked potatoes rubbed with Anveshan Olive Oil and finished with a melting spoon of nutty Anveshan Ghee instead of butter, then loaded with cheese, sour cream and chives.",
+    "prepTime": "10 min", "cookTime": "60 min", "servings": 4,
+    "ingredients": [
+      {"name":"Anveshan Olive Oil","quantity":"2","unit":"tbsp","anveshan":true,"anveshanProductId":"olive-oil","note":"rubbed on the skins for an extra-crisp, golden finish"},
+      {"name":"Anveshan Ghee","quantity":"3","unit":"tbsp","anveshan":true,"anveshanProductId":"ghee","note":"melted through the fluffy centre in place of butter for a rich, nutty aroma"},
+      {"name":"Large russet potatoes","quantity":"4","unit":"pieces","anveshan":false},
+      {"name":"Sea salt","quantity":"1","unit":"tbsp","anveshan":false},
+      {"name":"Sour cream","quantity":"1/2","unit":"cup","anveshan":false},
+      {"name":"Cheddar, grated","quantity":"1","unit":"cup","anveshan":false},
+      {"name":"Chives, chopped","quantity":"3","unit":"tbsp","anveshan":false},
+      {"name":"Black pepper","quantity":"0.5","unit":"tsp","anveshan":false}
+    ],
+    "steps": ["Preheat the oven to 200C. Scrub the potatoes dry and prick all over with a fork.","Rub each potato all over with Anveshan Olive Oil and a generous sprinkle of sea salt.","Bake directly on the oven rack for about 55-60 minutes until the skins are crisp and a knife slides in easily.","Slit each potato open lengthwise and gently fluff the insides with a fork.","Spoon in the Anveshan Ghee so it melts through the fluffy centre.","Top with grated cheddar, a dollop of sour cream, chives and a crack of black pepper.","Serve hot while the cheese melts."],
+    "anveshanProducts": ["olive-oil","ghee"],
+    "image": "https://images.unsplash.com/photo-1665931040985-88ceff0fd38e?w=1200&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "crispy-cabbage-cauliflower-salad", "slug": "crispy-cabbage-cauliflower-salad", "name": "Crispy Cabbage and Cauliflower Salad", "category": "starter", "subCategory": null,
+    "description": "A crunchy slaw of shredded cabbage and golden roasted cauliflower, tossed in a nutty sesame dressing. The cauliflower is roasted in Anveshan Olive Oil, while the dressing leans on toasty Anveshan Sesame Oil and a drizzle of raw Anveshan Honey.",
+    "prepTime": "15 min", "cookTime": "20 min", "servings": 4,
+    "ingredients": [
+      {"name":"Anveshan Olive Oil","quantity":"2","unit":"tbsp","anveshan":true,"anveshanProductId":"olive-oil","note":"to roast the cauliflower crisp and golden"},
+      {"name":"Anveshan Sesame Oil","quantity":"1.5","unit":"tbsp","anveshan":true,"anveshanProductId":"sesame-oil","note":"toasty base for the dressing"},
+      {"name":"Anveshan Honey","quantity":"1","unit":"tbsp","anveshan":true,"anveshanProductId":"honey","note":"balances the tangy dressing"},
+      {"name":"Cauliflower, small florets","quantity":"3","unit":"cups","anveshan":false},
+      {"name":"Cabbage, shredded","quantity":"3","unit":"cups","anveshan":false},
+      {"name":"Carrot, julienned","quantity":"1","unit":"large","anveshan":false},
+      {"name":"Soy sauce and lime juice","quantity":"2","unit":"tbsp each","anveshan":false},
+      {"name":"Roasted peanuts and coriander","quantity":"0.5","unit":"cup","anveshan":false},
+      {"name":"Salt","quantity":"0.5","unit":"tsp","anveshan":false}
+    ],
+    "steps": ["Toss the cauliflower florets in Anveshan Olive Oil and salt and roast at 220C for 18-20 minutes until crisp and golden.","Shred the cabbage and julienne the carrot into a large bowl.","Whisk the Anveshan Sesame Oil, Anveshan Honey, soy sauce and lime juice into a dressing.","Add the warm roasted cauliflower to the cabbage and carrot.","Pour over the dressing and toss well.","Top with roasted peanuts and coriander and serve crunchy."],
+    "anveshanProducts": ["olive-oil","sesame-oil","honey"],
+    "image": "https://images.unsplash.com/photo-1688807462845-a06bc0abcadb?w=1200&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "protein-atta-biscuits", "slug": "protein-atta-biscuits", "name": "Protein Atta Biscuits", "category": "snack", "subCategory": null,
+    "description": "Crisp, golden tea-time biscuits made with high-protein Anveshan Protein Atta, Anveshan Ghee and unrefined Anveshan Khandsari — a wholesome bake to go with your chai, no maida or refined sugar.",
+    "prepTime": "15 min", "cookTime": "15 min", "servings": 20,
+    "ingredients": [
+      {"name":"Anveshan Protein Atta","quantity":"2","unit":"cups","anveshan":true,"anveshanProductId":"protein-atta","note":"high-protein flour in place of maida"},
+      {"name":"Anveshan Ghee","quantity":"1/2","unit":"cup","anveshan":true,"anveshanProductId":"ghee","note":"gives a short, melt-in-mouth crumb"},
+      {"name":"Anveshan Khandsari (powdered)","quantity":"1/2","unit":"cup","anveshan":true,"anveshanProductId":"khandsari","note":"unrefined sweetener instead of white sugar"},
+      {"name":"Milk","quantity":"2-3","unit":"tbsp","anveshan":false},
+      {"name":"Baking powder","quantity":"1","unit":"tsp","anveshan":false},
+      {"name":"Cardamom powder","quantity":"0.5","unit":"tsp","anveshan":false},
+      {"name":"Pinch of salt","quantity":"1","unit":"pinch","anveshan":false}
+    ],
+    "steps": ["Cream the Anveshan Ghee with the powdered Anveshan Khandsari until light.","Mix in the Anveshan Protein Atta, baking powder, cardamom and salt.","Add milk a little at a time to form a stiff dough.","Roll out 1/2 cm thick and cut into rounds; prick with a fork.","Arrange on a lined tray and bake at 160C for 14-16 minutes until golden at the edges.","Cool completely so they crisp up, then store airtight."],
+    "anveshanProducts": ["protein-atta","ghee","khandsari"],
+    "image": "https://images.unsplash.com/photo-1725022857876-f3ac4e3aa17f?w=1200&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "miso-peanut-ramen-bowl", "slug": "miso-peanut-ramen-bowl", "name": "Miso Peanut Ramen Bowl", "category": "main-course", "subCategory": null,
+    "description": "A cosy ramen bowl with fresh noodles hand-cut from nutty Anveshan Khapli Atta, in a creamy miso-peanut broth built on toasty Anveshan Sesame Oil and a touch of Anveshan Honey.",
+    "prepTime": "35 min", "cookTime": "15 min", "servings": 4,
+    "ingredients": [
+      {"name":"Anveshan Khapli Atta","quantity":"2","unit":"cups","anveshan":true,"anveshanProductId":"khapli-atta","note":"makes firm, nutty fresh ramen noodles"},
+      {"name":"Anveshan Sesame Oil","quantity":"2","unit":"tbsp","anveshan":true,"anveshanProductId":"sesame-oil","note":"toasty depth for the broth"},
+      {"name":"Anveshan Honey","quantity":"1","unit":"tbsp","anveshan":true,"anveshanProductId":"honey","note":"balances the salty miso and peanut"},
+      {"name":"White miso paste","quantity":"3","unit":"tbsp","anveshan":false},
+      {"name":"Peanut butter","quantity":"3","unit":"tbsp","anveshan":false},
+      {"name":"Vegetable stock","quantity":"5","unit":"cups","anveshan":false},
+      {"name":"Garlic and ginger, grated","quantity":"1","unit":"tbsp each","anveshan":false},
+      {"name":"Mushrooms and pak choi","quantity":"2","unit":"cups","anveshan":false},
+      {"name":"Soft-boiled eggs and spring onion","quantity":"2","unit":"+ garnish","anveshan":false}
+    ],
+    "steps": ["Make the noodles: knead 2 cups Anveshan Khapli Atta with a pinch of salt and ~1/2 cup water into a firm dough; rest 30 minutes, roll thin and cut into strands.","Boil the fresh noodles 3-4 minutes, drain and set aside.","Warm the Anveshan Sesame Oil and saute the garlic and ginger.","Whisk in the miso, peanut butter and Anveshan Honey, then pour in the stock and simmer.","Add the mushrooms and pak choi and cook 4-5 minutes.","Divide the noodles into bowls, ladle over the broth, and top with soft eggs and spring onion."],
+    "anveshanProducts": ["khapli-atta","sesame-oil","honey"],
+    "image": "https://images.unsplash.com/photo-1637024696628-02cb19cc1829?w=1200&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "hamburger-buns", "slug": "hamburger-buns", "name": "Soft Multigrain Hamburger Buns", "category": "atta", "subCategory": "multigrain-atta",
+    "description": "Soft, pillowy sesame-topped burger buns made wholesome with fibre-rich Anveshan Multigrain Atta, enriched with Anveshan Olive Oil and lightly sweetened with raw Anveshan Honey.",
+    "prepTime": "2 hr", "cookTime": "18 min", "servings": 8,
+    "ingredients": [
+      {"name":"Anveshan Multigrain Atta","quantity":"3.5","unit":"cups","anveshan":true,"anveshanProductId":"multigrain-atta","note":"fibre-rich blend for hearty, soft buns"},
+      {"name":"Anveshan Olive Oil","quantity":"3","unit":"tbsp","anveshan":true,"anveshanProductId":"olive-oil","note":"enriches the dough and keeps buns soft"},
+      {"name":"Anveshan Honey","quantity":"2","unit":"tbsp","anveshan":true,"anveshanProductId":"honey","note":"feeds the yeast and adds a gentle sweetness"},
+      {"name":"Instant yeast","quantity":"2.25","unit":"tsp","anveshan":false},
+      {"name":"Warm milk","quantity":"1","unit":"cup","anveshan":false},
+      {"name":"Egg","quantity":"1","unit":"","anveshan":false},
+      {"name":"Salt","quantity":"1.25","unit":"tsp","anveshan":false},
+      {"name":"Sesame seeds","quantity":"2","unit":"tbsp","anveshan":false}
+    ],
+    "steps": ["Whisk the yeast and Anveshan Honey into the warm milk and let it foam 5 minutes.","Combine the Anveshan Multigrain Atta and salt, then add the yeast milk, egg and Anveshan Olive Oil.","Knead 10 minutes into a soft, smooth dough and let it rise 1 hour until doubled.","Divide into 8, shape into smooth balls and place on a lined tray; flatten slightly.","Cover and proof 30-40 minutes until puffy.","Brush with egg wash, sprinkle with sesame seeds, and bake at 190C for 16-18 minutes until golden.","Cool before slicing for burgers."],
+    "anveshanProducts": ["multigrain-atta","olive-oil","honey"],
+    "image": "https://images.unsplash.com/photo-1592811773343-9abf0b1a6920?w=1200&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "homemade-pizza-sauce", "slug": "homemade-pizza-sauce", "name": "Homemade Pizza Sauce", "category": "oil", "subCategory": "olive-oil",
+    "description": "A rich, herby pizza sauce simmered in fruity Anveshan Olive Oil with garlic and oregano, balanced with a touch of raw Anveshan Honey to round off the tomatoes' acidity. Far better than any jarred sauce.",
+    "prepTime": "10 min", "cookTime": "20 min", "servings": 6,
+    "ingredients": [
+      {"name":"Anveshan Olive Oil","quantity":"3","unit":"tbsp","anveshan":true,"anveshanProductId":"olive-oil","note":"fruity base that carries the garlic and herbs"},
+      {"name":"Anveshan Honey","quantity":"1","unit":"tsp","anveshan":true,"anveshanProductId":"honey","note":"balances the acidity of the tomatoes"},
+      {"name":"Tomato passata (or blended tomatoes)","quantity":"2","unit":"cups","anveshan":false},
+      {"name":"Garlic, minced","quantity":"4","unit":"cloves","anveshan":false},
+      {"name":"Dried oregano","quantity":"1.5","unit":"tsp","anveshan":false},
+      {"name":"Fresh basil","quantity":"1","unit":"handful","anveshan":false},
+      {"name":"Red chilli flakes","quantity":"0.5","unit":"tsp","anveshan":false},
+      {"name":"Salt","quantity":"1","unit":"tsp","anveshan":false}
+    ],
+    "steps": ["Warm the Anveshan Olive Oil in a pan and gently saute the garlic until fragrant.","Add the oregano and chilli flakes and let them bloom for 30 seconds.","Pour in the tomato passata and salt and simmer on low for 15 minutes until thick.","Stir in the Anveshan Honey to balance the acidity.","Tear in the fresh basil and simmer 2 more minutes.","Cool, then blend smooth if you prefer; store in a jar in the fridge."],
+    "anveshanProducts": ["olive-oil","honey"],
+    "image": "https://images.unsplash.com/photo-1472476443507-c7a5948772fc?w=1200&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "tomato-black-pepper-soup", "slug": "tomato-black-pepper-soup", "name": "Tomato and Black Pepper Soup", "category": "starter", "subCategory": null,
+    "description": "A warming, peppery tomato soup with the base sauteed in Anveshan Olive Oil and finished with a glossy spoon of Anveshan Ghee. A pinch of Anveshan Khandsari rounds off the tang.",
+    "prepTime": "10 min", "cookTime": "25 min", "servings": 4,
+    "ingredients": [
+      {"name":"Anveshan Olive Oil","quantity":"2","unit":"tbsp","anveshan":true,"anveshanProductId":"olive-oil","note":"to saute the soup base"},
+      {"name":"Anveshan Ghee","quantity":"1","unit":"tbsp","anveshan":true,"anveshanProductId":"ghee","note":"finishing spoon for richness and aroma"},
+      {"name":"Anveshan Khandsari","quantity":"1","unit":"tsp","anveshan":true,"anveshanProductId":"khandsari","note":"balances the tomato acidity"},
+      {"name":"Ripe tomatoes","quantity":"8","unit":"large","anveshan":false},
+      {"name":"Onion and garlic","quantity":"1","unit":"+ 4 cloves","anveshan":false},
+      {"name":"Freshly cracked black pepper","quantity":"1.5","unit":"tsp","anveshan":false},
+      {"name":"Vegetable stock","quantity":"2","unit":"cups","anveshan":false},
+      {"name":"Fresh cream and basil","quantity":"2","unit":"tbsp + garnish","anveshan":false},
+      {"name":"Salt","quantity":"1","unit":"tsp","anveshan":false}
+    ],
+    "steps": ["Saute the onion and garlic in Anveshan Olive Oil until soft.","Add the chopped tomatoes and cook until pulpy.","Pour in the stock, season with salt, and simmer 15 minutes.","Blend smooth and strain back into the pan.","Stir in plenty of cracked black pepper and the Anveshan Khandsari.","Finish with a swirl of cream and a spoon of Anveshan Ghee; garnish with basil and serve hot."],
+    "anveshanProducts": ["olive-oil","ghee","khandsari"],
+    "image": "https://images.unsplash.com/photo-1620791144170-8a443bf37a33?w=1200&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "spicy-tomato-chutney", "slug": "spicy-tomato-chutney", "name": "Spicy and Tasty Tomato Chutney", "category": "snack", "subCategory": null,
+    "description": "A tangy, spicy South-Indian-style tomato chutney tempered in nutty Anveshan Groundnut Oil and balanced with mineral-rich Anveshan Jaggery Powder. Perfect with dosa, idli or as a sandwich spread.",
+    "prepTime": "10 min", "cookTime": "20 min", "servings": 8,
+    "ingredients": [
+      {"name":"Anveshan Groundnut Oil","quantity":"2","unit":"tbsp","anveshan":true,"anveshanProductId":"groundnut-oil","note":"for the tempering and cooking the chutney"},
+      {"name":"Anveshan Jaggery Powder","quantity":"1","unit":"tbsp","anveshan":true,"anveshanProductId":"jaggery-powder","note":"balances the tang and heat with mellow sweetness"},
+      {"name":"Tomatoes, chopped","quantity":"5","unit":"large","anveshan":false},
+      {"name":"Dried red chillies","quantity":"3","unit":"","anveshan":false},
+      {"name":"Garlic","quantity":"5","unit":"cloves","anveshan":false},
+      {"name":"Mustard seeds and urad dal","quantity":"1","unit":"tsp each","anveshan":false},
+      {"name":"Curry leaves","quantity":"10","unit":"","anveshan":false},
+      {"name":"Salt","quantity":"1","unit":"tsp","anveshan":false}
+    ],
+    "steps": ["Heat the Anveshan Groundnut Oil and crackle the mustard seeds, urad dal, dried chillies and curry leaves.","Add the garlic and saute until golden.","Add the chopped tomatoes and salt, and cook down until soft and pulpy.","Stir in the Anveshan Jaggery Powder and simmer until thick and glossy.","Cool, then blend to a coarse chutney.","Serve with dosa, idli or parathas; store in the fridge."],
+    "anveshanProducts": ["groundnut-oil","jaggery-powder"],
+    "image": "https://images.unsplash.com/photo-1575919159574-e49dc9e1228f?w=1200&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "adrak-paak", "slug": "adrak-paak", "name": "Adrak Paak", "category": "superfood", "subCategory": "jaggery",
+    "description": "A traditional warming winter sweet of fresh ginger and roasted Anveshan Khapli Atta bound in Anveshan Ghee and mineral-rich Anveshan Jaggery Powder. Loaded with nuts and gond, adrak paak is an immunity-boosting treat for cold months.",
+    "prepTime": "20 min", "cookTime": "30 min", "servings": 12,
+    "ingredients": [
+      {"name":"Anveshan Khapli Atta","quantity":"1","unit":"cup","anveshan":true,"anveshanProductId":"khapli-atta","note":"roasted for a wholesome, nutty base"},
+      {"name":"Anveshan Ghee","quantity":"1/2","unit":"cup","anveshan":true,"anveshanProductId":"ghee","note":"roasts the atta and binds the paak"},
+      {"name":"Anveshan Jaggery Powder","quantity":"1","unit":"cup","anveshan":true,"anveshanProductId":"jaggery-powder","note":"mineral-rich sweetener that sets the paak"},
+      {"name":"Fresh ginger paste","quantity":"3","unit":"tbsp","anveshan":false},
+      {"name":"Dry ginger powder (saunth)","quantity":"1","unit":"tsp","anveshan":false},
+      {"name":"Edible gum (gond)","quantity":"2","unit":"tbsp","anveshan":false},
+      {"name":"Chopped almonds and cashews","quantity":"1/2","unit":"cup","anveshan":false},
+      {"name":"Cardamom powder","quantity":"0.5","unit":"tsp","anveshan":false}
+    ],
+    "steps": ["Heat the Anveshan Ghee and fry the gond until it puffs; crush and set aside.","In the same ghee, roast the Anveshan Khapli Atta on low heat until golden and nutty.","Add the fresh ginger paste and dry ginger powder and cook until the raw smell goes.","Melt the Anveshan Jaggery Powder with a splash of water to a soft syrup.","Mix the syrup into the roasted atta with the nuts, gond and cardamom.","Press into a greased tray, level, and cut into paak squares while warm; cool to set."],
+    "anveshanProducts": ["ghee","jaggery-powder","khapli-atta"],
+    "image": "https://upload.wikimedia.org/wikipedia/commons/f/f8/Barfi_Coconut_Sweets_of_India.jpg"
   },
 ];
+
+// Non-veg keywords (egg counts as non-veg, per Swiggy/Zomato convention).
+// Word-boundary matched; "eggplant"/"eggless" are explicitly excluded below.
+const NON_VEG_TERMS = [
+  "chicken", "mutton", "lamb", "beef", "pork", "bacon", "ham", "sausage",
+  "fish", "prawn", "shrimp", "crab", "squid", "anchovy", "tuna", "salmon",
+  "meat", "keema", "qeema", "gosht", "egg", "eggs",
+];
+const NON_VEG_RE = new RegExp(`\\b(${NON_VEG_TERMS.join("|")})\\b`, "i");
+
+function computeIsVeg(recipe: { name: string; ingredients?: { name: string }[] }): boolean {
+  const haystack = [
+    recipe.name,
+    ...(recipe.ingredients ?? []).map((i) => i.name),
+  ]
+    .join(" | ")
+    .toLowerCase()
+    .replace(/eggplant|eggless|egg-free|egg free/g, ""); // these are vegetarian
+  return !NON_VEG_RE.test(haystack);
+}
 
 async function seed() {
   console.log("Seeding products...");
@@ -2494,8 +2989,18 @@ async function seed() {
 
   console.log("Seeding recipes...");
   for (const r of recipes) {
-    await setDoc(doc(db, "recipes", r.id), r);
-    console.log(`  ✓ ${r.slug}`);
+    // Merge SEO/AEO content (intro, faqs, tips, rewritten description) by recipe id.
+    const seo = SEO_CONTENT[r.id];
+    const merged = {
+      ...r,
+      ...(seo?.description ? { description: seo.description } : {}),
+      ...(seo?.intro ? { intro: seo.intro } : {}),
+      ...(seo?.faqs ? { faqs: seo.faqs } : {}),
+      ...(seo?.tips ? { tips: seo.tips } : {}),
+      isVeg: computeIsVeg(r),
+    };
+    await setDoc(doc(db, "recipes", r.id), merged);
+    console.log(`  ✓ ${r.slug}${merged.isVeg ? "" : " [NON-VEG]"}${seo ? " (seo)" : ""}`);
   }
 
   console.log("Done.");

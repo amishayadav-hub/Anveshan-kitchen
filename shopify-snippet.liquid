@@ -15,7 +15,7 @@
 
 <script>
   (function () {
-    var APP_URL = "https://YOUR-APP.vercel.app"; // <-- your deployed app URL, no trailing slash
+    var APP_URL = "https://anveshan-recipes.vercel.app"; // deployed app URL
     var root = document.getElementById("anveshan-recipes-root");
     if (!root) return;
 
@@ -26,14 +26,42 @@
     iframe.style.cssText = "width:100%; border:0; min-height:600px; display:block;";
     root.appendChild(iframe);
 
+    function refreshCart() {
+      // Refresh the theme's floating cart / drawer + count bubble after add.
+      fetch("/cart.js")
+        .then(function (r) { return r.json(); })
+        .then(function (cart) {
+          document
+            .querySelectorAll(".cart-count-bubble, [data-cart-count], .cart-count, #CartCount")
+            .forEach(function (el) { el.textContent = cart.item_count; });
+          document.documentElement.dispatchEvent(new CustomEvent("cart:refresh", { bubbles: true }));
+          document.dispatchEvent(new CustomEvent("cart:updated", { detail: { cart: cart } }));
+          document.dispatchEvent(new CustomEvent("cart:build"));
+        })
+        .catch(function () {});
+    }
+
     window.addEventListener("message", function (e) {
       if (e.origin !== APP_URL) return;       // only trust messages from our app
       var data = e.data || {};
       if (data.type === "anveshan-resize" && data.height) {
         iframe.style.height = data.height + "px";   // auto-resize, no inner scrollbar
       }
-      if (data.type === "anveshan-add-to-cart" && data.url) {
-        window.location.href = data.url;            // open the shopper's real cart
+      // Add silently to the real cart via Shopify AJAX (this page is same-origin
+      // with the cart), then refresh the floating cart — no disruptive redirect.
+      if (data.type === "anveshan-add-to-cart") {
+        if (data.items && data.items.length) {
+          fetch("/cart/add.js", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ items: data.items })
+          })
+            .then(function (r) { if (!r.ok) throw new Error("add failed"); return r.json(); })
+            .then(function () { refreshCart(); })
+            .catch(function () { if (data.url) window.location.href = data.url; });
+        } else if (data.url) {
+          window.location.href = data.url;          // legacy fallback
+        }
       }
     });
   })();

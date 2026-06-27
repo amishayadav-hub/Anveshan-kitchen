@@ -4,28 +4,51 @@ import { useState } from "react";
 import { GeneratedRecipe } from "@/lib/ai-providers";
 import { CartItem, GheeVariant } from "@/types";
 import AddToCartButton from "@/components/ui/AddToCartButton";
+import { highlightProductMentions } from "@/lib/product-highlight";
+import { ClockIcon, FlameIcon, UsersIcon, UtensilsIcon } from "@/components/ui/icons";
 
-// Shopify variant IDs — update these from your Shopify admin
+// Real Shopify variant IDs from the Anveshan Products API.
+// moringa-powder & sattu have no live SKU → "" (skipped in cart).
 const PRODUCT_VARIANT_MAP: Record<string, string> = {
-  khandsari: "REPLACE_WITH_SHOPIFY_VARIANT_ID",
-  "groundnut-oil": "REPLACE_WITH_GROUNDNUT_OIL_VARIANT_ID",
-  honey: "REPLACE_WITH_HONEY_VARIANT_ID",
-  "coconut-oil": "REPLACE_WITH_COCONUT_OIL_VARIANT_ID",
-  "khapli-atta": "REPLACE_WITH_KHAPLI_ATTA_VARIANT_ID",
-  "mustard-oil": "REPLACE_WITH_MUSTARD_OIL_VARIANT_ID",
+  khandsari: "47070925095104", // → Jaggery Powder (no live khandsari SKU)
+  "jaggery-powder": "47070925095104",
+  "groundnut-oil": "43150198866112",
+  honey: "46476687114432",
+  "coconut-oil": "30393637404750",
+  "khapli-atta": "46719452676288",
+  "mustard-oil": "30393367396430",
+  "sunflower-oil": "43077260607680",
+  "sesame-oil": "30393241829454",
+  "olive-oil": "45426734530752",
+  "multigrain-atta": "48130399207616",
+  "protein-atta": "48130399207616", // → Khapli Multigrain Atta (no live protein-atta SKU)
+  "turmeric-latte-mix": "47258532577472",
+  "ashwagandha-mix": "47258532577472",
+  saffron: "43376001122496",
+  amlaprash: "46033354064064",
+  "dry-fruit-paak": "47258508755136",
+  "moringa-powder": "",
+  sattu: "",
 };
 
 const GHEE_VARIANTS: Record<GheeVariant, string> = {
-  "gir-cow": "REPLACE_WITH_GIR_COW_VARIANT_ID",
-  "desi-cow": "REPLACE_WITH_DESI_COW_VARIANT_ID",
-  buffalo: "REPLACE_WITH_BUFFALO_VARIANT_ID",
+  "gir-cow": "43355933212864",
+  "desi-cow": "32459662557262",
+  buffalo: "45791842533568",
 };
 
 const PROVIDER_BADGE: Record<string, string> = {
   "Gemini": "bg-blue-50 text-blue-700 border-blue-200",
   "Groq": "bg-orange-50 text-orange-700 border-orange-200",
+  "NVIDIA": "bg-green-50 text-green-700 border-green-200",
   "Sarvam-M": "bg-purple-50 text-purple-700 border-purple-200",
 };
+
+// "Ghee" → "Anveshan Ghee" (leave as-is if already branded)
+function brandName(name: string): string {
+  const t = name.trim();
+  return /^anveshan\b/i.test(t) ? t : `Anveshan ${t}`;
+}
 
 interface Props {
   recipe: GeneratedRecipe;
@@ -57,9 +80,9 @@ export default function GeneratedRecipeCard({ recipe }: Props) {
         </div>
 
         <div className="flex flex-wrap gap-4 mt-4 text-sm text-gray-500">
-          <span>⏱ Prep {recipe.prepTime}</span>
-          <span>🍳 Cook {recipe.cookTime}</span>
-          <span>🍽 {recipe.servings} servings</span>
+          <span className="inline-flex items-center gap-1.5"><ClockIcon /> Prep {recipe.prepTime}</span>
+          <span className="inline-flex items-center gap-1.5"><FlameIcon /> Cook {recipe.cookTime}</span>
+          <span className="inline-flex items-center gap-1.5"><UsersIcon /> {recipe.servings} servings</span>
         </div>
       </div>
 
@@ -73,10 +96,17 @@ export default function GeneratedRecipeCard({ recipe }: Props) {
                 <span className="shrink-0 w-6 h-6 rounded-full bg-anv-cream text-anv-green text-xs font-bold flex items-center justify-center mt-0.5">
                   {i + 1}
                 </span>
-                <p className="text-gray-600 text-sm leading-relaxed">{step}</p>
+                <p className="text-gray-600 text-sm leading-relaxed">{highlightProductMentions(step, recipe.anveshanProducts)}</p>
               </li>
             ))}
           </ol>
+
+          {recipe.servingSuggestion && (
+            <p className="mt-4 text-sm text-anv-green bg-anv-cream/40 border border-anv-cream-dark rounded-lg p-3 flex items-start gap-2">
+              <UtensilsIcon className="w-4 h-4 mt-0.5 shrink-0" />
+              <span><span className="font-semibold">Serve:</span> {recipe.servingSuggestion}</span>
+            </p>
+          )}
         </div>
 
         {/* Ingredients + Cart */}
@@ -87,14 +117,9 @@ export default function GeneratedRecipeCard({ recipe }: Props) {
               {recipe.ingredients.map((ing, i) => (
                 <li key={i} className={`rounded-lg p-2.5 text-sm ${ing.anveshan ? "bg-anv-cream/40 border border-anv-cream-dark" : "bg-gray-50"}`}>
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="text-gray-700 font-medium">
-                      {ing.quantity} {ing.unit} {ing.name}
+                    <span className={ing.anveshan ? "text-anv-green font-bold" : "text-gray-700 font-medium"}>
+                      {ing.quantity} {ing.unit} {ing.anveshan ? brandName(ing.name) : ing.name}
                     </span>
-                    {ing.anveshan && (
-                      <span className="text-xs bg-anv-green text-white px-1.5 py-0.5 rounded-full">
-                        Anveshan
-                      </span>
-                    )}
                   </div>
                   {ing.note && (
                     <p className="text-xs text-anv-green mt-1">{ing.note}</p>

@@ -19,16 +19,28 @@ export function buildCartPermalink(items: CartItem[]): string {
 
 /**
  * Adds items to the real anveshan.farm cart.
- * - Embedded in an iframe on anveshan.farm → ask the parent page (same origin
- *   as the cart) to navigate to the permalink, so the cart session is shared.
- * - Running standalone → navigate this window directly.
+ * - Embedded in an iframe on anveshan.farm → post the items to the parent page
+ *   (same origin as the cart), which adds them silently via the Shopify AJAX
+ *   Cart API so the shopper isn't redirected and the storefront's floating cart
+ *   updates. A permalink `url` is included as a fallback if the AJAX add fails.
+ * - Running standalone → navigate this window to the cart permalink.
  */
 export function addToCart(items: CartItem[]): void {
   if (typeof window === "undefined") return;
-  const url = buildCartPermalink(items);
+  const valid = items.filter((i) => i.shopifyVariantId);
+  if (valid.length === 0) return;
+
+  const url = buildCartPermalink(valid);
   const inIframe = window.parent && window.parent !== window;
   if (inIframe) {
-    window.parent.postMessage({ type: "anveshan-add-to-cart", url }, "*");
+    window.parent.postMessage(
+      {
+        type: "anveshan-add-to-cart",
+        items: valid.map((i) => ({ id: Number(i.shopifyVariantId), quantity: i.quantity || 1 })),
+        url, // fallback if the parent's AJAX add fails
+      },
+      "*"
+    );
   } else {
     window.location.href = url;
   }

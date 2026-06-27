@@ -25,16 +25,42 @@ export async function GET(request: Request) {
   iframe.allow = "same-origin";
   iframe.title = "Anveshan Recipes";
 
+  function refreshCart() {
+    // Best-effort: refresh the theme's floating cart / drawer + count bubble.
+    fetch("/cart.js")
+      .then(function (r) { return r.json(); })
+      .then(function (cart) {
+        document
+          .querySelectorAll(".cart-count-bubble, [data-cart-count], .cart-count, #CartCount")
+          .forEach(function (el) { el.textContent = cart.item_count; });
+        document.documentElement.dispatchEvent(new CustomEvent("cart:refresh", { bubbles: true }));
+        document.dispatchEvent(new CustomEvent("cart:updated", { detail: { cart: cart } }));
+        document.dispatchEvent(new CustomEvent("cart:build"));
+      })
+      .catch(function () {});
+  }
+
   window.addEventListener("message", function (e) {
     if (!e.data) return;
     // Auto-resize iframe to match content height
     if (e.data.type === "anveshan-resize") {
       iframe.style.height = e.data.height + "px";
     }
-    // Add-to-cart: navigate the Shopify page (same origin as the cart) to the
-    // cart permalink so items land in the shopper's real cart.
-    if (e.data.type === "anveshan-add-to-cart" && e.data.url) {
-      window.location.href = e.data.url;
+    // Add-to-cart: add silently via the Shopify AJAX Cart API (this page is
+    // same-origin with the cart), then refresh the floating cart — no redirect.
+    if (e.data.type === "anveshan-add-to-cart") {
+      if (e.data.items && e.data.items.length) {
+        fetch("/cart/add.js", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ items: e.data.items }),
+        })
+          .then(function (r) { if (!r.ok) throw new Error("add failed"); return r.json(); })
+          .then(function () { refreshCart(); })
+          .catch(function () { if (e.data.url) window.location.href = e.data.url; });
+      } else if (e.data.url) {
+        window.location.href = e.data.url; // legacy fallback
+      }
     }
   });
 

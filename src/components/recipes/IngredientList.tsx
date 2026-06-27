@@ -3,68 +3,107 @@
 import { useState } from "react";
 import { Ingredient, AnveshanProduct, GheeVariant } from "@/types";
 import GheeSelector from "@/components/ui/GheeSelector";
+import ProductInfoCard from "@/components/recipes/ProductInfoCard";
+import { pdpUrl, pdpUrlForProduct, PRODUCT_HANDLES, GHEE_VARIETY } from "@/lib/product-highlight";
+import { PRODUCT_SIZES } from "@/data/product-variants";
 
 interface Props {
   ingredients: Ingredient[];
   products: AnveshanProduct[];
-  onVariantChange: (productId: string, variantId: string) => void;
+  selection: Record<string, { variantId: string; price: number }>;
+  onSelect: (productId: string, variantId: string, price: number) => void;
 }
 
-export default function IngredientList({ ingredients, products, onVariantChange }: Props) {
-  const [gheeSelections, setGheeSelections] = useState<Record<string, GheeVariant>>({});
+const TYPE_LABEL: Record<GheeVariant, string> = {
+  "gir-cow": "Gir Cow",
+  "desi-cow": "Desi Cow",
+  "buffalo": "Buffalo",
+};
+
+export default function IngredientList({ ingredients, products, selection, onSelect }: Props) {
+  const [gheeType, setGheeType] = useState<Record<string, GheeVariant>>({});
+  const [openCard, setOpenCard] = useState<number | null>(null);
 
   const productMap = Object.fromEntries(products.map((p) => [p.id, p]));
 
-  function handleGheeChange(productId: string, variant: GheeVariant) {
-    const product = productMap[productId];
-    if (!product?.variants) return;
-    const selected = product.variants.find((v) => v.type === variant);
-    if (!selected) return;
-    setGheeSelections((prev) => ({ ...prev, [productId]: variant }));
-    onVariantChange(productId, selected.shopifyVariantId);
+  function handleGheeType(productId: string, variant: GheeVariant) {
+    const opt = productMap[productId]?.variants?.find((v) => v.type === variant);
+    if (!opt) return;
+    setGheeType((prev) => ({ ...prev, [productId]: variant }));
+    onSelect(productId, opt.shopifyVariantId, opt.price);
   }
 
   return (
-    <ul className="space-y-3">
+    <ul className="space-y-2.5">
       {ingredients.map((ing, i) => {
-        const product = ing.anveshanProductId ? productMap[ing.anveshanProductId] : null;
+        const pid = ing.anveshanProductId;
+        const product = pid ? productMap[pid] : null;
+        const label = ing.anveshan ? brandName(ing.name) : ing.name;
+
+        const isGhee = !!product?.variants;
+        const type = pid && isGhee ? gheeType[pid] ?? product!.variants![0].type : undefined;
+        const handle = isGhee && type ? GHEE_VARIETY[type].handle : pid ? PRODUCT_HANDLES[pid] : "";
+        const sizes = handle ? PRODUCT_SIZES[handle] ?? [] : [];
+        const pdp = isGhee && type ? pdpUrl(GHEE_VARIETY[type].handle) : pid ? pdpUrlForProduct(pid) : null;
+        const hasCard = ing.anveshan && (sizes.length > 0 || !!pdp);
+        const cardImage = isGhee && type ? GHEE_VARIETY[type].image : product?.image;
+        const cardName = isGhee && type ? `${TYPE_LABEL[type]} Ghee` : product?.name ?? label;
 
         return (
-          <li key={i} className={`rounded-xl p-3 ${ing.anveshan ? "bg-anv-cream/40 border border-anv-cream-dark" : "bg-gray-50"}`}>
-            <div className="flex items-start justify-between gap-3">
-              <div className="flex-1">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="font-medium text-gray-800">
-                    {ing.quantity} {ing.unit} {ing.name}
-                  </span>
-                  {ing.anveshan && (
-                    <span className="text-xs bg-anv-green text-white px-2 py-0.5 rounded-full">
-                      Anveshan
+          <li key={i} className="flex items-start gap-2.5">
+            <span className="mt-[7px] w-1.5 h-1.5 rounded-full bg-anv-green shrink-0" />
+            <div className="flex-1 min-w-0">
+              <span className="text-gray-700">
+                {ing.quantity} {ing.unit}{" "}
+                {ing.anveshan ? (
+                  hasCard ? (
+                    <span className="relative inline-block">
+                      <button
+                        onClick={() => setOpenCard(openCard === i ? null : i)}
+                        className="font-bold text-anv-green underline decoration-anv-green/30 underline-offset-2 hover:decoration-anv-green transition-colors"
+                      >
+                        {label}
+                      </button>
+                      {openCard === i && (
+                        <ProductInfoCard
+                          name={cardName}
+                          image={cardImage}
+                          about={product?.whyAnveshan}
+                          pdpUrl={pdp}
+                          sizes={sizes}
+                          selectedVariantId={pid ? selection[pid]?.variantId : undefined}
+                          onSelectSize={(s) => pid && onSelect(pid, s.variantId, s.price)}
+                          onClose={() => setOpenCard(null)}
+                        />
+                      )}
                     </span>
-                  )}
-                </div>
-                {ing.note && (
-                  <p className="text-xs text-anv-green mt-1">{ing.note}</p>
+                  ) : (
+                    <span className="font-bold text-anv-green">{label}</span>
+                  )
+                ) : (
+                  label
                 )}
-                {product?.whyAnveshan && (
-                  <p className="text-xs text-gray-500 mt-1 italic">{product.whyAnveshan}</p>
-                )}
-              </div>
-            </div>
+              </span>
 
-            {product?.variants && (
-              <div className="mt-2.5">
-                <p className="text-xs text-gray-500 mb-1.5">Choose variety:</p>
-                <GheeSelector
-                  variants={product.variants}
-                  selected={gheeSelections[product.id] ?? product.variants[0].type}
-                  onChange={(v) => handleGheeChange(product.id, v)}
-                />
-              </div>
-            )}
+              {isGhee && product?.variants && (
+                <div className="mt-1.5">
+                  <GheeSelector
+                    variants={product.variants}
+                    selected={type!}
+                    onChange={(v) => pid && handleGheeType(pid, v)}
+                  />
+                </div>
+              )}
+            </div>
           </li>
         );
       })}
     </ul>
   );
+}
+
+// "Groundnut Oil" → "Anveshan Groundnut Oil" (don't double an existing prefix)
+function brandName(name: string): string {
+  const t = name.trim();
+  return /^anveshan\b/i.test(t) ? t : `Anveshan ${t}`;
 }

@@ -1,29 +1,46 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Recipe, AnveshanProduct } from "@/types";
 import { CATEGORIES, getCategory } from "@/lib/categories";
 import RecipeCard from "@/components/recipes/RecipeCard";
+import VegToggle from "@/components/recipes/VegToggle";
 
 interface Props {
   recipes: Recipe[];
   productMap: Record<string, AnveshanProduct>;
 }
 
+const VEG_KEY = "anveshan-veg-mode";
+
 export default function RecipeBrowser({ recipes, productMap }: Props) {
   const [category, setCategory] = useState<string>("all");
   const [sub, setSub] = useState<string>("all");
+  const [vegOnly, setVegOnly] = useState(false);
+
+  // Restore the shopper's Veg Mode choice (persisted, like Swiggy).
+  useEffect(() => {
+    if (typeof window !== "undefined" && localStorage.getItem(VEG_KEY) === "1") {
+      setVegOnly(true);
+    }
+  }, []);
+
+  function toggleVeg(on: boolean) {
+    setVegOnly(on);
+    if (typeof window !== "undefined") localStorage.setItem(VEG_KEY, on ? "1" : "0");
+  }
 
   const activeCategory = category === "all" ? null : getCategory(category);
   const subs = activeCategory?.subs ?? null;
 
   const filtered = useMemo(() => {
     return recipes.filter((r) => {
+      if (vegOnly && r.isVeg === false) return false;
       if (category !== "all" && r.category !== category) return false;
       if (sub !== "all" && r.subCategory !== sub) return false;
       return true;
     });
-  }, [recipes, category, sub]);
+  }, [recipes, category, sub, vegOnly]);
 
   function selectCategory(key: string) {
     setCategory(key);
@@ -32,6 +49,11 @@ export default function RecipeBrowser({ recipes, productMap }: Props) {
 
   return (
     <div>
+      {/* Top bar: Veg Mode toggle (Swiggy-style) */}
+      <div className="flex items-center justify-end mb-4 pb-3 border-b border-gray-100">
+        <VegToggle on={vegOnly} onChange={toggleVeg} />
+      </div>
+
       {/* Top-level filter row */}
       <div className="flex flex-wrap gap-2">
         <FilterChip label="All Recipes" active={category === "all"} onClick={() => selectCategory("all")} />
