@@ -54,3 +54,12 @@ export interface CartItem {
   quantity: number;
   productName: string;
 }
+
+// A line in the local AJAX cart (drawer). Keyed by variantId.
+export interface CartLine {
+  variantId: string;
+  name: string;
+  image?: string;
+  price: number;
+  quantity: number;
+}

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Recipe, CartItem, AnveshanProduct } from "@/types";
+import { Recipe, AnveshanProduct } from "@/types";
 import { getCategoryLabel, getSubLabel } from "@/lib/categories";
 import BuyRecipeButton from "@/components/ui/BuyRecipeButton";
 
@@ -19,14 +19,6 @@ export default function RecipeCard({ recipe, productMap = {} }: Props) {
     .filter(Boolean);
 
   const total = recipeProducts.reduce((sum, p) => sum + (p.price || 0), 0);
-
-  const cartItems: CartItem[] = recipeProducts
-    .map((p) => ({
-      shopifyVariantId: p.variants ? p.variants[0].shopifyVariantId : p.shopifyVariantId,
-      quantity: 1,
-      productName: p.name,
-    }))
-    .filter((i) => i.shopifyVariantId);
 
   return (
     <Link
@@ -62,7 +54,7 @@ export default function RecipeCard({ recipe, productMap = {} }: Props) {
         </p>
 
         {/* Buy row: product-image circles + Add to Cart pill */}
-        <BuyRecipeButton products={recipeProducts} items={cartItems} />
+        <BuyRecipeButton products={recipeProducts} />
       </div>
     </Link>
   );

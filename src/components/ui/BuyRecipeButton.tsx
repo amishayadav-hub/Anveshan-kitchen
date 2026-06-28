@@ -2,26 +2,37 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { AnveshanProduct, CartItem } from "@/types";
-import { addToCart } from "@/lib/shopify-cart";
+import { AnveshanProduct, CartLine } from "@/types";
+import { useCart } from "@/components/cart/CartProvider";
 
 interface Props {
   products: AnveshanProduct[];
-  items: CartItem[];
 }
 
 // Card buy row: overlapping product-image circles + an "Add to Cart" pill.
 // Lives inside the card <Link>, so the click is stopped from navigating.
-export default function BuyRecipeButton({ products, items }: Props) {
+export default function BuyRecipeButton({ products }: Props) {
+  const { addLines, open } = useCart();
   const [added, setAdded] = useState(false);
   if (products.length === 0) return null;
 
   function handleClick(e: React.MouseEvent) {
     e.preventDefault();
     e.stopPropagation();
-    if (items.length === 0) return;
+    const lines: CartLine[] = products
+      .map((p) => ({
+        variantId: p.variants ? p.variants[0].shopifyVariantId : p.shopifyVariantId,
+        name: p.name,
+        image: p.image,
+        price: p.variants ? p.variants[0].price : p.price,
+        quantity: 1,
+      }))
+      .filter((l) => l.variantId);
+    if (lines.length === 0) return;
+    addLines(lines);
+    open();
     setAdded(true);
-    addToCart(items);
+    setTimeout(() => setAdded(false), 1500);
   }
 
   return (

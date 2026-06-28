@@ -3,15 +3,27 @@
 import { useState } from "react";
 import { Ingredient, AnveshanProduct, GheeVariant } from "@/types";
 import GheeSelector from "@/components/ui/GheeSelector";
+import AttaSelector from "@/components/ui/AttaSelector";
 import ProductInfoCard from "@/components/recipes/ProductInfoCard";
-import { pdpUrl, pdpUrlForProduct, PRODUCT_HANDLES, GHEE_VARIETY } from "@/lib/product-highlight";
+import {
+  pdpUrl,
+  pdpUrlForProduct,
+  PRODUCT_HANDLES,
+  GHEE_VARIETY,
+  ATTA_VARIETY,
+  ATTA_PRODUCT_IDS,
+  attaDefaultVariety,
+  type AttaVariety,
+} from "@/lib/product-highlight";
 import { PRODUCT_SIZES } from "@/data/product-variants";
+
+const ATTA_VARIETIES: AttaVariety[] = ["khapli", "multigrain"];
 
 interface Props {
   ingredients: Ingredient[];
   products: AnveshanProduct[];
-  selection: Record<string, { variantId: string; price: number }>;
-  onSelect: (productId: string, variantId: string, price: number) => void;
+  selection: Record<string, { variantId: string; price: number; image?: string }>;
+  onSelect: (productId: string, variantId: string, price: number, image?: string) => void;
 }
 
 const TYPE_LABEL: Record<GheeVariant, string> = {
@@ -22,6 +34,7 @@ const TYPE_LABEL: Record<GheeVariant, string> = {
 
 export default function IngredientList({ ingredients, products, selection, onSelect }: Props) {
   const [gheeType, setGheeType] = useState<Record<string, GheeVariant>>({});
+  const [attaType, setAttaType] = useState<Record<string, AttaVariety>>({});
   const [openCard, setOpenCard] = useState<number | null>(null);
 
   const productMap = Object.fromEntries(products.map((p) => [p.id, p]));
@@ -30,7 +43,14 @@ export default function IngredientList({ ingredients, products, selection, onSel
     const opt = productMap[productId]?.variants?.find((v) => v.type === variant);
     if (!opt) return;
     setGheeType((prev) => ({ ...prev, [productId]: variant }));
-    onSelect(productId, opt.shopifyVariantId, opt.price);
+    // also switch the image to the chosen variety's product photo
+    onSelect(productId, opt.shopifyVariantId, opt.price, GHEE_VARIETY[variant]?.image);
+  }
+
+  function handleAttaType(productId: string, variety: AttaVariety) {
+    const v = ATTA_VARIETY[variety];
+    setAttaType((prev) => ({ ...prev, [productId]: variety }));
+    onSelect(productId, v.variantId, v.price, v.image);
   }
 
   return (
@@ -41,13 +61,33 @@ export default function IngredientList({ ingredients, products, selection, onSel
         const label = ing.anveshan ? brandName(ing.name) : ing.name;
 
         const isGhee = !!product?.variants;
+        const isAtta = !!pid && ATTA_PRODUCT_IDS.includes(pid);
         const type = pid && isGhee ? gheeType[pid] ?? product!.variants![0].type : undefined;
-        const handle = isGhee && type ? GHEE_VARIETY[type].handle : pid ? PRODUCT_HANDLES[pid] : "";
+        const attaV = pid && isAtta ? attaType[pid] ?? attaDefaultVariety(pid) : undefined;
+
+        const handle =
+          isGhee && type
+            ? GHEE_VARIETY[type].handle
+            : isAtta && attaV
+              ? ATTA_VARIETY[attaV].handle
+              : pid
+                ? PRODUCT_HANDLES[pid]
+                : "";
         const sizes = handle ? PRODUCT_SIZES[handle] ?? [] : [];
-        const pdp = isGhee && type ? pdpUrl(GHEE_VARIETY[type].handle) : pid ? pdpUrlForProduct(pid) : null;
+        const pdp = handle ? pdpUrl(handle) : pid ? pdpUrlForProduct(pid) : null;
         const hasCard = ing.anveshan && (sizes.length > 0 || !!pdp);
-        const cardImage = isGhee && type ? GHEE_VARIETY[type].image : product?.image;
-        const cardName = isGhee && type ? `${TYPE_LABEL[type]} Ghee` : product?.name ?? label;
+        const cardImage =
+          isGhee && type
+            ? GHEE_VARIETY[type].image
+            : isAtta && attaV
+              ? ATTA_VARIETY[attaV].image
+              : product?.image;
+        const cardName =
+          isGhee && type
+            ? `${TYPE_LABEL[type]} Ghee`
+            : isAtta && attaV
+              ? `${ATTA_VARIETY[attaV].label} Atta`
+              : product?.name ?? label;
 
         return (
           <li key={i} className="flex items-start gap-2.5">
@@ -72,7 +112,7 @@ export default function IngredientList({ ingredients, products, selection, onSel
                           pdpUrl={pdp}
                           sizes={sizes}
                           selectedVariantId={pid ? selection[pid]?.variantId : undefined}
-                          onSelectSize={(s) => pid && onSelect(pid, s.variantId, s.price)}
+                          onSelectSize={(s) => pid && onSelect(pid, s.variantId, s.price, cardImage)}
                           onClose={() => setOpenCard(null)}
                         />
                       )}
@@ -91,6 +131,16 @@ export default function IngredientList({ ingredients, products, selection, onSel
                     variants={product.variants}
                     selected={type!}
                     onChange={(v) => pid && handleGheeType(pid, v)}
+                  />
+                </div>
+              )}
+
+              {isAtta && attaV && (
+                <div className="mt-1.5">
+                  <AttaSelector
+                    varieties={ATTA_VARIETIES}
+                    selected={attaV}
+                    onChange={(v) => pid && handleAttaType(pid, v)}
                   />
                 </div>
               )}

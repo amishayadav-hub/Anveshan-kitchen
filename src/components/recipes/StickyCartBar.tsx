@@ -2,25 +2,29 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { AnveshanProduct, CartItem } from "@/types";
-import { addToCart } from "@/lib/shopify-cart";
+import { AnveshanProduct, CartLine } from "@/types";
+import { useCart } from "@/components/cart/CartProvider";
 
 interface Props {
   products: AnveshanProduct[];
-  items: CartItem[];
+  lines: CartLine[];
   total: number;
   recipeName: string;
 }
 
 // Sticky bottom bar on the recipe detail page — adds the recipe's Anveshan
-// ingredients to the cart. Items reflect the chosen ghee variety.
-export default function StickyCartBar({ products, items, total, recipeName }: Props) {
+// products to the cart drawer. Lines reflect the chosen ghee variety/size.
+export default function StickyCartBar({ products, lines, total, recipeName }: Props) {
+  const { addLines, open } = useCart();
   const [added, setAdded] = useState(false);
   if (products.length === 0) return null;
 
   function handleClick() {
+    if (lines.length === 0) return;
+    addLines(lines);
+    open();
     setAdded(true);
-    addToCart(items);
+    setTimeout(() => setAdded(false), 1500);
   }
 
   return (
@@ -28,16 +32,16 @@ export default function StickyCartBar({ products, items, total, recipeName }: Pr
       <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
         <div className="flex items-center gap-3 min-w-0">
           <div className="flex -space-x-3 shrink-0">
-            {products.slice(0, 3).map((p) => (
+            {lines.slice(0, 3).map((l) => (
               <div
-                key={p.id}
+                key={l.variantId}
                 className="relative w-10 h-10 rounded-full ring-2 ring-white overflow-hidden bg-anv-cream/40"
               >
-                {p.image ? (
-                  <Image src={p.image} alt={p.name} fill className="object-cover" sizes="40px" />
+                {l.image ? (
+                  <Image src={l.image} alt={l.name} fill className="object-cover" sizes="40px" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-anv-green text-xs font-bold">
-                    {p.name.charAt(0)}
+                    {l.name.charAt(0)}
                   </div>
                 )}
               </div>
@@ -55,7 +59,7 @@ export default function StickyCartBar({ products, items, total, recipeName }: Pr
           onClick={handleClick}
           className="shrink-0 bg-anv-green text-white font-semibold text-sm px-5 sm:px-7 py-2.5 rounded-full hover:bg-anv-green-dark transition-colors whitespace-nowrap"
         >
-          {added ? "Opening cart..." : "Add to Cart"}
+          {added ? "Added ✓" : "Add to Cart"}
         </button>
       </div>
     </div>

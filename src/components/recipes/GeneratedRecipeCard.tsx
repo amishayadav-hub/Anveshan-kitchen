@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { GeneratedRecipe } from "@/lib/ai-providers";
-import { CartItem, GheeVariant } from "@/types";
+import { CartLine, GheeVariant } from "@/types";
 import AddToCartButton from "@/components/ui/AddToCartButton";
 import { highlightProductMentions } from "@/lib/product-highlight";
 import { ClockIcon, FlameIcon, UsersIcon, UtensilsIcon } from "@/components/ui/icons";
@@ -57,11 +57,14 @@ interface Props {
 export default function GeneratedRecipeCard({ recipe }: Props) {
   const [gheeVariant, setGheeVariant] = useState<GheeVariant>("gir-cow");
 
-  const cartItems: CartItem[] = recipe.anveshanProducts.map((id) => ({
-    shopifyVariantId: id === "ghee" ? GHEE_VARIANTS[gheeVariant] : PRODUCT_VARIANT_MAP[id] ?? id,
-    quantity: 1,
-    productName: id,
-  }));
+  const cartLines: CartLine[] = recipe.anveshanProducts
+    .map((id) => ({
+      variantId: id === "ghee" ? GHEE_VARIANTS[gheeVariant] : PRODUCT_VARIANT_MAP[id] ?? "",
+      name: brandName(id.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())),
+      price: 0,
+      quantity: 1,
+    }))
+    .filter((l) => l.variantId);
 
   const badgeStyle = PROVIDER_BADGE[recipe.provider] ?? "bg-gray-50 text-gray-600 border-gray-200";
 
@@ -151,7 +154,7 @@ export default function GeneratedRecipeCard({ recipe }: Props) {
               <p className="text-xs font-semibold text-anv-green mb-3">
                 {recipe.anveshanProducts.length} Anveshan product{recipe.anveshanProducts.length !== 1 ? "s" : ""} in this recipe
               </p>
-              <AddToCartButton items={cartItems} />
+              <AddToCartButton lines={cartLines} />
             </div>
           )}
         </div>

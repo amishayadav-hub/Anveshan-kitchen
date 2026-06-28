@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, type ReactNode } from "react";
 import Image from "next/image";
-import { Recipe, AnveshanProduct, CartItem } from "@/types";
+import { Recipe, AnveshanProduct, CartLine } from "@/types";
 import IngredientList from "@/components/recipes/IngredientList";
 import AddToCartButton from "@/components/ui/AddToCartButton";
 import StickyCartBar from "@/components/recipes/StickyCartBar";
@@ -60,28 +60,37 @@ function renderStep(step: string, productIds: string[]): ReactNode {
 }
 
 export default function RecipeView({ recipe, products, categoryLabel }: Props) {
-  // Per-product chosen pack: variant id + its price (drives the cart + totals).
-  const [selection, setSelection] = useState<Record<string, { variantId: string; price: number }>>(() => {
-    const map: Record<string, { variantId: string; price: number }> = {};
+  // Per-product chosen pack: variant id + price + image (drives cart, totals, art).
+  type Sel = { variantId: string; price: number; image?: string };
+  const [selection, setSelection] = useState<Record<string, Sel>>(() => {
+    const map: Record<string, Sel> = {};
     products.forEach((p) => {
       map[p.id] = p.variants
-        ? { variantId: p.variants[0].shopifyVariantId, price: p.variants[0].price }
-        : { variantId: p.shopifyVariantId, price: p.price };
+        ? { variantId: p.variants[0].shopifyVariantId, price: p.variants[0].price, image: p.image }
+        : { variantId: p.shopifyVariantId, price: p.price, image: p.image };
     });
     return map;
   });
 
-  function handleSelect(productId: string, variantId: string, price: number) {
-    setSelection((prev) => ({ ...prev, [productId]: { variantId, price } }));
+  function handleSelect(productId: string, variantId: string, price: number, image?: string) {
+    setSelection((prev) => ({
+      ...prev,
+      [productId]: { variantId, price, image: image ?? prev[productId]?.image },
+    }));
   }
 
   const priceFor = (p: AnveshanProduct) => selection[p.id]?.price ?? p.price ?? 0;
+  const imageFor = (p: AnveshanProduct) => selection[p.id]?.image ?? p.image;
 
-  const cartItems: CartItem[] = products.map((p) => ({
-    shopifyVariantId: selection[p.id]?.variantId ?? p.shopifyVariantId,
-    quantity: 1,
-    productName: p.name,
-  }));
+  const cartLines: CartLine[] = products
+    .map((p) => ({
+      variantId: selection[p.id]?.variantId ?? p.shopifyVariantId,
+      name: p.name,
+      image: imageFor(p),
+      price: priceFor(p),
+      quantity: 1,
+    }))
+    .filter((l) => l.variantId);
   const total = products.reduce((sum, p) => sum + priceFor(p), 0);
 
   const totalMin = parseMinutes(recipe.prepTime) + parseMinutes(recipe.cookTime);
@@ -141,37 +150,16 @@ export default function RecipeView({ recipe, products, categoryLabel }: Props) {
           </header>
 
         {/* ── All sections on one page ── */}
-        <section className="space-y-12">
+        <section className="space-y-10">
           {/* Ingredients */}
-          <div id="ingredients" className="grid md:grid-cols-[1fr_240px] gap-6 scroll-mt-6">
-            <div>
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Ingredients</h2>
-              <IngredientList
-                ingredients={recipe.ingredients}
-                products={products}
-                selection={selection}
-                onSelect={handleSelect}
-              />
-            </div>
-            <div className="space-y-4">
-              {hasTips && (
-                <div className="bg-[#EDF3EF] border border-[#D9E5DE] rounded-xl p-4">
-                  <p className="font-semibold text-anv-green text-sm mb-1.5 flex items-center gap-1.5">
-                    <SproutIcon /> Chef&apos;s Tip
-                  </p>
-                  <p className="text-sm text-gray-600 leading-relaxed">{recipe.tips![0]}</p>
-                </div>
-              )}
-              {/* Trust signals (moved here from the sidebar) */}
-              <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-4 space-y-3.5">
-                {TRUST.map((t) => (
-                  <div key={t.label} className="flex items-center gap-3 text-sm text-gray-700">
-                    <span className="text-anv-green shrink-0">{t.icon}</span>
-                    {t.label}
-                  </div>
-                ))}
-              </div>
-            </div>
+          <div id="ingredients" className="scroll-mt-6">
+            <h2 className="text-xl font-bold text-gray-900 mb-4">Ingredients</h2>
+            <IngredientList
+              ingredients={recipe.ingredients}
+              products={products}
+              selection={selection}
+              onSelect={handleSelect}
+            />
           </div>
 
           {/* Instructions */}
@@ -237,8 +225,8 @@ export default function RecipeView({ recipe, products, categoryLabel }: Props) {
                     className="flex gap-3 items-center rounded-xl border border-gray-100 p-2.5 hover:border-anv-green/30 transition-colors"
                   >
                     <div className="relative w-16 h-16 shrink-0 rounded-lg overflow-hidden bg-anv-cream/40">
-                      {p.image ? (
-                        <Image src={p.image} alt={p.name} fill className="object-cover" sizes="64px" />
+                      {imageFor(p) ? (
+                        <Image src={imageFor(p)!} alt={p.name} fill className="object-cover" sizes="64px" />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center text-anv-green font-bold">
                           {p.name.charAt(0)}
@@ -260,11 +248,21 @@ export default function RecipeView({ recipe, products, categoryLabel }: Props) {
                   <span className="text-sm font-bold text-gray-900">Total ₹{total}</span>
                 </div>
 
-                <AddToCartButton items={cartItems} />
+                <AddToCartButton lines={cartLines} />
 
                 <p className="text-center text-xs text-gray-400">
                   Secure checkout on anveshan.farm — you&apos;ll be redirected after adding.
                 </p>
+              </div>
+
+              {/* Trust signals — compact strip under the products */}
+              <div className="border-t border-gray-100 px-4 py-3 grid grid-cols-2 gap-x-3 gap-y-2">
+                {TRUST.map((t) => (
+                  <div key={t.label} className="flex items-center gap-2 text-xs text-gray-600">
+                    <span className="text-anv-green shrink-0">{t.icon}</span>
+                    {t.label}
+                  </div>
+                ))}
               </div>
             </div>
           </aside>
@@ -276,7 +274,7 @@ export default function RecipeView({ recipe, products, categoryLabel }: Props) {
         <ProductInfoTabs productName={primaryPdp.name} pdp={primaryPdp.pdp} />
       )}
 
-      <StickyCartBar products={products} items={cartItems} total={total} recipeName={recipe.name} />
+      <StickyCartBar products={products} lines={cartLines} total={total} recipeName={recipe.name} />
     </div>
   );
 }

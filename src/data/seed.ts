@@ -4,6 +4,7 @@ dotenv.config({ path: ".env.local" });
 import { initializeApp } from "firebase/app";
 import { getFirestore, doc, setDoc } from "firebase/firestore";
 import { SEO_CONTENT } from "./seo-content";
+import { STEP_FIXES } from "./step-fixes";
 
 const app = initializeApp({
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -266,7 +267,7 @@ const recipes = [
     slug: "besan-ladoo",
     name: "Besan Ladoo",
     description: "Classic festive ladoos made with roasted gram flour, pure ghee, and khandsari. Two Anveshan products — ghee and khandsari — make all the difference in taste and nutrition.",
-    image: "https://upload.wikimedia.org/wikipedia/commons/2/2f/Desi_besan_ke_ladoo.jpg",
+    image: "https://upload.wikimedia.org/wikipedia/commons/8/8d/Besan_Laddu_cropped.jpg",
     prepTime: "15 min",
     cookTime: "30 min",
     servings: 20,
@@ -1754,7 +1755,7 @@ const recipes = [
     category: "snack",
     subCategory: null,
     description: "Crispy, flaky diamond-shaped crackers made with nutty Anveshan Khapli Atta and rubbed with bilona ghee, then baked instead of deep-fried for a guilt-free crunch.",
-    image: "https://images.unsplash.com/photo-1696265498747-efc4c0dd7b98?w=1200&q=80&auto=format&fit=crop",
+    image: "https://upload.wikimedia.org/wikipedia/commons/4/48/Namak_paray_made_at_home.jpg",
     prepTime: "20 min",
     cookTime: "25 min",
     servings: 4,
@@ -1815,7 +1816,7 @@ const recipes = [
     category: "snack",
     subCategory: null,
     description: "A light, fluffy Maharashtrian breakfast of flattened rice tempered with onions, mustard seeds and curry leaves in wholesome Anveshan Groundnut Oil, finished with lemon and coriander.",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Kanda_poha.jpg/500px-Kanda_poha.jpg",
+    image: "https://upload.wikimedia.org/wikipedia/commons/5/5d/Kanda_Poha-Diu-DSC003.jpg",
     prepTime: "10 min",
     cookTime: "15 min",
     servings: 4,
@@ -2406,7 +2407,7 @@ const recipes = [
     ],
     "steps": ["Cut the sweet potatoes into matchstick fries and pat dry.", "Toss with cornflour, paprika, pepper and salt.", "Drizzle with groundnut oil and toss to coat.", "Air-fry at 200C for 15-18 minutes, shaking halfway.", "Warm the honey and drizzle over the hot fries.", "Scatter herbs and serve immediately."],
     "anveshanProducts": ["groundnut-oil", "honey"],
-    "image": "https://images.unsplash.com/photo-1598679253544-2c97992403ea?w=1200&q=80&auto=format&fit=crop"
+    "image": "https://images.unsplash.com/photo-1745792714512-77cffdb16020?w=1200&q=80&auto=format&fit=crop"
   },
   {
     "id": "bajra-methi-khakhra", "slug": "bajra-methi-khakhra", "name": "Bajra Methi Khakhra", "category": "snack", "subCategory": null,
@@ -2956,7 +2957,7 @@ const recipes = [
     ],
     "steps": ["Heat the Anveshan Ghee and fry the gond until it puffs; crush and set aside.","In the same ghee, roast the Anveshan Khapli Atta on low heat until golden and nutty.","Add the fresh ginger paste and dry ginger powder and cook until the raw smell goes.","Melt the Anveshan Jaggery Powder with a splash of water to a soft syrup.","Mix the syrup into the roasted atta with the nuts, gond and cardamom.","Press into a greased tray, level, and cut into paak squares while warm; cool to set."],
     "anveshanProducts": ["ghee","jaggery-powder","khapli-atta"],
-    "image": "https://upload.wikimedia.org/wikipedia/commons/f/f8/Barfi_Coconut_Sweets_of_India.jpg"
+    "image": "https://upload.wikimedia.org/wikipedia/commons/7/7d/Traditional_Gujarati_Adadiya_Pak_-_Gujarat_-_SHAILI_021.jpg"
   },
 ];
 
@@ -2991,12 +2992,14 @@ async function seed() {
   for (const r of recipes) {
     // Merge SEO/AEO content (intro, faqs, tips, rewritten description) by recipe id.
     const seo = SEO_CONTENT[r.id];
+    const stepFix = STEP_FIXES[r.id];
     const merged = {
       ...r,
       ...(seo?.description ? { description: seo.description } : {}),
       ...(seo?.intro ? { intro: seo.intro } : {}),
       ...(seo?.faqs ? { faqs: seo.faqs } : {}),
       ...(seo?.tips ? { tips: seo.tips } : {}),
+      ...(stepFix ? { steps: stepFix.steps } : {}), // corrected steps that use every Anveshan product
       isVeg: computeIsVeg(r),
     };
     await setDoc(doc(db, "recipes", r.id), merged);

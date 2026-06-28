@@ -4,6 +4,9 @@ import "./globals.css";
 import { SITE_URL, SITE_NAME, buildSiteJsonLd } from "@/lib/seo";
 import JsonLd from "@/components/JsonLd";
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import CartProvider from "@/components/cart/CartProvider";
+import CartDrawer from "@/components/cart/CartDrawer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -55,9 +58,13 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <JsonLd data={buildSiteJsonLd()} />
-        <Header />
-        {children}
+        <CartProvider>
+          <JsonLd data={buildSiteJsonLd()} />
+          <Header />
+          {children}
+          <Footer />
+          <CartDrawer />
+        </CartProvider>
       </body>
     </html>
   );

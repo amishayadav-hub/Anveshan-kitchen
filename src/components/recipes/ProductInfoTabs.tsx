@@ -2,27 +2,26 @@
 
 import { useState } from "react";
 import { ProductPdp } from "@/data/product-pdp";
-import FaqAccordion from "@/components/recipes/FaqAccordion";
 
 interface Props {
   productName: string;
   pdp: ProductPdp;
 }
 
-type TabKey = "shelf" | "benefits" | "faqs";
+type TabKey = "shelf" | "benefits";
 
 export default function ProductInfoTabs({ productName, pdp }: Props) {
   const hasShelf = !!pdp.shelfLife && (!!pdp.shelfLife.duration || !!pdp.shelfLife.storage);
   const hasBenefits = !!pdp.benefits?.length;
-  const hasFaqs = !!pdp.faqs?.length;
 
+  // FAQs intentionally omitted here — the recipe already has its own FAQ section,
+  // so the product footer stays focused on Shelf Life + Benefits (no duplicate FAQ).
   const tabs: { key: TabKey; label: string }[] = [
     ...(hasShelf ? [{ key: "shelf" as const, label: "Shelf Life" }] : []),
     ...(hasBenefits ? [{ key: "benefits" as const, label: "Benefits" }] : []),
-    ...(hasFaqs ? [{ key: "faqs" as const, label: "FAQs" }] : []),
   ];
 
-  const [tab, setTab] = useState<TabKey>(tabs[0]?.key ?? "faqs");
+  const [tab, setTab] = useState<TabKey>(tabs[0]?.key ?? "shelf");
 
   if (tabs.length === 0) return null;
 
@@ -82,9 +81,6 @@ export default function ProductInfoTabs({ productName, pdp }: Props) {
           </div>
         </div>
       )}
-
-      {/* FAQs accordion */}
-      {tab === "faqs" && hasFaqs && <FaqAccordion faqs={pdp.faqs!} />}
     </section>
   );
 }

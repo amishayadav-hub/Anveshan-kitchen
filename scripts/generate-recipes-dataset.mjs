@@ -8,7 +8,9 @@ import { writeFileSync } from "fs";
 
 const CAP = 10000;
 
-const COMMON = ["salt", "turmeric powder", "red chilli powder", "cumin seeds", "oil"];
+// No generic "oil" here — the cooking fat is declared per family (ghee or oil)
+// so that whatever appears in the ingredients is the same fat used in the steps.
+const COMMON = ["salt", "turmeric powder", "red chilli powder", "cumin seeds"];
 
 // region → adjective + signature ingredient
 const REGIONS = [
@@ -52,7 +54,7 @@ const STYLE_EXTRAS = {
   Handi: ["cream", "whole spices"],
   Tadka: ["ghee", "asafoetida", "dried red chilli"],
   Fry: ["onion", "garlic"],
-  Festive: ["ghee", "whole spices", "saffron"],
+  Festive: ["ghee", "whole spices"],
   Quick: [],
   Roasted: ["ghee"],
   Classic: [],
@@ -85,7 +87,7 @@ function describe(name, label, region, ingredients) {
 }
 
 const regionStep = (c) =>
-  c.regionTouch ? [`Regional touch: finish with a little ${c.regionTouch} for authentic ${c.region} flavour.`] : [];
+  c.regionTouch ? [`Regional touch: finish with a little ${brand(c.regionTouch)} for authentic ${c.region} flavour.`] : [];
 
 // Each family: dish-noun format, base ingredients, fillings, styles, and a
 // step-template (prep → cook → serve) keyed to that family's cooking method.
@@ -114,7 +116,7 @@ const FAMILIES = [
   {
     label: "dry sabzi",
     fmt: (style, main) => `${style} ${main.name}`.trim(),
-    base: ["onion", "tomato", "ginger-garlic paste", "coriander powder"],
+    base: ["onion", "tomato", "ginger-garlic paste", "coriander powder", "oil"],
     mains: [
       ["Aloo Gobi", ["potatoes", "cauliflower"]], ["Bhindi", ["okra"]], ["Baingan Bharta", ["eggplant"]],
       ["Lauki", ["bottle gourd"]], ["Tori", ["ridge gourd"]], ["Aloo Matar", ["potatoes", "green peas"]],
@@ -135,7 +137,7 @@ const FAMILIES = [
   {
     label: "gravy curry",
     fmt: (style, main) => `${style} ${main.name}`.trim(),
-    base: ["onion", "tomato", "ginger-garlic paste", "garam masala", "cream"],
+    base: ["onion", "tomato", "ginger-garlic paste", "garam masala", "cream", "oil"],
     mains: [
       ["Paneer", ["paneer"]], ["Chana Masala", ["chickpeas"]], ["Rajma", ["kidney beans"]],
       ["Kofta", ["vegetable kofta"]], ["Malai Kofta", ["paneer", "potato kofta"]], ["Dum Aloo", ["baby potatoes"]],
@@ -272,7 +274,7 @@ function buildEntry(fam, main, style, region, withAdj) {
   const ctx = {
     name,
     main: main[0],
-    mains: main[1].join(" and "),
+    mains: main[1].map(brand).join(" and "), // brand product mains so steps name them
     region: region.state,
     regionTouch: withAdj ? region.sig : null,
   };

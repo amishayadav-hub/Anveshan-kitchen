@@ -1,53 +1,33 @@
 "use client";
 
 import { useState } from "react";
-import { CartItem } from "@/types";
-import { addToCart } from "@/lib/shopify-cart";
+import { CartLine } from "@/types";
+import { useCart } from "@/components/cart/CartProvider";
 
 interface Props {
-  items: CartItem[];
+  lines: CartLine[];
+  label?: string;
 }
 
-type State = "idle" | "loading" | "success" | "error";
-
-export default function AddToCartButton({ items }: Props) {
-  const [state, setState] = useState<State>("idle");
+// Adds the recipe's Anveshan products to the local cart drawer (AJAX, no reload).
+export default function AddToCartButton({ lines, label = "Add Anveshan Products to Cart" }: Props) {
+  const { addLines, open } = useCart();
+  const [added, setAdded] = useState(false);
 
   function handleClick() {
-    if (items.length === 0) return;
-    try {
-      setState("success");
-      addToCart(items); // navigates the shopper to their anveshan.farm cart
-    } catch {
-      setState("error");
-      setTimeout(() => setState("idle"), 2500);
-    }
+    if (lines.length === 0) return;
+    addLines(lines);
+    open();
+    setAdded(true);
+    setTimeout(() => setAdded(false), 1500);
   }
-
-  const labels: Record<State, string> = {
-    idle: "Add Anveshan Products to Cart",
-    loading: "Adding...",
-    success: "Opening your cart...",
-    error: "Something went wrong. Try again.",
-  };
-
-  const styles: Record<State, string> = {
-    idle: "bg-anv-green hover:bg-anv-green-dark text-white",
-    loading: "bg-anv-green opacity-70 text-white cursor-wait",
-    success: "bg-anv-green text-white",
-    error: "bg-red-600 text-white",
-  };
 
   return (
     <button
       onClick={handleClick}
-      disabled={state === "loading" || state === "success"}
-      className={`w-full py-3.5 px-6 rounded-xl font-semibold text-base transition-all ${styles[state]}`}
+      className="w-full py-3.5 px-6 rounded-xl font-semibold text-base transition-all bg-anv-green hover:bg-anv-green-dark text-white"
     >
-      {state === "loading" && (
-        <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2 align-middle" />
-      )}
-      {labels[state]}
+      {added ? "Added to cart ✓" : label}
     </button>
   );
 }

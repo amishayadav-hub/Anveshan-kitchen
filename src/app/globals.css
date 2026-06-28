@@ -16,9 +16,11 @@
    utilities (bg-anv-green, text-anv-cream, border-anv-cream-dark, etc.) */
 @theme {
   --color-anv-green: #235A49;
-  --color-anv-green-dark: #18402F;
-  --color-anv-cream: #F5E6D3;
-  --color-anv-cream-dark: #E8D0B8;
+  --color-anv-green-dark: #235A49;
+  --color-anv-cream: #FFFFFF;
+  --color-anv-cream-dark: #FFFFFF;
+  /* muted tan-gold used in the footer (headings, social circles, contact pill) */
+  --color-anv-gold: #C7A867;
 }
 
 @media (prefers-color-scheme: dark) {

@@ -71,6 +71,15 @@ export function ExternalLinkIcon({ className }: IconProps) {
   );
 }
 
+export function SearchIcon({ className }: IconProps) {
+  return (
+    <Base className={className}>
+      <circle cx="11" cy="11" r="8" />
+      <path d="m21 21-4.3-4.3" />
+    </Base>
+  );
+}
+
 export function FlameIcon({ className }: IconProps) {
   return (
     <Base className={className}>

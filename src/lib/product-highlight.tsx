@@ -66,6 +66,39 @@ export function pdpUrlForProduct(productId: string): string | null {
   return handle ? pdpUrl(handle) : null;
 }
 
+// ── Atta varieties ─────────────────────────────────────────────────────────
+// Anveshan currently sells two real attas; Protein Atta has no live SKU yet.
+export type AttaVariety = "khapli" | "multigrain";
+
+export const ATTA_VARIETY: Record<
+  AttaVariety,
+  { label: string; handle: string; image: string; variantId: string; price: number }
+> = {
+  khapli: {
+    label: "Khapli",
+    handle: "cold-pressed-khapli-atta-low-100-emmer-wheat-gi-high-fiber-stone-ground-flour",
+    image: "https://cdn.shopify.com/s/files/1/0270/3346/9006/files/khapli_aata.webp?v=1767422899",
+    variantId: "46719452676288",
+    price: 240,
+  },
+  multigrain: {
+    label: "Multigrain",
+    handle: "khapli-multigrain-atta",
+    image:
+      "https://cdn.shopify.com/s/files/1/0270/3346/9006/files/Frontcopy1.06.16PM1.08.54PM.webp?v=1775561230",
+    variantId: "48130399207616",
+    price: 360,
+  },
+};
+
+// Recipe productIds that are an atta (so they get the variety selector).
+export const ATTA_PRODUCT_IDS = ["khapli-atta", "multigrain-atta", "protein-atta"];
+
+// Which variety to preselect for a given recipe atta product.
+export function attaDefaultVariety(productId: string): AttaVariety {
+  return productId === "khapli-atta" ? "khapli" : "multigrain";
+}
+
 // Per-ghee-variety PDP handle + product image + tasting/Ayurvedic attributes
 // (shown in the hover popover on the ghee variety chips).
 export interface GheeVarietyInfo {
