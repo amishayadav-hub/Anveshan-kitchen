@@ -22,8 +22,14 @@ const ATTA_VARIETIES: AttaVariety[] = ["khapli", "multigrain"];
 interface Props {
   ingredients: Ingredient[];
   products: AnveshanProduct[];
-  selection: Record<string, { variantId: string; price: number; image?: string }>;
-  onSelect: (productId: string, variantId: string, price: number, image?: string) => void;
+  selection: Record<string, { variantId: string; price: number; image?: string; name?: string }>;
+  onSelect: (
+    productId: string,
+    variantId: string,
+    price: number,
+    image?: string,
+    name?: string
+  ) => void;
 }
 
 const TYPE_LABEL: Record<GheeVariant, string> = {
@@ -43,14 +49,14 @@ export default function IngredientList({ ingredients, products, selection, onSel
     const opt = productMap[productId]?.variants?.find((v) => v.type === variant);
     if (!opt) return;
     setGheeType((prev) => ({ ...prev, [productId]: variant }));
-    // also switch the image to the chosen variety's product photo
-    onSelect(productId, opt.shopifyVariantId, opt.price, GHEE_VARIETY[variant]?.image);
+    // switch image + name to the chosen variety
+    onSelect(productId, opt.shopifyVariantId, opt.price, GHEE_VARIETY[variant]?.image, `${TYPE_LABEL[variant]} Ghee`);
   }
 
   function handleAttaType(productId: string, variety: AttaVariety) {
     const v = ATTA_VARIETY[variety];
     setAttaType((prev) => ({ ...prev, [productId]: variety }));
-    onSelect(productId, v.variantId, v.price, v.image);
+    onSelect(productId, v.variantId, v.price, v.image, `${v.label} Atta`);
   }
 
   return (
@@ -112,7 +118,9 @@ export default function IngredientList({ ingredients, products, selection, onSel
                           pdpUrl={pdp}
                           sizes={sizes}
                           selectedVariantId={pid ? selection[pid]?.variantId : undefined}
-                          onSelectSize={(s) => pid && onSelect(pid, s.variantId, s.price, cardImage)}
+                          onSelectSize={(s) =>
+                            pid && onSelect(pid, s.variantId, s.price, cardImage, isGhee || isAtta ? cardName : undefined)
+                          }
                           onClose={() => setOpenCard(null)}
                         />
                       )}

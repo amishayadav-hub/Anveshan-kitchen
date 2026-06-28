@@ -5,6 +5,7 @@ import { initializeApp } from "firebase/app";
 import { getFirestore, doc, setDoc } from "firebase/firestore";
 import { SEO_CONTENT } from "./seo-content";
 import { STEP_FIXES } from "./step-fixes";
+import { SERVING_FIXES } from "./serving-fixes";
 
 const app = initializeApp({
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -368,7 +369,7 @@ const recipes = [
     slug: "moringa-mathri",
     name: "Moringa Mathri",
     description: "A nutrient-packed twist on the classic tea-time mathri using moringa powder and Anveshan's ancient khapli wheat atta. Flaky, crispy, and far better for you than the maida original.",
-    image: "https://upload.wikimedia.org/wikipedia/commons/e/ef/Masala_Mathri.JPG",
+    image: "https://www.anveshan.farm/cdn/shop/articles/anveshan-blog-img_b143f8f5-0107-4d4b-8996-71ea8e65a744.png?v=1710738422&width=1100",
     prepTime: "20 min",
     cookTime: "25 min",
     servings: 30,
@@ -3000,6 +3001,7 @@ async function seed() {
       ...(seo?.faqs ? { faqs: seo.faqs } : {}),
       ...(seo?.tips ? { tips: seo.tips } : {}),
       ...(stepFix ? { steps: stepFix.steps } : {}), // corrected steps that use every Anveshan product
+      ...(SERVING_FIXES[r.id] ? { servings: SERVING_FIXES[r.id] } : {}), // realistic yield for the amounts
       isVeg: computeIsVeg(r),
     };
     await setDoc(doc(db, "recipes", r.id), merged);

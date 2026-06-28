@@ -60,8 +60,8 @@ function renderStep(step: string, productIds: string[]): ReactNode {
 }
 
 export default function RecipeView({ recipe, products, categoryLabel }: Props) {
-  // Per-product chosen pack: variant id + price + image (drives cart, totals, art).
-  type Sel = { variantId: string; price: number; image?: string };
+  // Per-product chosen pack: variant id + price + image + name (drives cart, totals, art).
+  type Sel = { variantId: string; price: number; image?: string; name?: string };
   const [selection, setSelection] = useState<Record<string, Sel>>(() => {
     const map: Record<string, Sel> = {};
     products.forEach((p) => {
@@ -72,20 +72,32 @@ export default function RecipeView({ recipe, products, categoryLabel }: Props) {
     return map;
   });
 
-  function handleSelect(productId: string, variantId: string, price: number, image?: string) {
+  function handleSelect(
+    productId: string,
+    variantId: string,
+    price: number,
+    image?: string,
+    name?: string
+  ) {
     setSelection((prev) => ({
       ...prev,
-      [productId]: { variantId, price, image: image ?? prev[productId]?.image },
+      [productId]: {
+        variantId,
+        price,
+        image: image ?? prev[productId]?.image,
+        name: name ?? prev[productId]?.name,
+      },
     }));
   }
 
   const priceFor = (p: AnveshanProduct) => selection[p.id]?.price ?? p.price ?? 0;
   const imageFor = (p: AnveshanProduct) => selection[p.id]?.image ?? p.image;
+  const nameFor = (p: AnveshanProduct) => selection[p.id]?.name ?? p.name;
 
   const cartLines: CartLine[] = products
     .map((p) => ({
       variantId: selection[p.id]?.variantId ?? p.shopifyVariantId,
-      name: p.name,
+      name: nameFor(p),
       image: imageFor(p),
       price: priceFor(p),
       quantity: 1,
@@ -234,7 +246,7 @@ export default function RecipeView({ recipe, products, categoryLabel }: Props) {
                       )}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="font-semibold text-sm text-gray-900 leading-tight">{p.name}</p>
+                      <p className="font-semibold text-sm text-gray-900 leading-tight">{nameFor(p)}</p>
                       <p className="text-xs text-gray-500 line-clamp-2 mt-0.5">{p.whyAnveshan}</p>
                     </div>
                     <span className="font-bold text-anv-green text-sm shrink-0">₹{priceFor(p)}</span>

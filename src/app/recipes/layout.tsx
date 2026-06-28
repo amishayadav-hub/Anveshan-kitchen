@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import RecipesHeader from "@/components/layout/RecipesHeader";
+import DietProvider from "@/components/recipes/DietProvider";
 
 export default function RecipesLayout({ children }: { children: React.ReactNode }) {
   // Notify parent Shopify page of content height for iframe auto-resize
@@ -17,9 +18,11 @@ export default function RecipesLayout({ children }: { children: React.ReactNode 
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#FAFAF7]">
-      <RecipesHeader />
-      {children}
-    </div>
+    <DietProvider>
+      <div className="min-h-screen bg-[#FAFAF7]">
+        <RecipesHeader />
+        {children}
+      </div>
+    </DietProvider>
   );
 }

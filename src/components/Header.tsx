@@ -1,21 +1,97 @@
-import Link from "next/link";
-import CartButton from "@/components/cart/CartButton";
+"use client";
 
-// Slim top header with the Anveshan logo + cart, shown across the recipe app.
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState, useRef, useEffect } from "react";
+import CartButton from "@/components/cart/CartButton";
+import { SearchIcon } from "@/components/ui/icons";
+
+// Slim top header: Anveshan logo + search, account & cart on the right.
 export default function Header() {
+  const router = useRouter();
+  const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // Focus the field as soon as it expands.
+  useEffect(() => {
+    if (open) inputRef.current?.focus();
+  }, [open]);
+
+  function go() {
+    const q = query.trim();
+    router.push(q ? `/recipes?q=${encodeURIComponent(q)}` : "/recipes");
+    setOpen(false);
+  }
+
+  function onSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    go();
+  }
+
   return (
-    <header className="bg-white border-b border-anv-cream-dark sticky top-0 z-50">
+    <header className="bg-white border-b border-gray-100 sticky top-0 z-50">
       <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
-        <Link href="/recipes" aria-label="Anveshan Kitchen">
+        <Link href="/recipes" aria-label="Anveshan Kitchen" className="shrink-0 flex items-baseline gap-1.5">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="https://cdn.shopify.com/s/files/1/0270/3346/9006/files/anveshan-logo-updates-register-mark.png?v=1728463199"
             alt="Anveshan"
-            className="h-7 md:h-8 w-auto"
+            className="h-7 w-auto"
           />
+          <span className="text-anv-green font-medium text-lg lowercase tracking-tight">kitchen</span>
         </Link>
-        <CartButton />
+
+        <div className="flex items-center gap-1">
+          {/* Search: icon only; expands an input when clicked */}
+          <form onSubmit={onSubmit} className="flex items-center">
+            <input
+              ref={inputRef}
+              type="search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onBlur={() => {
+                if (!query.trim()) setOpen(false);
+              }}
+              placeholder="Search recipes…"
+              tabIndex={open ? 0 : -1}
+              className={`text-sm text-gray-700 bg-gray-50 rounded-full outline-none transition-all duration-200 ${
+                open
+                  ? "w-40 sm:w-56 px-3.5 py-1.5 mr-1 border border-gray-200 focus:border-anv-green"
+                  : "w-0 px-0 py-0 border-0"
+              }`}
+            />
+            <button
+              type="button"
+              onClick={() => (open ? go() : setOpen(true))}
+              aria-label="Search recipes"
+              className="p-2 text-anv-green hover:text-anv-green-dark transition-colors"
+            >
+              <SearchIcon />
+            </button>
+          </form>
+
+          <a
+            href="https://www.anveshan.farm/account"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Account"
+            className="p-2 text-anv-green hover:text-anv-green-dark transition-colors"
+          >
+            <UserIcon />
+          </a>
+          <CartButton />
+        </div>
       </div>
     </header>
+  );
+}
+
+function UserIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+      <circle cx="12" cy="7" r="4" />
+    </svg>
   );
 }
