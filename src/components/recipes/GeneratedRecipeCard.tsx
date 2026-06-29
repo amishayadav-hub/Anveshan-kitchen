@@ -81,7 +81,7 @@ export default function GeneratedRecipeCard({ recipe, index, total }: { recipe: 
           </p>
         )}
         <div className="flex items-start justify-between gap-3 flex-wrap">
-          <h2 className="text-2xl font-bold text-gray-900 leading-tight break-words min-w-0">{recipe.name}</h2>
+          <h2 className="text-2xl font-bold text-gray-900 leading-tight break-words min-w-0">{recipe.name || "Recipe"}</h2>
           <span className="text-xs font-medium px-2.5 py-1 rounded-full border bg-anv-green/[0.07] text-anv-green border-anv-green/20 shrink-0 inline-flex items-center gap-1">
             <SparklesIcon className="w-3 h-3" /> {providerLabel}
           </span>
@@ -102,7 +102,7 @@ export default function GeneratedRecipeCard({ recipe, index, total }: { recipe: 
             <h3 className="text-lg font-bold text-gray-900 mb-3">Ingredients</h3>
             <ul className="space-y-2">
               {recipe.ingredients.map((ing, i) => (
-                <li key={i} className="flex items-start gap-2.5 text-sm">
+                <li key={`${ing.name}-${i}`} className="flex items-start gap-2.5 text-sm">
                   <span className={`mt-[7px] w-1.5 h-1.5 rounded-full shrink-0 ${ing.anveshan ? "bg-anv-green" : "bg-gray-300"}`} />
                   <span className={ing.anveshan ? "font-semibold text-anv-green" : "text-gray-700"}>
                     {(ing.quantity || ing.unit) && (
@@ -120,7 +120,7 @@ export default function GeneratedRecipeCard({ recipe, index, total }: { recipe: 
             <h3 className="text-lg font-bold text-gray-900 mb-4">Method</h3>
             <ol className="space-y-3">
               {recipe.steps.map((step, i) => (
-                <li key={i} className="flex gap-3">
+                <li key={`${i}-${step.slice(0, 16)}`} className="flex gap-3">
                   <span className="shrink-0 w-7 h-7 rounded-full bg-anv-green text-white text-xs font-bold flex items-center justify-center mt-0.5">
                     {i + 1}
                   </span>
@@ -160,7 +160,7 @@ export default function GeneratedRecipeCard({ recipe, index, total }: { recipe: 
                       <div className="w-14 h-14 shrink-0 rounded-lg overflow-hidden bg-gray-50 border border-gray-100 flex items-center justify-center">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         {s.image ? (
-                          <img src={s.image} alt="" width={56} height={56} loading="lazy" decoding="async" className="w-full h-full object-cover" />
+                          <img src={s.image} alt={s.name} width={56} height={56} loading="lazy" decoding="async" className="w-full h-full object-cover" />
                         ) : (
                           <span className="text-anv-green font-bold text-lg">{s.name.replace(/^Anveshan\s+/i, "").charAt(0)}</span>
                         )}
