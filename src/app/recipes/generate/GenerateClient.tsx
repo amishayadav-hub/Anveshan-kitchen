@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, type ReactNode } from "react";
 import { Language, GeneratedRecipeSet } from "@/lib/ai-providers";
 import IngredientTagInput from "@/components/ui/IngredientTagInput";
 import GeneratedRecipeCard from "@/components/recipes/GeneratedRecipeCard";
@@ -9,7 +9,6 @@ import { buildGeneratedRecipesJsonLd } from "@/lib/seo";
 import Link from "next/link";
 import {
   SparklesIcon,
-  ArrowLeftIcon,
   SearchIcon,
   ChefHatIcon,
   LeafIcon,
@@ -93,21 +92,34 @@ export default function GenerateClient() {
         <div className="pointer-events-none absolute -top-16 -left-24 w-72 h-72 rounded-full bg-anv-gold/10 blur-3xl" />
 
         <div className="relative max-w-3xl mx-auto px-4 pt-6 pb-10 md:pt-8 md:pb-16 text-center">
-          <div>
+          {/* Top bar: back link (left) and language toggle (right) */}
+          <div className="flex items-center justify-between gap-3">
             <Link
               href="/recipes"
-              className="inline-flex items-center gap-1.5 text-gray-400 text-sm font-medium hover:text-anv-green transition-colors"
+              className="inline-flex items-center h-8 px-3.5 rounded-full bg-anv-green text-white text-[13px] font-medium hover:bg-anv-green-dark transition-colors"
             >
-              <ArrowLeftIcon className="w-4 h-4" /> Back to Recipes
+              Back to Recipes
             </Link>
+
+            <div role="group" aria-label="Language" className="inline-flex items-center h-8 bg-white border border-gray-200 rounded-full p-1 shadow-sm">
+              <button
+                aria-pressed={language === "en"}
+                onClick={() => { setLanguage("en"); setResult(null); }}
+                className={`flex items-center h-full px-3.5 rounded-full text-[13px] font-medium transition-all ${language === "en" ? "bg-anv-green text-white shadow-sm" : "text-gray-500 hover:text-gray-700"}`}
+              >
+                English
+              </button>
+              <button
+                aria-pressed={hi}
+                onClick={() => { setLanguage("hi"); setResult(null); }}
+                className={`flex items-center h-full px-3.5 rounded-full text-[13px] font-medium transition-all ${hi ? "bg-anv-green text-white shadow-sm" : "text-gray-500 hover:text-gray-700"}`}
+              >
+                Hinglish
+              </button>
+            </div>
           </div>
 
-          <div className="mt-4 md:mt-6 inline-flex items-center gap-1.5 bg-anv-green/10 text-anv-green text-xs font-semibold uppercase tracking-[0.12em] px-3.5 py-1.5 rounded-full">
-            <SparklesIcon className="w-3.5 h-3.5" />
-            AI Recipe Studio
-          </div>
-
-          <h1 className="text-3xl md:text-[3.25rem] font-bold text-gray-900 mt-3 md:mt-5 leading-[1.1] md:leading-[1.08] tracking-tight">
+          <h1 className="text-3xl md:text-[3.25rem] font-bold text-gray-900 mt-6 md:mt-10 leading-[1.1] md:leading-[1.08] tracking-tight">
             {hi ? (
               <>Koi bhi dish banao,<br className="hidden sm:block" /> <span className="text-anv-green">Anveshan</span> ke saath</>
             ) : (
@@ -115,28 +127,6 @@ export default function GenerateClient() {
             )}
           </h1>
 
-          <p className="mt-3 md:mt-4 text-gray-500 max-w-xl mx-auto text-sm md:text-base leading-relaxed">
-            {hi
-              ? "Dish ka naam likho — AI 4-5 healthy variations banayega, har ek mein Anveshan ke pure ghee, oils aur attas ke swaps."
-              : "Name a dish and our AI builds 4–5 full variations — each one swapping in Anveshan's pure ghee, wood-pressed oils and ancient-grain attas."}
-          </p>
-
-          <div role="group" aria-label="Language" className="mt-4 md:mt-7 inline-flex bg-white border border-gray-200 rounded-full p-1 shadow-sm">
-            <button
-              aria-pressed={language === "en"}
-              onClick={() => { setLanguage("en"); setResult(null); }}
-              className={`px-6 py-2.5 md:py-1.5 rounded-full text-sm font-medium transition-all ${language === "en" ? "bg-anv-green text-white shadow-sm" : "text-gray-500 hover:text-gray-700"}`}
-            >
-              English
-            </button>
-            <button
-              aria-pressed={hi}
-              onClick={() => { setLanguage("hi"); setResult(null); }}
-              className={`px-6 py-2.5 md:py-1.5 rounded-full text-sm font-medium transition-all ${hi ? "bg-anv-green text-white shadow-sm" : "text-gray-500 hover:text-gray-700"}`}
-            >
-              Hinglish
-            </button>
-          </div>
         </div>
       </section>
 
@@ -255,24 +245,13 @@ export default function GenerateClient() {
       {/* How it works (before first result) */}
       {!result && !loading && (
         <section className="max-w-4xl mx-auto px-4 pt-8 pb-28 md:pt-12 md:pb-16">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+          <div className="grid grid-cols-3 gap-2 sm:gap-4">
             {[
               { icon: <SearchIcon className="w-5 h-5" />, title: hi ? "Dish batao" : "Name your dish", desc: hi ? "Dish ka naam ya jo ingredients paas hain wo daalo." : "Type a dish, or just the ingredients in your kitchen." },
               { icon: <WandIcon className="w-5 h-5" />, title: hi ? "AI variations banata hai" : "AI cooks up variations", desc: hi ? "4-5 alag styles, har ek mein step-by-step instructions." : "4–5 distinct styles, each with full step-by-step instructions." },
               { icon: <LeafIcon className="w-5 h-5" />, title: hi ? "Anveshan swaps add karo" : "Add the Anveshan swaps", desc: hi ? "Pure ghee, oils, attas — ek click mein cart mein." : "Pure ghee, oils & attas — straight to your cart in a click." },
             ].map((s, i) => (
-              <div key={i} className="bg-white rounded-2xl border border-gray-100 p-4 sm:p-5 shadow-sm flex items-start gap-3 sm:block">
-                <div className="flex items-center gap-3 shrink-0 sm:mb-2">
-                  <span className="w-10 h-10 rounded-xl bg-anv-green/10 text-anv-green flex items-center justify-center shrink-0">
-                    {s.icon}
-                  </span>
-                  <span className="hidden sm:inline text-xs font-bold text-anv-green/40">0{i + 1}</span>
-                </div>
-                <div className="min-w-0">
-                  <h3 className="font-bold text-gray-900 text-sm">{s.title}</h3>
-                  <p className="text-sm text-gray-500 mt-1 leading-relaxed">{s.desc}</p>
-                </div>
-              </div>
+              <HowItWorksCard key={i} icon={s.icon} title={s.title} desc={s.desc} index={i} />
             ))}
           </div>
         </section>
@@ -429,5 +408,38 @@ function ChevronDownIcon({ className }: { className?: string }) {
     <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <path d="m6 9 6 6 6-6" />
     </svg>
+  );
+}
+
+// "How it works" step: only the heading shows; the description is revealed on
+// hover (desktop) or tap (mobile, toggles open).
+function HowItWorksCard({ icon, title, desc, index }: { icon: ReactNode; title: string; desc: string; index: number }) {
+  const [open, setOpen] = useState(false);
+  const toggle = () => setOpen((o) => !o);
+  return (
+    <div
+      role="button"
+      tabIndex={0}
+      aria-expanded={open}
+      onClick={toggle}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          toggle();
+        }
+      }}
+      className="group cursor-pointer bg-white rounded-2xl border border-gray-100 p-3 sm:p-5 shadow-sm transition-shadow hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-anv-green/30"
+    >
+      <div className="flex items-center gap-2 sm:gap-3 mb-2">
+        <span className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-anv-green/10 text-anv-green flex items-center justify-center shrink-0">
+          {icon}
+        </span>
+        <span className="hidden sm:inline text-xs font-bold text-anv-green/40">0{index + 1}</span>
+      </div>
+      <h3 className="font-bold text-gray-900 text-xs sm:text-sm">{title}</h3>
+      <p className={`text-xs sm:text-sm text-gray-500 mt-1 leading-relaxed ${open ? "block" : "hidden group-hover:block"}`}>
+        {desc}
+      </p>
+    </div>
   );
 }
