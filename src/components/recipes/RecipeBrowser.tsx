@@ -128,23 +128,26 @@ export default function RecipeBrowser({ recipes, productMap, initialCategory, in
         )}
       </div>
 
-      {/* Top-level filter row */}
-      <div className="flex flex-wrap gap-2">
-        <FilterChip label="All Recipes" active={category === "all"} onClick={() => selectCategory("all")} />
-        {CATEGORIES.map((c) => (
-          <FilterChip
-            key={c.key}
-            label={c.label}
-            active={category === c.key}
-            onClick={() => selectCategory(c.key)}
-          />
-        ))}
+      {/* Top-level filter row — single scrollable row (no wrapping to 3-4 lines).
+          Bleeds to the screen edge on mobile so it's clear it scrolls sideways. */}
+      <div className="-mx-4 px-4 sm:mx-0 sm:px-0">
+        <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1">
+          <FilterChip label="All Recipes" active={category === "all"} onClick={() => selectCategory("all")} />
+          {CATEGORIES.map((c) => (
+            <FilterChip
+              key={c.key}
+              label={c.label}
+              active={category === c.key}
+              onClick={() => selectCategory(c.key)}
+            />
+          ))}
+        </div>
       </div>
 
-      {/* Second-level sub-product row (only for product groups) */}
+      {/* Second-level sub-product row (only for product groups) — also one scroll row */}
       {subs && (
-        <div className="mt-3 flex flex-wrap items-center gap-2 rounded-xl bg-anv-cream/30 border border-anv-cream-dark p-3">
-          <span className="text-xs font-semibold text-anv-green uppercase tracking-wide mr-1">
+        <div className="mt-3 flex items-center gap-2 overflow-x-auto no-scrollbar rounded-xl bg-anv-cream/30 border border-anv-cream-dark p-3">
+          <span className="shrink-0 text-xs font-semibold text-anv-green uppercase tracking-wide mr-1">
             {activeCategory?.label}:
           </span>
           <SubChip label="All" active={sub === "all"} onClick={() => setSub("all")} />
@@ -206,7 +209,7 @@ function FilterChip({ label, active, onClick }: { label: string; active: boolean
   return (
     <button
       onClick={onClick}
-      className={`px-3.5 py-1.5 rounded-full text-sm font-medium border transition-colors ${
+      className={`shrink-0 whitespace-nowrap px-3.5 py-1.5 rounded-full text-sm font-medium border transition-colors ${
         active
           ? "bg-anv-green text-white border-anv-green"
           : "bg-white text-gray-600 border-gray-200 hover:border-anv-green hover:text-anv-green"
@@ -221,7 +224,7 @@ function SubChip({ label, active, onClick }: { label: string; active: boolean; o
   return (
     <button
       onClick={onClick}
-      className={`px-3 py-1 rounded-full text-xs font-medium border transition-colors ${
+      className={`shrink-0 whitespace-nowrap px-3 py-1 rounded-full text-xs font-medium border transition-colors ${
         active
           ? "bg-anv-green text-white border-anv-green"
           : "bg-white text-anv-green border-anv-cream-dark hover:border-anv-green"
