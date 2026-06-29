@@ -39,7 +39,7 @@ function prettify(id: string): string {
   return id.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
-export default function GeneratedRecipeCard({ recipe }: { recipe: GeneratedRecipe }) {
+export default function GeneratedRecipeCard({ recipe, index, total }: { recipe: GeneratedRecipe; index?: number; total?: number }) {
   const [gheeVariant, setGheeVariant] = useState<GheeVariant>("gir-cow");
   const [attaVariety, setAttaVariety] = useState<Record<string, AttaVariety>>({});
 
@@ -72,9 +72,14 @@ export default function GeneratedRecipeCard({ recipe }: { recipe: GeneratedRecip
   const providerLabel = /anveshan/i.test(recipe.provider) ? "Anveshan Collection" : "AI-crafted";
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow overflow-hidden">
+    <div className="bg-white rounded-2xl border-2 sm:border border-gray-200 sm:border-gray-100 shadow-md sm:shadow-sm hover:shadow-md transition-shadow overflow-hidden">
       {/* Header */}
       <div className="bg-gradient-to-br from-anv-green/[0.07] via-white to-anv-gold/[0.06] border-b border-gray-100 p-6 sm:p-7">
+        {typeof index === "number" && typeof total === "number" && (
+          <p className="text-xs font-bold uppercase tracking-wider text-anv-green/70 mb-2">
+            Recipe {index + 1} of {total}
+          </p>
+        )}
         <div className="flex items-start justify-between gap-3 flex-wrap">
           <h2 className="text-2xl font-bold text-gray-900 leading-tight break-words min-w-0">{recipe.name}</h2>
           <span className="text-xs font-medium px-2.5 py-1 rounded-full border bg-anv-green/[0.07] text-anv-green border-anv-green/20 shrink-0 inline-flex items-center gap-1">

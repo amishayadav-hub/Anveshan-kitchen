@@ -74,10 +74,13 @@ export default function CartProvider({ children }: { children: ReactNode }) {
         ? prev.filter((l) => l.variantId !== variantId)
         : prev.map((l) => (l.variantId === variantId ? { ...l, quantity: qty } : l))
     );
+    if (qty <= 0 && lines.length <= 1) setIsOpen(false); // emptied → close drawer
   }
 
-  const remove = (variantId: string) =>
+  function remove(variantId: string) {
     setLines((prev) => prev.filter((l) => l.variantId !== variantId));
+    if (lines.length <= 1) setIsOpen(false); // removed the last item → close drawer
+  }
   const clear = () => setLines([]);
 
   const count = lines.reduce((n, l) => n + l.quantity, 0);

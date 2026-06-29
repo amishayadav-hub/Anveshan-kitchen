@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Language, GeneratedRecipeSet } from "@/lib/ai-providers";
 import IngredientTagInput from "@/components/ui/IngredientTagInput";
 import GeneratedRecipeCard from "@/components/recipes/GeneratedRecipeCard";
@@ -33,6 +33,14 @@ export default function GenerateClient() {
 
   const hi = language === "hi";
   const canGenerate = query.trim().length > 0 || ingredients.length > 0;
+  const resultsRef = useRef<HTMLDivElement | null>(null);
+
+  // Slide to the generated recipes as soon as they arrive.
+  useEffect(() => {
+    if (result && result.variations.length > 0) {
+      resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [result]);
 
   async function handleGenerate() {
     if (loading) return; // guard against double-submit / repeated Regenerate
@@ -304,7 +312,7 @@ export default function GenerateClient() {
 
       {/* Results */}
       {result && result.variations.length > 0 && (
-        <section aria-live="polite" className="max-w-4xl mx-auto px-4 pt-12 pb-20">
+        <section ref={resultsRef} aria-live="polite" className="max-w-4xl mx-auto px-4 pt-12 pb-20 scroll-mt-20">
           {(() => {
             const ld = buildGeneratedRecipesJsonLd(result.variations);
             return ld ? <JsonLd data={ld} /> : null;
@@ -324,9 +332,9 @@ export default function GenerateClient() {
               {hi ? "Aur variations" : "Regenerate"}
             </button>
           </div>
-          <div className="space-y-8">
+          <div className="space-y-12 sm:space-y-8">
             {result.variations.map((v, i) => (
-              <GeneratedRecipeCard key={`${v.name}-${i}`} recipe={v} />
+              <GeneratedRecipeCard key={`${v.name}-${i}`} recipe={v} index={i} total={result.variations.length} />
             ))}
           </div>
         </section>
