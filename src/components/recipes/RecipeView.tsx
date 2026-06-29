@@ -94,6 +94,10 @@ export default function RecipeView({ recipe, products, categoryLabel, related = 
     }));
   }
 
+  // Serving multiplier (1x/2x/3x) — owned here so the header chip's popover and
+  // the ingredient amounts share one source of truth.
+  const [multiplier, setMultiplier] = useState(1);
+
   const priceFor = (p: AnveshanProduct) => selection[p.id]?.price ?? p.price ?? 0;
   const imageFor = (p: AnveshanProduct) => selection[p.id]?.image ?? p.image;
   const nameFor = (p: AnveshanProduct) => selection[p.id]?.name ?? p.name;
@@ -127,14 +131,17 @@ export default function RecipeView({ recipe, products, categoryLabel, related = 
 
   return (
     <div className="max-w-6xl mx-auto px-4 pt-4 md:pt-6 pb-28">
-      {/* Breadcrumb */}
-      <nav className="flex flex-wrap text-xs text-gray-400 mb-3 md:mb-5">
-        <span>Recipes</span>
-        <span className="mx-1.5">/</span>
-        <span>{categoryLabel}</span>
-        <span className="mx-1.5">/</span>
-        <span className="text-gray-600">{recipe.name}</span>
-      </nav>
+      {/* Breadcrumb + recipe actions (Print / Share / Save) on the right */}
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between mb-3 md:mb-5">
+        <nav className="flex flex-wrap text-xs text-gray-400">
+          <span>Recipes</span>
+          <span className="mx-1.5">/</span>
+          <span>{categoryLabel}</span>
+          <span className="mx-1.5">/</span>
+          <span className="text-gray-600">{recipe.name}</span>
+        </nav>
+        <RecipeActions slug={recipe.slug} name={recipe.name} className="shrink-0 sm:justify-end" />
+      </div>
 
       <div className="grid lg:grid-cols-[1fr_350px] gap-6 md:gap-8 items-start">
         {/* ── Main column: header + all sections (keeps text at a readable width) ── */}
@@ -159,16 +166,15 @@ export default function RecipeView({ recipe, products, categoryLabel, related = 
               </p>
               <div className="flex flex-wrap items-center gap-2 mt-4">
                 <TimingChip prepTime={recipe.prepTime} cookTime={recipe.cookTime} total={formatMinutes(totalMin)} />
-                <Chip><UsersIcon /> {recipe.servings} Servings</Chip>
+                <ServingsChip servings={recipe.servings} multiplier={multiplier} onChange={setMultiplier} />
                 <Chip><GaugeIcon /> {difficulty}</Chip>
                 <Chip><UtensilsIcon /> {categoryLabel}</Chip>
               </div>
-              <RecipeActions slug={recipe.slug} name={recipe.name} />
             </div>
           </header>
 
           {/* Sticky in-page jump nav */}
-          <JumpNav hasTips={hasTips} hasFaq={hasFaq} />
+          <JumpNav hasTips={hasTips} hasFaq={hasFaq} hasProducts={products.length > 0} />
 
         {/* ── All sections on one page ── */}
         <section className="space-y-7 md:space-y-10">
@@ -180,6 +186,7 @@ export default function RecipeView({ recipe, products, categoryLabel, related = 
               products={products}
               selection={selection}
               onSelect={handleSelect}
+              multiplier={multiplier}
             />
           </div>
 
@@ -230,7 +237,7 @@ export default function RecipeView({ recipe, products, categoryLabel, related = 
 
         {/* ── Right: Anveshan products (image-2 style) ── */}
         {products.length > 0 && (
-          <aside className="lg:sticky lg:top-6 space-y-4">
+          <aside id="products" className="scroll-mt-24 lg:sticky lg:top-6 space-y-4">
             <div className="bg-white rounded-2xl border border-anv-cream-dark shadow-sm overflow-hidden">
               <div className="bg-anv-green text-white px-5 py-4">
                 <h3 className="font-bold text-base">Shop the Anveshan products</h3>
@@ -302,36 +309,152 @@ export default function RecipeView({ recipe, products, categoryLabel, related = 
   );
 }
 
-// Sticky in-page jump nav — smooth-scrolls to each section. Only links to
-// sections that exist. Sits below the page's existing sticky headers.
-function JumpNav({ hasTips, hasFaq }: { hasTips: boolean; hasFaq: boolean }) {
+// Sticky in-page jump nav — a segmented pill box (styled like the Ghee/Atta
+// selectors: active pill is theme-green, the rest light). Smooth-scrolls to each
+// section and the active pill follows the scroll position. "Products" jumps to
+// the Anveshan products cart (which stacks at the bottom on mobile).
+function JumpNav({
+  hasTips,
+  hasFaq,
+  hasProducts,
+}: {
+  hasTips: boolean;
+  hasFaq: boolean;
+  hasProducts: boolean;
+}) {
   const links = [
     { id: "ingredients", label: "Ingredients" },
     { id: "instructions", label: "Method" },
     ...(hasTips ? [{ id: "tips", label: "Tips" }] : []),
     ...(hasFaq ? [{ id: "faq", label: "FAQ" }] : []),
+    ...(hasProducts ? [{ id: "products", label: "Products" }] : []),
   ];
 
-  function jump(e: React.MouseEvent<HTMLAnchorElement>, id: string) {
-    e.preventDefault();
+  const [active, setActive] = useState(links[0]?.id);
+  const linkKey = links.map((l) => l.id).join(",");
+
+  // Scroll-spy: highlight the section currently crossing a band near the top.
+  useEffect(() => {
+    const els = links
+      .map((l) => document.getElementById(l.id))
+      .filter((el): el is HTMLElement => !!el);
+    if (!els.length) return;
+    const obs = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+        if (visible[0]) setActive(visible[0].target.id);
+      },
+      { rootMargin: "-96px 0px -65% 0px", threshold: 0 }
+    );
+    els.forEach((el) => obs.observe(el));
+    return () => obs.disconnect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [linkKey]);
+
+  function jump(id: string) {
+    setActive(id); // instant feedback; scroll-spy keeps it in sync afterwards
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
   return (
-    <nav className="no-print sticky top-14 z-20 -mx-4 mb-6 md:mb-8 border-b border-anv-cream-dark bg-white/90 backdrop-blur supports-[backdrop-filter]:bg-white/75">
-      <div className="flex gap-1.5 overflow-x-auto px-4 py-2 no-scrollbar">
-        {links.map((l) => (
-          <a
-            key={l.id}
-            href={`#${l.id}`}
-            onClick={(e) => jump(e, l.id)}
-            className="whitespace-nowrap rounded-full px-3 py-1.5 text-sm font-medium text-gray-600 hover:bg-anv-green/10 hover:text-anv-green transition-colors"
-          >
-            {l.label}
-          </a>
-        ))}
+    <nav className="no-print sticky top-14 z-20 -mx-4 mb-6 md:mb-8 px-4 py-2 bg-white/90 backdrop-blur supports-[backdrop-filter]:bg-white/75">
+      <div className="flex w-max max-w-full gap-1 overflow-x-auto rounded-full border border-anv-green/20 bg-white p-1 no-scrollbar">
+        {links.map((l) => {
+          const isActive = active === l.id;
+          return (
+            <button
+              key={l.id}
+              type="button"
+              onClick={() => jump(l.id)}
+              aria-current={isActive ? "true" : undefined}
+              className={`whitespace-nowrap rounded-full px-3.5 py-1.5 text-sm font-medium transition-colors ${
+                isActive ? "bg-anv-green text-white" : "text-anv-green hover:bg-anv-green/10"
+              }`}
+            >
+              {l.label}
+            </button>
+          );
+        })}
       </div>
     </nav>
+  );
+}
+
+// Servings chip with a floating 1x/2x/3x scaler (mirrors the TimingChip popover).
+// The number reflects the scaled servings and shows the active multiplier badge.
+function ServingsChip({
+  servings,
+  multiplier,
+  onChange,
+}: {
+  servings: number | string;
+  multiplier: number;
+  onChange: (m: number) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const hovering = useRef(false);
+
+  const base = typeof servings === "number" ? servings : parseInt(String(servings).match(/\d+/)?.[0] ?? "", 10);
+  const scaled = Number.isFinite(base) ? base * multiplier : null;
+  const label = scaled !== null ? `${scaled} Servings` : `${servings} Servings`;
+
+  return (
+    <span
+      className="relative inline-block"
+      onMouseEnter={() => {
+        hovering.current = true;
+        setOpen(true);
+      }}
+      onMouseLeave={() => {
+        hovering.current = false;
+        setOpen(false);
+      }}
+    >
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        aria-expanded={open}
+        aria-label="Adjust servings"
+        className="inline-flex items-center gap-1.5 text-sm text-gray-600 bg-gray-100 rounded-full px-3 py-1 hover:bg-gray-200 transition-colors cursor-pointer"
+      >
+        <UsersIcon /> {label}
+        {multiplier !== 1 && (
+          <span className="ml-0.5 rounded-full bg-anv-green px-1.5 py-px text-[10px] font-bold leading-none text-white">
+            {multiplier}x
+          </span>
+        )}
+      </button>
+      <div
+        className={`absolute top-full left-0 mt-2 z-30 w-56 bg-white rounded-xl shadow-lg border border-gray-200 p-3.5 space-y-3 transition-all duration-150 ${
+          open ? "opacity-100 translate-y-0" : "pointer-events-none opacity-0 -translate-y-1"
+        }`}
+      >
+        <p className="text-xs font-semibold text-anv-green">Scale recipe</p>
+        <div className="inline-flex w-full overflow-hidden rounded-full border border-anv-green/30">
+          {[1, 2, 3].map((m) => (
+            <button
+              key={m}
+              type="button"
+              onClick={() => onChange(m)}
+              aria-pressed={multiplier === m}
+              className={`flex-1 px-3 py-2 text-sm font-semibold transition-colors ${
+                multiplier === m ? "bg-anv-green text-white" : "bg-white text-anv-green hover:bg-anv-green/10"
+              }`}
+            >
+              {m}x
+            </button>
+          ))}
+        </div>
+        {scaled !== null && (
+          <p className="text-xs text-gray-500">
+            Ingredient amounts scaled for{" "}
+            <span className="font-semibold text-gray-700">{scaled} servings</span>.
+          </p>
+        )}
+      </div>
+    </span>
   );
 }
 

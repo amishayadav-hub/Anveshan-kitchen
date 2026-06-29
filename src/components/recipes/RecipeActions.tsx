@@ -5,11 +5,12 @@ import { useEffect, useState, type ReactNode } from "react";
 interface Props {
   slug: string;
   name: string;
+  className?: string;
 }
 
 const FAVORITES_KEY = "anveshan-favorites";
 
-export default function RecipeActions({ slug, name }: Props) {
+export default function RecipeActions({ slug, name, className }: Props) {
   const [saved, setSaved] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -45,7 +46,7 @@ export default function RecipeActions({ slug, name }: Props) {
   }
 
   return (
-    <div className="no-print flex flex-wrap items-center gap-2 mt-4">
+    <div className={`no-print flex flex-wrap items-center gap-2 ${className ?? "mt-4"}`}>
       <ActionButton onClick={() => window.print()} label="Print">
         <PrinterIcon />
       </ActionButton>

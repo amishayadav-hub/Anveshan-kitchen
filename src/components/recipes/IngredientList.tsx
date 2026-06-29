@@ -31,6 +31,8 @@ interface Props {
     image?: string,
     name?: string
   ) => void;
+  /** Serving multiplier (1/2/3) — controlled by the Servings chip in the header. */
+  multiplier: number;
 }
 
 const TYPE_LABEL: Record<GheeVariant, string> = {
@@ -39,11 +41,10 @@ const TYPE_LABEL: Record<GheeVariant, string> = {
   "buffalo": "Buffalo",
 };
 
-export default function IngredientList({ ingredients, products, selection, onSelect }: Props) {
+export default function IngredientList({ ingredients, products, selection, onSelect, multiplier }: Props) {
   const [gheeType, setGheeType] = useState<Record<string, GheeVariant>>({});
   const [attaType, setAttaType] = useState<Record<string, AttaVariety>>({});
   const [openCard, setOpenCard] = useState<number | null>(null);
-  const [multiplier, setMultiplier] = useState(1);
   const [checked, setChecked] = useState<Set<number>>(new Set());
 
   const pathname = usePathname();
@@ -96,34 +97,16 @@ export default function IngredientList({ ingredients, products, selection, onSel
 
   return (
     <div>
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-2">
-          <span className="text-sm font-medium text-gray-600">Servings</span>
-          <div className="inline-flex overflow-hidden rounded-full border border-anv-green/30">
-            {[1, 2, 3].map((m) => (
-              <button
-                key={m}
-                onClick={() => setMultiplier(m)}
-                className={`min-w-[44px] px-3 py-2 text-sm font-semibold transition-colors ${
-                  multiplier === m
-                    ? "bg-anv-green text-white"
-                    : "bg-white text-anv-green hover:bg-anv-green/10"
-                }`}
-              >
-                {m}x
-              </button>
-            ))}
-          </div>
-        </div>
-        {checked.size > 0 && (
+      {checked.size > 0 && (
+        <div className="mb-4 flex justify-end">
           <button
             onClick={clearChecks}
             className="text-sm font-medium text-anv-green underline decoration-anv-green/30 underline-offset-2 hover:decoration-anv-green"
           >
             Clear ({checked.size})
           </button>
-        )}
-      </div>
+        </div>
+      )}
 
       <ul className="space-y-1">
       {ingredients.map((ing, i) => {
