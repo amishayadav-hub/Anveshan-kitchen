@@ -46,7 +46,7 @@ export default function RecipeActions({ slug, name, className }: Props) {
   }
 
   return (
-    <div className={`no-print flex flex-wrap items-center gap-2 ${className ?? "mt-4"}`}>
+    <div className={`no-print flex items-center gap-1.5 sm:gap-2 ${className ?? "mt-4"}`}>
       <ActionButton onClick={() => window.print()} label="Print">
         <PrinterIcon />
       </ActionButton>
@@ -76,7 +76,7 @@ function ActionButton({
       type="button"
       onClick={onClick}
       aria-pressed={pressed}
-      className={`inline-flex min-h-[44px] items-center gap-2 rounded-full border px-4 text-sm font-medium transition-colors ${
+      className={`inline-flex min-h-[44px] shrink-0 items-center gap-1.5 sm:gap-2 whitespace-nowrap rounded-full border px-3 sm:px-4 text-sm font-medium transition-colors ${
         pressed
           ? "border-anv-green bg-anv-green/10 text-anv-green"
           : "border-anv-cream-dark text-gray-600 hover:border-anv-green/40 hover:text-anv-green"
