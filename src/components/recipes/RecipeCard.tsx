@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { memo } from "react";
 import { Recipe, AnveshanProduct } from "@/types";
 import { getCategoryLabel, getSubLabel } from "@/lib/categories";
 import BuyRecipeButton from "@/components/ui/BuyRecipeButton";
@@ -7,9 +8,10 @@ import BuyRecipeButton from "@/components/ui/BuyRecipeButton";
 interface Props {
   recipe: Recipe;
   productMap?: Record<string, AnveshanProduct>;
+  priority?: boolean;
 }
 
-export default function RecipeCard({ recipe, productMap = {} }: Props) {
+function RecipeCard({ recipe, productMap = {}, priority = false }: Props) {
   const subLabel = getSubLabel(recipe.category, recipe.subCategory);
   const categoryLabel = subLabel ?? getCategoryLabel(recipe.category);
 
@@ -23,7 +25,7 @@ export default function RecipeCard({ recipe, productMap = {} }: Props) {
   return (
     <Link
       href={`/recipes/${recipe.slug}`}
-      className="group block bg-white border border-gray-100 hover:border-anv-green/30 hover:shadow-md transition-all duration-200 rounded-xl overflow-hidden"
+      className="group block bg-white border border-gray-100 hover:border-anv-green/30 hover:shadow-md transition-all duration-200 rounded-xl overflow-hidden [content-visibility:auto] [contain-intrinsic-size:auto_280px]"
     >
       {/* Image — compact, recipes are supporting content */}
       <div className="relative h-32 w-full bg-anv-cream/30 overflow-hidden">
@@ -31,6 +33,7 @@ export default function RecipeCard({ recipe, productMap = {} }: Props) {
           src={recipe.image || "/placeholder-recipe.jpg"}
           alt={recipe.name}
           fill
+          priority={priority}
           className="object-cover group-hover:scale-[1.03] transition-transform duration-300"
           sizes="(max-width:640px) 50vw, (max-width:1024px) 33vw, 25vw"
         />
@@ -59,6 +62,8 @@ export default function RecipeCard({ recipe, productMap = {} }: Props) {
     </Link>
   );
 }
+
+export default memo(RecipeCard);
 
 // Standard veg / non-veg food mark (green square+dot / red square+triangle).
 function VegMark({ isVeg }: { isVeg: boolean }) {

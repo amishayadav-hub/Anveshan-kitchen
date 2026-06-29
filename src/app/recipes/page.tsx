@@ -1,10 +1,32 @@
 import { getAllRecipes, getAllProducts } from "@/lib/recipes";
 import RecipeBrowser from "@/components/recipes/RecipeBrowser";
+import JsonLd from "@/components/JsonLd";
+import { buildRecipeListJsonLd, SITE_URL, SITE_NAME } from "@/lib/seo";
 import { AnveshanProduct } from "@/types";
 
+const TITLE = "Healthy Indian Recipes with Ghee, Cold-Pressed Oils & Atta | Anveshan Kitchen";
+const DESCRIPTION =
+  "Browse healthy Indian recipes made with Anveshan's pure bilona ghee, wood-pressed oils, ancient-grain attas and superfoods. Cook tastier, shop the ingredients in one click.";
+
 export const metadata = {
-  title: "Recipes | Anveshan Kitchen",
-  description: "Healthy Indian recipes made with Anveshan's pure ghee, wood-pressed oils, attas and superfoods.",
+  title: TITLE,
+  description: DESCRIPTION,
+  keywords: [
+    "Indian recipes",
+    "healthy recipes",
+    "ghee recipes",
+    "wood-pressed oil recipes",
+    "atta recipes",
+    "Anveshan",
+  ],
+  alternates: { canonical: `${SITE_URL}/recipes` },
+  openGraph: {
+    type: "website",
+    url: `${SITE_URL}/recipes`,
+    title: TITLE,
+    description: DESCRIPTION,
+    siteName: SITE_NAME,
+  },
 };
 
 interface Props {
@@ -26,6 +48,7 @@ export default async function RecipesPage({ searchParams }: Props) {
 
   return (
     <main>
+      <JsonLd data={buildRecipeListJsonLd(recipes)} />
       {/* Recipes (two-level filter + grid) */}
       <section className="max-w-6xl mx-auto px-4 pt-6 pb-10">
         {recipes.length === 0 ? (

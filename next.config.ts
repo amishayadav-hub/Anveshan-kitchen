@@ -11,22 +11,12 @@ const nextConfig: NextConfig = {
     "/api/generate-recipe": ["./data/recipe-embeddings.bin", "./indian-recipes.json"],
   },
   images: {
-    // Images come from already-sized external CDNs (Unsplash ?w=…). Skipping the
-    // built-in optimizer avoids dev-time proxy timeouts and serves them directly.
-    unoptimized: true,
+    formats: ["image/avif", "image/webp"],
     remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "upload.wikimedia.org",
-      },
-      {
-        protocol: "https",
-        hostname: "images.unsplash.com",
-      },
-      {
-        protocol: "https",
-        hostname: "cdn.shopify.com",
-      },
+      { protocol: "https", hostname: "upload.wikimedia.org" },
+      { protocol: "https", hostname: "images.unsplash.com" },
+      { protocol: "https", hostname: "cdn.shopify.com" },
+      { protocol: "https", hostname: "www.anveshan.farm" },
     ],
   },
 };

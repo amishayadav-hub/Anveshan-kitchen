@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useDeferredValue } from "react";
 import { Recipe, AnveshanProduct } from "@/types";
 import { CATEGORIES, getCategory } from "@/lib/categories";
 import RecipeCard from "@/components/recipes/RecipeCard";
@@ -27,16 +27,22 @@ export default function RecipeBrowser({ recipes, productMap, initialCategory, in
 
   const q = (initialQuery ?? "").trim().toLowerCase();
 
+  // Defer the heavy 102-card re-filter so filter clicks stay responsive (INP).
+  const dCategory = useDeferredValue(category);
+  const dSub = useDeferredValue(sub);
+  const dVeg = useDeferredValue(vegOnly);
+  const dNonVeg = useDeferredValue(nonVegOnly);
+
   const filtered = useMemo(() => {
     return recipes.filter((r) => {
       if (q && !r.name.toLowerCase().includes(q)) return false; // search by name
-      if (vegOnly && r.isVeg === false) return false; // hide non-veg
-      if (nonVegOnly && r.isVeg !== false) return false; // hide veg
-      if (category !== "all" && r.category !== category) return false;
-      if (sub !== "all" && r.subCategory !== sub) return false;
+      if (dVeg && r.isVeg === false) return false; // hide non-veg
+      if (dNonVeg && r.isVeg !== false) return false; // hide veg
+      if (dCategory !== "all" && r.category !== dCategory) return false;
+      if (dSub !== "all" && r.subCategory !== dSub) return false;
       return true;
     });
-  }, [recipes, category, sub, vegOnly, nonVegOnly, q]);
+  }, [recipes, dCategory, dSub, dVeg, dNonVeg, q]);
 
   function selectCategory(key: string) {
     setCategory(key);
@@ -88,8 +94,8 @@ export default function RecipeBrowser({ recipes, productMap, initialCategory, in
         </div>
       ) : (
         <div className="mt-3 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-          {filtered.map((r) => (
-            <RecipeCard key={r.id} recipe={r} productMap={productMap} />
+          {filtered.map((r, i) => (
+            <RecipeCard key={r.id} recipe={r} productMap={productMap} priority={i < 4} />
           ))}
         </div>
       )}

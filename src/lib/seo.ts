@@ -149,6 +149,40 @@ export function buildSiteJsonLd() {
   ];
 }
 
+/** CollectionPage + ItemList + BreadcrumbList JSON-LD for the recipes listing page. */
+export function buildRecipeListJsonLd(recipes: Recipe[]): object[] {
+  return [
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      name: "Anveshan Kitchen Recipes",
+      url: `${SITE_URL}/recipes`,
+      description:
+        "Healthy Indian recipes made with Anveshan's pure bilona ghee, wood-pressed oils, ancient-grain attas and superfoods.",
+      isPartOf: { "@type": "WebSite", name: SITE_NAME, url: SITE_URL },
+      publisher: { "@type": "Organization", name: "Anveshan", url: BRAND_URL },
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      itemListElement: recipes.map((recipe, idx) => ({
+        "@type": "ListItem",
+        position: idx + 1,
+        url: recipeUrl(recipe.slug),
+        name: recipe.name,
+      })),
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+        { "@type": "ListItem", position: 2, name: "Recipes", item: `${SITE_URL}/recipes` },
+      ],
+    },
+  ];
+}
+
 /** WebApplication + BreadcrumbList + FAQPage JSON-LD for the AI generator page. */
 export function buildGeneratorPageJsonLd(): object[] {
   const org = { "@type": "Organization", name: "Anveshan", url: BRAND_URL };
