@@ -24,13 +24,13 @@ export default function GheeSelector({ variants, selected, onChange, showInfo = 
   const [openInfo, setOpenInfo] = useState<GheeVariant | null>(null);
 
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="flex flex-nowrap gap-2 overflow-x-auto sm:overflow-visible no-scrollbar">
       {variants.map((v) => {
         const info = GHEE_VARIETY[v.type];
         return (
           <div
             key={v.type}
-            className="relative"
+            className="relative shrink-0"
             onMouseEnter={() => showInfo && setOpenInfo(v.type)}
             onMouseLeave={() => setOpenInfo((cur) => (cur === v.type ? null : cur))}
           >
@@ -43,7 +43,7 @@ export default function GheeSelector({ variants, selected, onChange, showInfo = 
               }}
               onFocus={() => showInfo && setOpenInfo(v.type)}
               onBlur={() => setOpenInfo((cur) => (cur === v.type ? null : cur))}
-              className={`min-h-[40px] px-3 py-1.5 rounded-full text-sm font-medium border transition-all ${
+              className={`min-h-[40px] whitespace-nowrap px-3 py-1.5 rounded-full text-sm font-medium border transition-all ${
                 selected === v.type
                   ? "bg-anv-green text-white border-anv-green"
                   : "bg-white text-anv-green border-anv-green/25 hover:border-anv-green hover:bg-anv-green/5"

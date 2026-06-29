@@ -40,25 +40,25 @@ export default function BuyRecipeButton({ products }: Props) {
   const overflow = products.length - shown.length;
 
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mt-3">
-      <div className="flex -space-x-2 shrink-0">
+    <div className="flex flex-col items-start sm:flex-row sm:items-center sm:justify-between gap-2 mt-3">
+      <div className="flex -space-x-1.5 shrink-0">
         {shown.map((p) => (
           <div
             key={p.id}
-            className="relative w-8 h-8 rounded-full ring-2 ring-white overflow-hidden bg-anv-cream/40"
+            className="relative w-6 h-6 rounded-full ring-2 ring-white overflow-hidden bg-anv-cream/40"
             title={p.name}
           >
             {p.image ? (
-              <Image src={p.image} alt={p.name} fill className="object-cover" sizes="32px" />
+              <Image src={p.image} alt={p.name} fill className="object-cover" sizes="24px" />
             ) : (
-              <div className="w-full h-full flex items-center justify-center text-anv-green text-[10px] font-bold">
+              <div className="w-full h-full flex items-center justify-center text-anv-green text-[9px] font-bold">
                 {p.name.charAt(0)}
               </div>
             )}
           </div>
         ))}
         {overflow > 0 && (
-          <div className="relative w-8 h-8 rounded-full ring-2 ring-white flex items-center justify-center bg-anv-cream/40 text-anv-green text-[10px] font-bold">
+          <div className="relative w-6 h-6 rounded-full ring-2 ring-white flex items-center justify-center bg-anv-cream/40 text-anv-green text-[9px] font-bold">
             +{overflow}
           </div>
         )}
@@ -66,7 +66,7 @@ export default function BuyRecipeButton({ products }: Props) {
       <button
         type="button"
         onClick={handleClick}
-        className="w-full sm:w-auto shrink-0 min-h-[40px] bg-anv-green text-white text-xs font-semibold px-4 py-2 rounded-full hover:bg-anv-green-dark transition-colors whitespace-nowrap"
+        className="shrink-0 bg-anv-green text-white text-[11px] font-semibold px-3 py-1.5 rounded-full hover:bg-anv-green-dark transition-colors whitespace-nowrap"
       >
         {added ? "Added ✓" : "Add to Cart"}
       </button>
