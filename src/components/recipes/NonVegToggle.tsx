@@ -12,6 +12,7 @@ export default function NonVegToggle({ on, onChange }: Props) {
       type="button"
       role="switch"
       aria-checked={on}
+      aria-label="Non-vegetarian only"
       onClick={() => onChange(!on)}
       className="inline-flex items-center gap-2.5 select-none"
       title="Show only non-vegetarian recipes"

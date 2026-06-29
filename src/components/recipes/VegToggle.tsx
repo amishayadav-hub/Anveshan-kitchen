@@ -12,6 +12,7 @@ export default function VegToggle({ on, onChange }: Props) {
       type="button"
       role="switch"
       aria-checked={on}
+      aria-label="Vegetarian only"
       onClick={() => onChange(!on)}
       className="inline-flex items-center gap-2.5 select-none"
       title="Show only vegetarian recipes"

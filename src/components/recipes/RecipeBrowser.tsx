@@ -1,10 +1,12 @@
 "use client";
 
 import { useState, useMemo, useDeferredValue, useEffect, useRef } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Recipe, AnveshanProduct } from "@/types";
 import { CATEGORIES, getCategory } from "@/lib/categories";
 import RecipeCard from "@/components/recipes/RecipeCard";
 import { useDiet } from "@/components/recipes/DietProvider";
+import { SearchIcon } from "@/components/ui/icons";
 
 interface Props {
   recipes: Recipe[];
@@ -20,12 +22,32 @@ export default function RecipeBrowser({ recipes, productMap, initialCategory, in
   const [category, setCategory] = useState<string>(validCategory);
   const [sub, setSub] = useState<string>("all");
   // Veg / Non-Veg now live in the green stripe (shared via DietProvider).
-  const { vegOnly, nonVegOnly } = useDiet();
+  const { vegOnly, nonVegOnly, toggleVeg, toggleNonVeg } = useDiet();
 
   const activeCategory = category === "all" ? null : getCategory(category);
   const subs = activeCategory?.subs ?? null;
 
-  const q = (initialQuery ?? "").trim().toLowerCase();
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  // Controlled, live search box. `query` is the raw input; `q` drives filtering.
+  const [query, setQuery] = useState(initialQuery ?? "");
+  const q = query.trim().toLowerCase();
+
+  // Keep ?q= in sync, debounced, preserving other params (category, diet).
+  useEffect(() => {
+    const t = setTimeout(() => {
+      const params = new URLSearchParams(searchParams.toString());
+      const trimmed = query.trim();
+      if (trimmed) params.set("q", trimmed);
+      else params.delete("q");
+      const qs = params.toString();
+      router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
+    }, 300);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [query]);
 
   // Defer the heavy 102-card re-filter so filter clicks stay responsive (INP).
   const dCategory = useDeferredValue(category);
@@ -47,6 +69,15 @@ export default function RecipeBrowser({ recipes, productMap, initialCategory, in
   function selectCategory(key: string) {
     setCategory(key);
     setSub("all"); // reset sub whenever top-level changes
+  }
+
+  // Clear every filter (q + category + sub + diet) and wipe the URL params.
+  function resetFilters() {
+    setQuery("");
+    setCategory("all");
+    setSub("all");
+    if (vegOnly) toggleVeg(false);
+    if (nonVegOnly) toggleNonVeg(false);
   }
 
   // Infinite scroll: render in batches, grow as a sentinel scrolls into view.
@@ -72,6 +103,31 @@ export default function RecipeBrowser({ recipes, productMap, initialCategory, in
 
   return (
     <div>
+      {/* Search */}
+      <div className="relative mb-4">
+        <SearchIcon className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+        <input
+          type="search"
+          inputMode="search"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          onKeyDown={(e) => e.key === "Escape" && setQuery("")}
+          placeholder="Search recipes…"
+          aria-label="Search recipes by name"
+          className="w-full rounded-full border border-gray-200 bg-white py-3 pl-11 pr-11 text-sm text-gray-800 placeholder:text-gray-400 outline-none transition-colors focus:border-anv-green focus:ring-2 focus:ring-anv-green/30"
+        />
+        {query && (
+          <button
+            type="button"
+            onClick={() => setQuery("")}
+            aria-label="Clear search"
+            className="absolute right-3 top-1/2 -translate-y-1/2 flex h-6 w-6 items-center justify-center rounded-full text-gray-400 hover:bg-gray-100 hover:text-anv-green"
+          >
+            <span aria-hidden="true" className="text-lg leading-none">&times;</span>
+          </button>
+        )}
+      </div>
+
       {/* Top-level filter row */}
       <div className="flex flex-wrap gap-2">
         <FilterChip label="All Recipes" active={category === "all"} onClick={() => selectCategory("all")} />
@@ -99,19 +155,34 @@ export default function RecipeBrowser({ recipes, productMap, initialCategory, in
       )}
 
       {/* Count */}
-      <p className="mt-4 text-sm text-gray-500">
+      <p className="mt-4 text-sm text-gray-500" aria-live="polite">
         {filtered.length} {filtered.length === 1 ? "recipe" : "recipes"}
         {q && (
           <>
-            {" "}for &ldquo;<span className="text-anv-green font-medium">{initialQuery}</span>&rdquo;
+            {" "}for &ldquo;<span className="text-anv-green font-medium">{query.trim()}</span>&rdquo;
           </>
         )}
       </p>
 
       {/* Grid */}
       {filtered.length === 0 ? (
-        <div className="py-20 text-center text-gray-400">
-          <p>No recipes found. Try a different search or filter.</p>
+        <div className="py-16 text-center">
+          <p className="text-gray-600">
+            No recipes found
+            {q && (
+              <>
+                {" "}for &ldquo;<span className="font-medium text-anv-green">{query.trim()}</span>&rdquo;
+              </>
+            )}
+            {" "}— try a different term or browse all recipes.
+          </p>
+          <button
+            type="button"
+            onClick={resetFilters}
+            className="mt-4 rounded-full bg-anv-green px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-anv-green/90"
+          >
+            Reset filters
+          </button>
         </div>
       ) : (
         <>
