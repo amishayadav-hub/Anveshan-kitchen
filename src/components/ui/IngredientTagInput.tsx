@@ -39,18 +39,20 @@ export default function IngredientTagInput({
   }
 
   return (
-    <div className="w-full border border-gray-200 rounded-xl p-3 bg-white focus-within:border-amber-500 focus-within:ring-2 focus-within:ring-amber-100 transition-all min-h-[56px] flex flex-wrap gap-2 items-center cursor-text"
+    <div className="w-full border border-gray-200 rounded-xl p-3 bg-white focus-within:border-anv-green focus-within:ring-2 focus-within:ring-anv-green/15 transition-all min-h-[56px] flex flex-wrap gap-2 items-center cursor-text"
       onClick={() => document.getElementById("ingredient-input")?.focus()}
     >
       {tags.map((tag, i) => (
         <span
           key={i}
-          className="flex items-center gap-1.5 bg-amber-50 border border-amber-200 text-amber-800 text-sm px-3 py-1 rounded-full"
+          className="flex items-center gap-1.5 bg-anv-green/8 border border-anv-green/20 text-anv-green text-sm px-3 py-1 rounded-full"
         >
           {tag}
           <button
+            type="button"
+            aria-label={`Remove ${tag}`}
             onClick={(e) => { e.stopPropagation(); removeTag(i); }}
-            className="text-amber-400 hover:text-amber-700 font-bold leading-none"
+            className="text-anv-green/50 hover:text-anv-green font-bold leading-none px-0.5"
           >
             ×
           </button>

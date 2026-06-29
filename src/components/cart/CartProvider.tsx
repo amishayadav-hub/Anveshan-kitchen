@@ -45,13 +45,23 @@ export default function CartProvider({ children }: { children: ReactNode }) {
     if (hydrated) localStorage.setItem(STORAGE_KEY, JSON.stringify(lines));
   }, [lines, hydrated]);
 
+  const MAX_QTY = 99;
+
   function addLines(incoming: CartLine[]) {
     setLines((prev) => {
       const next = [...prev];
       for (const line of incoming) {
         if (!line.variantId) continue;
+        // Some product ids share one Shopify SKU, so merge by variantId and
+        // adopt the latest name/image rather than keeping a stale first write.
         const i = next.findIndex((l) => l.variantId === line.variantId);
-        if (i >= 0) next[i] = { ...next[i], quantity: next[i].quantity + (line.quantity || 1) };
+        if (i >= 0)
+          next[i] = {
+            ...next[i],
+            name: line.name,
+            image: line.image,
+            quantity: Math.min(next[i].quantity + (line.quantity || 1), MAX_QTY),
+          };
         else next.push({ ...line, quantity: line.quantity || 1 });
       }
       return next;

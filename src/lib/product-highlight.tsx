@@ -77,7 +77,7 @@ export const ATTA_VARIETY: Record<
   khapli: {
     label: "Khapli",
     handle: "cold-pressed-khapli-atta-low-100-emmer-wheat-gi-high-fiber-stone-ground-flour",
-    image: "https://cdn.shopify.com/s/files/1/0270/3346/9006/files/khapli_aata.webp?v=1767422899",
+    image: "https://cdn.shopify.com/s/files/1/0270/3346/9006/files/khapli_aata.webp?v=1767422899&width=200",
     variantId: "46719452676288",
     price: 240,
   },
@@ -85,7 +85,7 @@ export const ATTA_VARIETY: Record<
     label: "Multigrain",
     handle: "khapli-multigrain-atta",
     image:
-      "https://cdn.shopify.com/s/files/1/0270/3346/9006/files/Frontcopy1.06.16PM1.08.54PM.webp?v=1775561230",
+      "https://cdn.shopify.com/s/files/1/0270/3346/9006/files/Frontcopy1.06.16PM1.08.54PM.webp?v=1775561230&width=200",
     variantId: "48130399207616",
     price: 360,
   },
@@ -114,7 +114,7 @@ export const GHEE_VARIETY: Record<GheeVariant, GheeVarietyInfo> = {
   "gir-cow": {
     handle: "gir-cow-ghee",
     image:
-      "https://cdn.shopify.com/s/files/1/0270/3346/9006/files/Artboard12_9aa0bb70-c8dd-4f7f-b2c0-81e248099162.jpg?v=1773726670",
+      "https://cdn.shopify.com/s/files/1/0270/3346/9006/files/Artboard12_9aa0bb70-c8dd-4f7f-b2c0-81e248099162.jpg?v=1773726670&width=200",
     flavour: "Sweet and lactic",
     texture: "Golden, light grains",
     bestFor: "Digestion & Nourishment",
@@ -123,7 +123,7 @@ export const GHEE_VARIETY: Record<GheeVariant, GheeVarietyInfo> = {
   "desi-cow": {
     handle: "a2-desi-ghee",
     image:
-      "https://cdn.shopify.com/s/files/1/0270/3346/9006/files/Desi-cow-ghee-500-ml.jpg?v=1778050408",
+      "https://cdn.shopify.com/s/files/1/0270/3346/9006/files/Desi-cow-ghee-500-ml.jpg?v=1778050408&width=200",
     flavour: "Sweet & caramelized",
     texture: "Pale yellow, heavy grains",
     bestFor: "Strength & Stamina",
@@ -132,7 +132,7 @@ export const GHEE_VARIETY: Record<GheeVariant, GheeVarietyInfo> = {
   buffalo: {
     handle: "desi-buffalo-ghee",
     image:
-      "https://cdn.shopify.com/s/files/1/0270/3346/9006/files/Artboard12_996aed27-904d-4cfe-8982-aede84ad567c.jpg?v=1749579826",
+      "https://cdn.shopify.com/s/files/1/0270/3346/9006/files/Artboard12_996aed27-904d-4cfe-8982-aede84ad567c.jpg?v=1749579826&width=200",
     flavour: "Sour and lactic",
     texture: "White, dense & smooth",
     bestFor: "Muscles & Sleep",

@@ -1,11 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 import { generateRecipes, Language, GeneratedRecipe } from "@/lib/ai-providers";
 import { searchRecipes, SearchHit } from "@/lib/semantic-search";
+import { rateLimit, clientIp } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 
+const MAX_QUERY = 200;
+const MAX_INGREDIENT = 80;
+const MAX_INGREDIENTS = 15;
+
+// Strip control characters and collapse whitespace from user-supplied text.
+function sanitize(s: string): string {
+  return s.replace(/\p{Cc}/gu, " ").replace(/\s+/g, " ").trim();
+}
+
 // Minimum cosine score for a dataset match to be served instead of calling AI.
-// Tunable — raise it to fall back to AI more often, lower it to prefer the 10k.
 const SEARCH_THRESHOLD = 0.45;
 
 // Branded dataset ingredient → our internal productId (so cart/links work).
@@ -53,16 +62,28 @@ function hitToRecipe(hit: SearchHit, language: Language): GeneratedRecipe {
 }
 
 export async function POST(req: NextRequest) {
+  const limit = rateLimit(`gen:${clientIp(req)}`, 15, 60_000);
+  if (!limit.ok) {
+    return NextResponse.json(
+      { error: "Too many requests. Please wait a moment and try again." },
+      { status: 429, headers: { "Retry-After": String(limit.retryAfter) } }
+    );
+  }
+
   try {
-    const { query, ingredients, language } = (await req.json()) as {
-      query?: string;
-      ingredients?: string[];
-      language?: Language;
+    const body = (await req.json().catch(() => ({}))) as {
+      query?: unknown;
+      ingredients?: unknown;
+      language?: unknown;
     };
 
-    const dish = (query ?? "").trim();
-    const items = Array.isArray(ingredients) ? ingredients : [];
-    const lang: Language = language ?? "en";
+    const dish = sanitize(typeof body.query === "string" ? body.query : "").slice(0, MAX_QUERY);
+    const items = (Array.isArray(body.ingredients) ? body.ingredients : [])
+      .filter((x): x is string => typeof x === "string")
+      .slice(0, MAX_INGREDIENTS)
+      .map((s) => sanitize(s).slice(0, MAX_INGREDIENT))
+      .filter(Boolean);
+    const lang: Language = body.language === "hi" ? "hi" : "en";
 
     if (!dish && items.length === 0) {
       return NextResponse.json(
@@ -70,13 +91,9 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
-    if (items.length > 15) {
-      return NextResponse.json({ error: "Maximum 15 ingredients allowed" }, { status: 400 });
-    }
 
-    // 1) Dataset-first: try the 10k semantic index (English only — the dataset
-    //    is English; Hinglish requests go straight to AI). Any failure (index
-    //    missing / model error) falls through to AI.
+    // 1) Dataset-first: try the 10k semantic index (English only). Any failure
+    //    (index missing / model error) falls through to AI.
     if (lang !== "hi") {
       try {
         const hits = await searchRecipes([dish, ...items].join(" ").trim(), 5);

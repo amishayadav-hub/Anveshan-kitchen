@@ -24,7 +24,9 @@ export default function AddToCartButton({ lines, label = "Add Anveshan Products 
 
   return (
     <button
+      type="button"
       onClick={handleClick}
+      aria-live="polite"
       className="w-full py-3.5 px-6 rounded-xl font-semibold text-base transition-all bg-anv-green hover:bg-anv-green-dark text-white"
     >
       {added ? "Added to cart ✓" : label}

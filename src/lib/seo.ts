@@ -1,5 +1,6 @@
 import { Recipe, AnveshanProduct } from "@/types";
 import { getCategoryLabel, getSubLabel } from "./categories";
+import type { GeneratedRecipe } from "@/lib/ai-providers";
 
 // The crawlable home of the recipe pages. Override per environment.
 export const SITE_URL = (
@@ -146,4 +147,109 @@ export function buildSiteJsonLd() {
       url: SITE_URL,
     },
   ];
+}
+
+/** WebApplication + BreadcrumbList + FAQPage JSON-LD for the AI generator page. */
+export function buildGeneratorPageJsonLd(): object[] {
+  const org = { "@type": "Organization", name: "Anveshan", url: BRAND_URL };
+  return [
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      name: "Anveshan AI Recipe Generator",
+      url: `${SITE_URL}/recipes/generate`,
+      applicationCategory: "LifestyleApplication",
+      operatingSystem: "Web",
+      description:
+        "Generate 4–5 healthy Indian recipe variations for any dish, each built around Anveshan's pure bilona ghee, wood-pressed oils and ancient-grain attas — with step-by-step method and one-click shopping.",
+      offers: { "@type": "Offer", price: "0", priceCurrency: "INR" },
+      provider: org,
+      publisher: org,
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Recipes", item: `${SITE_URL}/recipes` },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "AI Recipe Generator",
+          item: `${SITE_URL}/recipes/generate`,
+        },
+      ],
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: [
+        {
+          "@type": "Question",
+          name: "How does the Anveshan AI Recipe Generator work?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Enter a dish name or the ingredients you have and the AI creates 4–5 full recipe variations, each built around Anveshan's pure ghee, wood-pressed oils and ancient-grain attas, with step-by-step instructions you can add to your cart in one click.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "Is the AI recipe generator free to use?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Yes, generating recipes is completely free. You only pay if you choose to add Anveshan ingredients to your cart.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "Can I get recipes in Hindi or Hinglish?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Yes — switch to Hinglish mode to get the same recipes written in Hindi using English letters, the way most Indian kitchens actually talk.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "Which Anveshan products do the recipes use?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Recipes swap in Anveshan staples like bilona ghee (Gir Cow, Desi Cow, Buffalo), cold/wood-pressed oils, and Khapli or Multigrain attas — so you cook healthier with farm-direct, chemical-free ingredients.",
+          },
+        },
+      ],
+    },
+  ];
+}
+
+/** ItemList of schema.org/Recipe JSON-LD for AI-generated recipe variations. */
+export function buildGeneratedRecipesJsonLd(variations: GeneratedRecipe[]): object | null {
+  if (!variations || variations.length === 0) return null;
+  const org = { "@type": "Organization", name: "Anveshan", url: BRAND_URL };
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    itemListElement: variations.map((v, idx) => ({
+      "@type": "ListItem",
+      position: idx + 1,
+      item: {
+        "@type": "Recipe",
+        name: v.name,
+        description: v.description,
+        author: org,
+        publisher: org,
+        recipeCuisine: "Indian",
+        keywords: [...v.anveshanProducts, "Anveshan"].join(", "),
+        prepTime: toISODuration(v.prepTime),
+        cookTime: toISODuration(v.cookTime),
+        recipeYield: v.servings ? `${v.servings} servings` : undefined,
+        recipeIngredient: v.ingredients.map((i) =>
+          [i.quantity, i.unit, i.name].filter(Boolean).join(" ").trim()
+        ),
+        recipeInstructions: v.steps.map((step, i) => ({
+          "@type": "HowToStep",
+          position: i + 1,
+          text: step,
+        })),
+      },
+    })),
+  };
 }

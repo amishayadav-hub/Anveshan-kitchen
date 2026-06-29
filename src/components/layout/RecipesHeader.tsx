@@ -14,9 +14,14 @@ export default function RecipesHeader() {
   return (
     <header className="bg-anv-green text-white">
       <div className="max-w-6xl mx-auto px-4 py-3 flex items-center gap-4 text-sm">
+        <div className="flex items-center gap-4 bg-white rounded-full px-4 py-1.5 shadow-sm">
+          <VegToggle on={vegOnly} onChange={toggleVeg} />
+          <NonVegToggle on={nonVegOnly} onChange={toggleNonVeg} />
+        </div>
+
         <Link
           href="/recipes/generate"
-          className="font-medium text-white/90 hover:text-white transition-colors"
+          className="ml-auto font-medium text-white/90 hover:text-white transition-colors"
         >
           ✨ AI Generator
         </Link>
@@ -26,11 +31,6 @@ export default function RecipesHeader() {
         >
           + Share Your Recipe
         </Link>
-
-        <div className="ml-auto flex items-center gap-4 bg-white rounded-full px-4 py-1.5 shadow-sm">
-          <VegToggle on={vegOnly} onChange={toggleVeg} />
-          <NonVegToggle on={nonVegOnly} onChange={toggleNonVeg} />
-        </div>
       </div>
     </header>
   );

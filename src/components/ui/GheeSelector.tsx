@@ -8,6 +8,8 @@ interface Props {
   variants: GheeVariantOption[];
   selected: GheeVariant;
   onChange: (variant: GheeVariant) => void;
+  /** Show the hover popover with tasting notes. Off in tight layouts (e.g. cart sidebar). */
+  showInfo?: boolean;
 }
 
 const LABELS: Record<GheeVariant, string> = {
@@ -18,7 +20,7 @@ const LABELS: Record<GheeVariant, string> = {
 
 // Ghee type selector. Click selects the type for the cart; hover/focus/tap shows
 // a popover with that variety's product image + flavour/texture/best-for/ayurvedic.
-export default function GheeSelector({ variants, selected, onChange }: Props) {
+export default function GheeSelector({ variants, selected, onChange, showInfo = true }: Props) {
   const [openInfo, setOpenInfo] = useState<GheeVariant | null>(null);
 
   return (
@@ -29,20 +31,22 @@ export default function GheeSelector({ variants, selected, onChange }: Props) {
           <div
             key={v.type}
             className="relative"
-            onMouseEnter={() => setOpenInfo(v.type)}
+            onMouseEnter={() => showInfo && setOpenInfo(v.type)}
             onMouseLeave={() => setOpenInfo((cur) => (cur === v.type ? null : cur))}
           >
             <button
+              type="button"
+              aria-pressed={selected === v.type}
               onClick={() => {
                 onChange(v.type);
-                setOpenInfo((cur) => (cur === v.type ? null : v.type)); // tap toggles on mobile
+                if (showInfo) setOpenInfo((cur) => (cur === v.type ? null : v.type)); // tap toggles on mobile
               }}
-              onFocus={() => setOpenInfo(v.type)}
+              onFocus={() => showInfo && setOpenInfo(v.type)}
               onBlur={() => setOpenInfo((cur) => (cur === v.type ? null : cur))}
               className={`px-3 py-1.5 rounded-full text-sm font-medium border transition-all ${
                 selected === v.type
                   ? "bg-anv-green text-white border-anv-green"
-                  : "bg-white text-anv-green border-anv-cream-dark hover:border-anv-green"
+                  : "bg-white text-anv-green border-anv-green/25 hover:border-anv-green hover:bg-anv-green/5"
               }`}
             >
               {LABELS[v.type]}
@@ -54,7 +58,7 @@ export default function GheeSelector({ variants, selected, onChange }: Props) {
                 <div className="flex items-center gap-3 mb-3">
                   <div className="relative w-14 h-14 shrink-0 rounded-lg overflow-hidden bg-anv-cream/40">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={info.image} alt={`${LABELS[v.type]} Ghee`} className="w-full h-full object-cover" />
+                    <img src={info.image} alt={`${LABELS[v.type]} Ghee`} width={56} height={56} loading="lazy" decoding="async" className="w-full h-full object-cover" />
                   </div>
                   <p className="font-bold text-anv-green leading-tight">{LABELS[v.type]} Ghee</p>
                 </div>

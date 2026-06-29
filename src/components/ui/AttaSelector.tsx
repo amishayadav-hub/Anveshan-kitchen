@@ -18,11 +18,13 @@ export default function AttaSelector({ varieties, selected, onChange }: Props) {
         return (
           <button
             key={v}
+            type="button"
+            aria-pressed={selected === v}
             onClick={() => onChange(v)}
             className={`px-3 py-1.5 rounded-full text-sm font-medium border transition-all ${
               selected === v
                 ? "bg-anv-green text-white border-anv-green"
-                : "bg-white text-anv-green border-anv-cream-dark hover:border-anv-green"
+                : "bg-white text-anv-green border-anv-green/25 hover:border-anv-green hover:bg-anv-green/5"
             }`}
           >
             {info.label} Atta

@@ -37,6 +37,8 @@ export default function Header() {
           <img
             src="https://cdn.shopify.com/s/files/1/0270/3346/9006/files/anveshan-logo-updates-register-mark.png?v=1728463199"
             alt="Anveshan"
+            width={120}
+            height={28}
             className="h-7 w-auto"
           />
           <span className="text-anv-green font-medium text-lg lowercase tracking-tight">kitchen</span>
