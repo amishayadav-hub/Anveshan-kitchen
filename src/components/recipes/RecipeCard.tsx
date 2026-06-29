@@ -47,7 +47,7 @@ function RecipeCard({ recipe, productMap = {}, priority = false }: Props) {
 
       {/* Content */}
       <div className="p-3">
-        <h3 className="font-bold text-gray-900 text-sm leading-snug group-hover:text-anv-green transition-colors line-clamp-1">
+        <h3 className="font-bold text-gray-900 text-sm leading-snug group-hover:text-anv-green transition-colors line-clamp-2">
           {recipe.name}
         </h3>
         <p className="text-xs text-gray-500 mt-1 line-clamp-2 leading-relaxed">

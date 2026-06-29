@@ -67,7 +67,7 @@ export default function Header() {
               type="button"
               onClick={() => (open ? go() : setOpen(true))}
               aria-label="Search recipes"
-              className="p-2 text-anv-green hover:text-anv-green-dark transition-colors"
+              className="flex h-11 w-11 items-center justify-center text-anv-green hover:text-anv-green-dark transition-colors"
             >
               <SearchIcon />
             </button>
@@ -78,7 +78,7 @@ export default function Header() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Account"
-            className="p-2 text-anv-green hover:text-anv-green-dark transition-colors"
+            className="flex h-11 w-11 items-center justify-center text-anv-green hover:text-anv-green-dark transition-colors"
           >
             <UserIcon />
           </a>

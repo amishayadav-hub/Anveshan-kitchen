@@ -27,9 +27,10 @@ export default function CartDrawer() {
       {/* drawer */}
       <aside
         className={`fixed top-0 right-0 z-[70] h-full w-full max-w-sm bg-white shadow-2xl flex flex-col transition-transform duration-300 ${
-          isOpen ? "translate-x-0" : "translate-x-full"
+          isOpen ? "translate-x-0" : "translate-x-full pointer-events-none"
         }`}
         aria-hidden={!isOpen}
+        inert={!isOpen}
       >
         <header className="flex items-center justify-between pl-5 pr-2 h-14 border-b border-gray-100 shrink-0">
           <h2 className="font-bold text-gray-900">Your Cart{count > 0 ? ` (${count})` : ""}</h2>

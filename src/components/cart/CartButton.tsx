@@ -7,7 +7,7 @@ export default function CartButton() {
   return (
     <button
       onClick={open}
-      className="relative p-2 text-anv-green hover:text-anv-green-dark transition-colors"
+      className="relative flex h-11 w-11 items-center justify-center text-anv-green hover:text-anv-green-dark transition-colors"
       aria-label={`Open cart${count ? `, ${count} items` : ""}`}
     >
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
