@@ -8,6 +8,8 @@ import AddToCartButton from "@/components/ui/AddToCartButton";
 import StickyCartBar from "@/components/recipes/StickyCartBar";
 import ProductInfoTabs from "@/components/recipes/ProductInfoTabs";
 import FaqAccordion from "@/components/recipes/FaqAccordion";
+import RecipeActions from "@/components/recipes/RecipeActions";
+import RelatedRecipes from "@/components/recipes/RelatedRecipes";
 import { highlightProductMentions, PRODUCT_HANDLES } from "@/lib/product-highlight";
 import { PRODUCT_PDP } from "@/data/product-pdp";
 import { ClockIcon, UsersIcon, GaugeIcon, UtensilsIcon } from "@/components/ui/icons";
@@ -16,6 +18,8 @@ interface Props {
   recipe: Recipe;
   products: AnveshanProduct[];
   categoryLabel: string;
+  related?: Recipe[];
+  relatedProducts?: Record<string, AnveshanProduct>;
 }
 
 // Anveshan trust signals shown beside every recipe's products (icon + label).
@@ -59,7 +63,7 @@ function renderStep(step: string, productIds: string[]): ReactNode {
   return highlightProductMentions(step, productIds);
 }
 
-export default function RecipeView({ recipe, products, categoryLabel }: Props) {
+export default function RecipeView({ recipe, products, categoryLabel, related = [], relatedProducts = {} }: Props) {
   // Per-product chosen pack: variant id + price + image + name (drives cart, totals, art).
   type Sel = { variantId: string; price: number; image?: string; name?: string };
   const [selection, setSelection] = useState<Record<string, Sel>>(() => {
@@ -122,9 +126,9 @@ export default function RecipeView({ recipe, products, categoryLabel }: Props) {
     .find((x) => x.pdp);
 
   return (
-    <div className="max-w-6xl mx-auto px-4 pt-6 pb-28">
+    <div className="max-w-6xl mx-auto px-4 pt-4 md:pt-6 pb-28">
       {/* Breadcrumb */}
-      <nav className="flex flex-wrap text-xs text-gray-400 mb-5">
+      <nav className="flex flex-wrap text-xs text-gray-400 mb-3 md:mb-5">
         <span>Recipes</span>
         <span className="mx-1.5">/</span>
         <span>{categoryLabel}</span>
@@ -132,11 +136,11 @@ export default function RecipeView({ recipe, products, categoryLabel }: Props) {
         <span className="text-gray-600">{recipe.name}</span>
       </nav>
 
-      <div className="grid lg:grid-cols-[1fr_350px] gap-8 items-start">
+      <div className="grid lg:grid-cols-[1fr_350px] gap-6 md:gap-8 items-start">
         {/* ── Main column: header + all sections (keeps text at a readable width) ── */}
         <div className="min-w-0">
           {/* Header: thumbnail + title + meta chips */}
-          <header className="flex flex-col sm:flex-row gap-5 mb-10">
+          <header className="flex flex-col sm:flex-row gap-4 sm:gap-5 mb-6 md:mb-10">
             <div className="relative w-full h-40 sm:w-44 sm:h-44 shrink-0 rounded-2xl overflow-hidden bg-anv-cream/40">
               <Image
                 src={recipe.image || "/placeholder-recipe.jpg"}
@@ -159,13 +163,17 @@ export default function RecipeView({ recipe, products, categoryLabel }: Props) {
                 <Chip><GaugeIcon /> {difficulty}</Chip>
                 <Chip><UtensilsIcon /> {categoryLabel}</Chip>
               </div>
+              <RecipeActions slug={recipe.slug} name={recipe.name} />
             </div>
           </header>
 
+          {/* Sticky in-page jump nav */}
+          <JumpNav hasTips={hasTips} hasFaq={hasFaq} />
+
         {/* ── All sections on one page ── */}
-        <section className="space-y-10">
+        <section className="space-y-7 md:space-y-10">
           {/* Ingredients */}
-          <div id="ingredients" className="scroll-mt-6">
+          <div id="ingredients" className="scroll-mt-24">
             <h2 className="text-xl font-bold text-gray-900 mb-4">Ingredients</h2>
             <IngredientList
               ingredients={recipe.ingredients}
@@ -176,7 +184,7 @@ export default function RecipeView({ recipe, products, categoryLabel }: Props) {
           </div>
 
           {/* Instructions */}
-          <div id="instructions" className="scroll-mt-6">
+          <div id="instructions" className="scroll-mt-24">
             <h2 className="text-xl font-bold text-gray-900 mb-4">How to Make {recipe.name}</h2>
             <ol className="space-y-4">
               {recipe.steps.map((step, i) => (
@@ -194,7 +202,7 @@ export default function RecipeView({ recipe, products, categoryLabel }: Props) {
 
           {/* Tips */}
           {hasTips && (
-            <div id="tips" className="scroll-mt-6">
+            <div id="tips" className="scroll-mt-24">
               <h2 className="text-xl font-bold text-gray-900 mb-4">Tips for the Best {recipe.name}</h2>
               <ul className="space-y-3">
                 {recipe.tips!.map((tip, i) => (
@@ -209,7 +217,7 @@ export default function RecipeView({ recipe, products, categoryLabel }: Props) {
 
           {/* FAQ — same accordion format as the product FAQs */}
           {hasFaq && (
-            <div id="faq" className="scroll-mt-6">
+            <div id="faq" className="scroll-mt-24">
               <h2 className="text-xl font-bold text-gray-900 mb-4">Frequently Asked Questions</h2>
               <FaqAccordion
                 faqs={recipe.faqs!}
@@ -287,8 +295,43 @@ export default function RecipeView({ recipe, products, categoryLabel }: Props) {
         <ProductInfoTabs productName={primaryPdp.name} pdp={primaryPdp.pdp} />
       )}
 
+      <RelatedRecipes recipes={related} products={relatedProducts} />
+
       <StickyCartBar products={products} lines={cartLines} total={total} recipeName={recipe.name} />
     </div>
+  );
+}
+
+// Sticky in-page jump nav — smooth-scrolls to each section. Only links to
+// sections that exist. Sits below the page's existing sticky headers.
+function JumpNav({ hasTips, hasFaq }: { hasTips: boolean; hasFaq: boolean }) {
+  const links = [
+    { id: "ingredients", label: "Ingredients" },
+    { id: "instructions", label: "Method" },
+    ...(hasTips ? [{ id: "tips", label: "Tips" }] : []),
+    ...(hasFaq ? [{ id: "faq", label: "FAQ" }] : []),
+  ];
+
+  function jump(e: React.MouseEvent<HTMLAnchorElement>, id: string) {
+    e.preventDefault();
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  return (
+    <nav className="no-print sticky top-14 z-20 -mx-4 mb-6 md:mb-8 border-b border-anv-cream-dark bg-white/90 backdrop-blur supports-[backdrop-filter]:bg-white/75">
+      <div className="flex gap-1.5 overflow-x-auto px-4 py-2 no-scrollbar">
+        {links.map((l) => (
+          <a
+            key={l.id}
+            href={`#${l.id}`}
+            onClick={(e) => jump(e, l.id)}
+            className="whitespace-nowrap rounded-full px-3 py-1.5 text-sm font-medium text-gray-600 hover:bg-anv-green/10 hover:text-anv-green transition-colors"
+          >
+            {l.label}
+          </a>
+        ))}
+      </div>
+    </nav>
   );
 }
 

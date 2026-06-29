@@ -20,13 +20,13 @@ export default function CartDrawer() {
       {/* backdrop */}
       <div
         onClick={close}
-        className={`fixed inset-0 z-[60] bg-black/40 transition-opacity duration-300 ${
+        className={`print:hidden fixed inset-0 z-[60] bg-black/40 transition-opacity duration-300 ${
           isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
       />
       {/* drawer */}
       <aside
-        className={`fixed top-0 right-0 z-[70] h-full w-full max-w-sm bg-white shadow-2xl flex flex-col transition-transform duration-300 ${
+        className={`print:hidden fixed top-0 right-0 z-[70] h-full w-full max-w-sm bg-white shadow-2xl flex flex-col transition-transform duration-300 ${
           isOpen ? "translate-x-0" : "translate-x-full pointer-events-none"
         }`}
         aria-hidden={!isOpen}
