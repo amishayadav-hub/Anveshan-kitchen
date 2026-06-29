@@ -145,6 +145,7 @@ export default function RecipeView({ recipe, products, categoryLabel }: Props) {
                 className="object-cover"
                 sizes="(max-width: 640px) 100vw, 176px"
                 priority
+                unoptimized={/upload\.wikimedia\.org/.test(recipe.image || "")}
               />
             </div>
             <div className="flex-1 min-w-0">

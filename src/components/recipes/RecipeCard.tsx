@@ -34,6 +34,8 @@ function RecipeCard({ recipe, productMap = {}, priority = false }: Props) {
           alt={recipe.name}
           fill
           priority={priority}
+          // Wikimedia 429s the server-side optimizer; load those directly.
+          unoptimized={/upload\.wikimedia\.org/.test(recipe.image || "")}
           className="object-cover group-hover:scale-[1.03] transition-transform duration-300"
           sizes="(max-width:640px) 50vw, (max-width:1024px) 33vw, 25vw"
         />

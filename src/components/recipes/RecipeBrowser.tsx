@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useDeferredValue } from "react";
+import { useState, useMemo, useDeferredValue, useEffect, useRef } from "react";
 import { Recipe, AnveshanProduct } from "@/types";
 import { CATEGORIES, getCategory } from "@/lib/categories";
 import RecipeCard from "@/components/recipes/RecipeCard";
@@ -49,6 +49,27 @@ export default function RecipeBrowser({ recipes, productMap, initialCategory, in
     setSub("all"); // reset sub whenever top-level changes
   }
 
+  // Infinite scroll: render in batches, grow as a sentinel scrolls into view.
+  const PAGE = 16;
+  const [visible, setVisible] = useState(PAGE);
+  const sentinelRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => setVisible(PAGE), [dCategory, dSub, dVeg, dNonVeg, q]); // reset on filter change
+
+  useEffect(() => {
+    if (visible >= filtered.length) return;
+    const el = sentinelRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => entry.isIntersecting && setVisible((v) => Math.min(v + PAGE, filtered.length)),
+      { rootMargin: "800px" }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [visible, filtered.length]);
+
+  const shown = filtered.slice(0, visible);
+
   return (
     <div>
       {/* Top-level filter row */}
@@ -93,11 +114,18 @@ export default function RecipeBrowser({ recipes, productMap, initialCategory, in
           <p>No recipes found. Try a different search or filter.</p>
         </div>
       ) : (
-        <div className="mt-3 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-          {filtered.map((r, i) => (
-            <RecipeCard key={r.id} recipe={r} productMap={productMap} priority={i < 4} />
-          ))}
-        </div>
+        <>
+          <div className="mt-3 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+            {shown.map((r, i) => (
+              <RecipeCard key={r.id} recipe={r} productMap={productMap} priority={i < 4} />
+            ))}
+          </div>
+          {visible < filtered.length && (
+            <div ref={sentinelRef} className="flex justify-center py-8" aria-hidden="true">
+              <span className="w-6 h-6 border-2 border-anv-green/30 border-t-anv-green rounded-full animate-spin" />
+            </div>
+          )}
+        </>
       )}
     </div>
   );
