@@ -13,26 +13,29 @@ export default function RecipesHeader() {
 
   return (
     <header className="bg-anv-green text-white">
-      <div className="max-w-6xl mx-auto px-4 py-3 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4 text-sm">
-        <div className="flex items-center justify-center gap-3 sm:gap-4 bg-white rounded-full px-3 sm:px-4 py-1.5 shadow-sm w-full sm:w-auto">
+      {/* Single row: Veg/Non-Veg + AI Generator + Share. Scrolls horizontally on
+          narrow screens (can't fit four controls at phone widths); fits on one
+          line from sm up, with the actions pushed right. */}
+      <div className="max-w-6xl mx-auto px-4 py-3 flex items-center gap-3 sm:gap-4 overflow-x-auto no-scrollbar text-sm">
+        <div className="flex shrink-0 items-center bg-white rounded-full px-3 py-1.5 shadow-sm">
           <VegToggle on={vegOnly} onChange={toggleVeg} />
+        </div>
+        <div className="flex shrink-0 items-center bg-white rounded-full px-3 py-1.5 shadow-sm">
           <NonVegToggle on={nonVegOnly} onChange={toggleNonVeg} />
         </div>
 
-        <div className="grid grid-cols-2 gap-2 sm:flex sm:items-center sm:gap-4 sm:ml-auto">
-          <Link
-            href="/recipes/generate"
-            className="text-center font-medium text-white/90 hover:text-white transition-colors whitespace-nowrap rounded-full border border-white/30 py-1.5 sm:border-0 sm:py-0 sm:rounded-none"
-          >
-            ✨ AI Generator
-          </Link>
-          <Link
-            href="/recipes/share"
-            className="bg-anv-cream text-anv-green text-center px-3 sm:px-4 py-1.5 rounded-full text-xs font-semibold hover:bg-white transition-colors shadow-sm whitespace-nowrap"
-          >
-            + Share Your Recipe
-          </Link>
-        </div>
+        <Link
+          href="/recipes/generate"
+          className="shrink-0 whitespace-nowrap font-medium text-white/90 hover:text-white transition-colors sm:ml-auto"
+        >
+          ✨ AI Generator
+        </Link>
+        <Link
+          href="/recipes/share"
+          className="shrink-0 whitespace-nowrap bg-anv-cream text-anv-green px-3 sm:px-4 py-1.5 rounded-full text-xs font-semibold hover:bg-white transition-colors shadow-sm"
+        >
+          + Share Your Recipe
+        </Link>
       </div>
     </header>
   );

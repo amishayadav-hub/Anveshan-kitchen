@@ -6,7 +6,7 @@ import { useState, useRef, useEffect } from "react";
 import CartButton from "@/components/cart/CartButton";
 import { SearchIcon } from "@/components/ui/icons";
 
-// Slim top header: Anveshan logo + search, account & cart on the right.
+// Slim top header: Anveshan logo + search & cart on the right.
 export default function Header() {
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -73,27 +73,9 @@ export default function Header() {
             </button>
           </form>
 
-          <a
-            href="https://www.anveshan.farm/account"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Account"
-            className="flex h-11 w-11 items-center justify-center text-anv-green hover:text-anv-green-dark transition-colors"
-          >
-            <UserIcon />
-          </a>
           <CartButton />
         </div>
       </div>
     </header>
-  );
-}
-
-function UserIcon() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-      <circle cx="12" cy="7" r="4" />
-    </svg>
   );
 }
