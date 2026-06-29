@@ -1,3 +1,7 @@
+"use client";
+
+import { useState } from "react";
+
 // Replica of the live anveshan.farm footer (links point to the real store).
 const SERVICES = [
   { label: "Shop", href: "https://www.anveshan.farm/collections/all-products" },
@@ -25,7 +29,7 @@ const SOCIAL = [
 
 function FootLink({ href, label }: { href: string; label: string }) {
   return (
-    <a href={href} target="_blank" rel="noopener noreferrer" className="text-white/80 hover:text-white transition-colors">
+    <a href={href} target="_blank" rel="noopener noreferrer" className="flex items-center min-h-[44px] md:min-h-0 text-white/80 hover:text-white transition-colors">
       {label}
     </a>
   );
@@ -33,17 +37,51 @@ function FootLink({ href, label }: { href: string; label: string }) {
 
 function ColHeading({ children }: { children: React.ReactNode }) {
   return (
-    <h3 className="text-anv-gold font-semibold uppercase tracking-wide text-sm mb-5">{children}</h3>
+    <h3 className="text-anv-gold font-semibold uppercase tracking-wide text-sm mb-2 md:mb-5">{children}</h3>
+  );
+}
+
+// Link list that collapses into a tap-to-expand accordion on mobile, and is
+// always expanded (plain column) on md+.
+function FooterAccordion({ heading, links }: { heading: string; links: { href: string; label: string }[] }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="col-span-2 md:col-span-1 border-t border-white/10 md:border-0">
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        aria-expanded={open}
+        className="flex w-full items-center justify-between py-3 md:py-0 md:pointer-events-none"
+      >
+        <span className="text-anv-gold font-semibold uppercase tracking-wide text-sm">{heading}</span>
+        <ChevronIcon className={`md:hidden h-5 w-5 text-anv-gold transition-transform ${open ? "rotate-180" : ""}`} />
+      </button>
+      <ul className={`${open ? "block" : "hidden"} md:block space-y-0 md:space-y-3 text-sm pb-2 md:pb-0 md:mt-5`}>
+        {links.map((l) => (
+          <li key={l.label}>
+            <FootLink href={l.href} label={l.label} />
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function ChevronIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="m6 9 6 6 6-6" />
+    </svg>
   );
 }
 
 export default function Footer() {
   return (
     <footer className="bg-anv-green text-white mt-16">
-      <div className="max-w-6xl mx-auto px-4 py-10 md:py-14">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1.3fr] gap-10">
+      <div className="max-w-6xl mx-auto px-4 py-8 md:py-14">
+        <div className="grid grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1.3fr] gap-x-6 gap-y-5 md:gap-10">
           {/* Brand + newsletter */}
-          <div>
+          <div className="col-span-2 md:col-span-1">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="https://cdn.shopify.com/s/files/1/0270/3346/9006/files/anveshan-logo-updates-register-mark.png?v=1728463199"
@@ -81,38 +119,18 @@ export default function Footer() {
             </p>
           </div>
 
-          {/* Services */}
-          <div>
-            <ColHeading>Services</ColHeading>
-            <ul className="space-y-3 text-sm">
-              {SERVICES.map((l) => (
-                <li key={l.label}>
-                  <FootLink href={l.href} label={l.label} />
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Policies */}
-          <div>
-            <ColHeading>Policies</ColHeading>
-            <ul className="space-y-3 text-sm">
-              {POLICIES.map((l) => (
-                <li key={l.label}>
-                  <FootLink href={l.href} label={l.label} />
-                </li>
-              ))}
-            </ul>
-          </div>
+          {/* Services + Policies: tap-to-expand accordions on mobile, columns on md+ */}
+          <FooterAccordion heading="Services" links={SERVICES} />
+          <FooterAccordion heading="Policies" links={POLICIES} />
 
           {/* Need help */}
-          <div>
+          <div className="col-span-2 md:col-span-1">
             <ColHeading>Need Help?</ColHeading>
             <a
               href="https://www.anveshan.farm/pages/contact-us"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex w-full max-w-[220px] items-center justify-center bg-anv-gold text-anv-green font-semibold rounded-full px-6 py-2.5 hover:brightness-105 transition"
+              className="inline-flex w-full max-w-[220px] min-h-[44px] items-center justify-center bg-anv-gold text-anv-green font-semibold rounded-full px-6 py-2.5 hover:brightness-105 transition"
             >
               Contact Us
             </a>
@@ -125,7 +143,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={s.label}
-                  className="w-10 h-10 rounded-full bg-anv-gold text-anv-green flex items-center justify-center hover:brightness-105 transition"
+                  className="w-11 h-11 rounded-full bg-anv-gold text-anv-green flex items-center justify-center hover:brightness-105 transition"
                 >
                   {s.icon}
                 </a>
