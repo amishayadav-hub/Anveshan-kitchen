@@ -167,7 +167,7 @@ export default function IngredientList({ ingredients, products, selection, onSel
               </span>
             </button>
             <div className="min-w-0 flex-1 py-2.5">
-              <span className={`transition-colors ${isChecked ? "text-gray-400 line-through" : "text-gray-700"}`}>
+              <span className={`recipe-body transition-colors ${isChecked ? "text-gray-400 line-through" : ""}`}>
                 <button onClick={() => toggleCheck(i)} className="text-left">
                   {qty} {ing.unit}
                 </button>{" "}
@@ -176,7 +176,7 @@ export default function IngredientList({ ingredients, products, selection, onSel
                     <span className="relative inline-block">
                       <button
                         onClick={() => setOpenCard(openCard === i ? null : i)}
-                        className="font-bold text-anv-green underline decoration-anv-green/30 underline-offset-2 hover:decoration-anv-green transition-colors"
+                        className="font-bold text-anv-green no-underline decoration-anv-green/30 underline-offset-2 hover:underline hover:decoration-anv-green transition-colors"
                       >
                         {label}
                       </button>

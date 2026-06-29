@@ -27,7 +27,7 @@ export default function ProductInfoTabs({ productName, pdp }: Props) {
 
   return (
     <section className="mt-16">
-      <h2 className="text-center text-lg font-bold text-gray-900 mb-5">
+      <h2 className="recipe-heading text-center">
         More about Anveshan {productName}
       </h2>
 
@@ -62,26 +62,49 @@ export default function ProductInfoTabs({ productName, pdp }: Props) {
         </div>
       )}
 
-      {/* Benefits */}
+      {/* Benefits — headings on one row; hover/tap each to reveal its detail. */}
       {tab === "benefits" && hasBenefits && (
         <div>
           <h3 className="text-center font-bold text-gray-900 tracking-wide mb-6">BENEFITS</h3>
-          <div className="grid sm:grid-cols-2 gap-x-10 gap-y-6">
+          <div className="flex flex-nowrap justify-start sm:justify-center gap-2 sm:gap-3 overflow-x-auto sm:overflow-visible no-scrollbar">
             {pdp.benefits!.map((b, i) => (
-              <div key={i} className="flex gap-3">
-                <span className="shrink-0 text-anv-green mt-0.5">
-                  <LeafIcon />
-                </span>
-                <div>
-                  <p className="font-semibold text-gray-900">{b.title}</p>
-                  <p className="text-gray-600 text-sm leading-relaxed mt-0.5">{b.desc}</p>
-                </div>
-              </div>
+              <BenefitChip key={i} title={b.title} desc={b.desc} />
             ))}
           </div>
         </div>
       )}
     </section>
+  );
+}
+
+// A benefit heading (e.g. "Gut Health"); hover / focus / tap opens a small
+// floating window with the detail. Mirrors the ghee-variety popover pattern.
+function BenefitChip({ title, desc }: { title: string; desc: string }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div
+      className="relative shrink-0"
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
+    >
+      <button
+        type="button"
+        aria-expanded={open}
+        onClick={() => setOpen((o) => !o)}
+        onFocus={() => setOpen(true)}
+        onBlur={() => setOpen(false)}
+        className="inline-flex min-h-[40px] items-center gap-1.5 whitespace-nowrap rounded-full border border-anv-green/25 bg-white px-4 text-sm font-semibold text-anv-green transition-all hover:border-anv-green hover:bg-anv-green/5"
+      >
+        <LeafIcon />
+        {title}
+      </button>
+      {open && (
+        <div className="fixed inset-x-4 top-auto z-40 mx-auto w-auto max-w-sm rounded-2xl border border-gray-200 bg-white p-4 shadow-xl sm:absolute sm:inset-x-auto sm:left-1/2 sm:top-full sm:mx-0 sm:mt-2 sm:w-64 sm:max-w-none sm:-translate-x-1/2">
+          <p className="mb-1 font-bold text-anv-green">{title}</p>
+          <p className="text-sm leading-relaxed text-gray-600">{desc}</p>
+        </div>
+      )}
+    </div>
   );
 }
 

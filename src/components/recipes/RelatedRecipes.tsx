@@ -11,7 +11,7 @@ export default function RelatedRecipes({ recipes, products }: Props) {
 
   return (
     <section className="mt-12 md:mt-16">
-      <h2 className="text-xl font-bold text-gray-900 mb-4">You might also like</h2>
+      <h2 className="recipe-heading">You might also like</h2>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
         {recipes.map((r) => (
           <RecipeCard key={r.slug} recipe={r} productMap={products} />

@@ -1,34 +1,16 @@
 "use client";
 
-import { useEffect, useState, type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 
 interface Props {
-  slug: string;
   name: string;
   className?: string;
 }
 
-const FAVORITES_KEY = "anveshan-favorites";
-
-export default function RecipeActions({ slug, name, className }: Props) {
-  const [saved, setSaved] = useState(false);
+// Single Share action shown at the foot of the recipe description.
+// Uses the native share sheet when available, else copies the link.
+export default function RecipeActions({ name, className }: Props) {
   const [copied, setCopied] = useState(false);
-
-  useEffect(() => {
-    try {
-      const list: string[] = JSON.parse(localStorage.getItem(FAVORITES_KEY) || "[]");
-      setSaved(list.includes(slug));
-    } catch {}
-  }, [slug]);
-
-  function toggleSave() {
-    try {
-      const list: string[] = JSON.parse(localStorage.getItem(FAVORITES_KEY) || "[]");
-      const next = list.includes(slug) ? list.filter((s) => s !== slug) : [...list, slug];
-      localStorage.setItem(FAVORITES_KEY, JSON.stringify(next));
-      setSaved(next.includes(slug));
-    } catch {}
-  }
 
   async function share() {
     const url = window.location.href;
@@ -46,45 +28,16 @@ export default function RecipeActions({ slug, name, className }: Props) {
   }
 
   return (
-    <div className={`no-print flex items-center gap-1.5 sm:gap-2 ${className ?? "mt-4"}`}>
-      <ActionButton onClick={() => window.print()} label="Print">
-        <PrinterIcon />
-      </ActionButton>
-      <ActionButton onClick={share} label={copied ? "Link copied" : "Share"}>
+    <div className={`no-print ${className ?? "mt-4"}`}>
+      <button
+        type="button"
+        onClick={share}
+        className="inline-flex min-h-[40px] items-center gap-2 rounded-full border border-anv-cream-dark px-4 text-sm font-medium text-gray-600 transition-colors hover:border-anv-green/40 hover:text-anv-green"
+      >
         <ShareIcon />
-      </ActionButton>
-      <ActionButton onClick={toggleSave} label={saved ? "Saved" : "Save"} pressed={saved}>
-        <BookmarkIcon filled={saved} />
-      </ActionButton>
+        <span>{copied ? "Link copied" : "Share"}</span>
+      </button>
     </div>
-  );
-}
-
-function ActionButton({
-  onClick,
-  label,
-  pressed,
-  children,
-}: {
-  onClick: () => void;
-  label: string;
-  pressed?: boolean;
-  children: ReactNode;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      aria-pressed={pressed}
-      className={`inline-flex min-h-[44px] shrink-0 items-center gap-1.5 sm:gap-2 whitespace-nowrap rounded-full border px-3 sm:px-4 text-sm font-medium transition-colors ${
-        pressed
-          ? "border-anv-green bg-anv-green/10 text-anv-green"
-          : "border-anv-cream-dark text-gray-600 hover:border-anv-green/40 hover:text-anv-green"
-      }`}
-    >
-      {children}
-      <span>{label}</span>
-    </button>
   );
 }
 
@@ -106,16 +59,6 @@ function Svg({ children }: { children: ReactNode }) {
   );
 }
 
-function PrinterIcon() {
-  return (
-    <Svg>
-      <path d="M6 9V2h12v7" />
-      <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
-      <rect x="6" y="14" width="12" height="8" />
-    </Svg>
-  );
-}
-
 function ShareIcon() {
   return (
     <Svg>
@@ -125,23 +68,5 @@ function ShareIcon() {
       <path d="m8.59 13.51 6.83 3.98" />
       <path d="m15.41 6.51-6.82 3.98" />
     </Svg>
-  );
-}
-
-function BookmarkIcon({ filled }: { filled?: boolean }) {
-  return (
-    <svg
-      width="18"
-      height="18"
-      viewBox="0 0 24 24"
-      fill={filled ? "currentColor" : "none"}
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
-    </svg>
   );
 }

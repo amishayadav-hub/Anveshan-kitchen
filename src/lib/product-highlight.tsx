@@ -187,7 +187,7 @@ export function highlightProductMentions(text: string, productIds: string[]): Re
           href={pdpUrl(handle)}
           target="_blank"
           rel="noopener noreferrer"
-          className="font-bold text-gray-900 underline decoration-anv-green/40 underline-offset-2 hover:text-anv-green hover:decoration-anv-green transition-colors"
+          className="font-bold text-gray-900 no-underline decoration-anv-green/40 underline-offset-2 hover:text-anv-green hover:underline hover:decoration-anv-green transition-colors"
         >
           {label}
         </a>

@@ -9,6 +9,7 @@ import StickyCartBar from "@/components/recipes/StickyCartBar";
 import ProductInfoTabs from "@/components/recipes/ProductInfoTabs";
 import FaqAccordion from "@/components/recipes/FaqAccordion";
 import RecipeActions from "@/components/recipes/RecipeActions";
+import ReadMore from "@/components/recipes/ReadMore";
 import RelatedRecipes from "@/components/recipes/RelatedRecipes";
 import { highlightProductMentions, PRODUCT_HANDLES } from "@/lib/product-highlight";
 import { PRODUCT_PDP } from "@/data/product-pdp";
@@ -98,6 +99,14 @@ export default function RecipeView({ recipe, products, categoryLabel, related = 
   // the ingredient amounts share one source of truth.
   const [multiplier, setMultiplier] = useState(1);
 
+  // Collapse the method to the first few steps, with a "See all steps" toggle.
+  const COLLAPSED_STEPS = 3;
+  const [showAllSteps, setShowAllSteps] = useState(false);
+
+  // Collapse tips to the first couple, with a "Load more" toggle.
+  const COLLAPSED_TIPS = 2;
+  const [showAllTips, setShowAllTips] = useState(false);
+
   const priceFor = (p: AnveshanProduct) => selection[p.id]?.price ?? p.price ?? 0;
   const imageFor = (p: AnveshanProduct) => selection[p.id]?.image ?? p.image;
   const nameFor = (p: AnveshanProduct) => selection[p.id]?.name ?? p.name;
@@ -131,17 +140,14 @@ export default function RecipeView({ recipe, products, categoryLabel, related = 
 
   return (
     <div className="max-w-6xl mx-auto px-4 pt-4 md:pt-6 pb-28">
-      {/* Breadcrumb + recipe actions (Print / Share / Save) on the right */}
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between mb-3 md:mb-5">
-        <nav className="flex flex-wrap text-xs text-gray-400">
-          <span>Recipes</span>
-          <span className="mx-1.5">/</span>
-          <span>{categoryLabel}</span>
-          <span className="mx-1.5">/</span>
-          <span className="text-gray-600">{recipe.name}</span>
-        </nav>
-        <RecipeActions slug={recipe.slug} name={recipe.name} className="shrink-0 sm:justify-end" />
-      </div>
+      {/* Breadcrumb */}
+      <nav className="flex flex-wrap text-xs text-gray-400 mb-3 md:mb-5">
+        <span>Recipes</span>
+        <span className="mx-1.5">/</span>
+        <span>{categoryLabel}</span>
+        <span className="mx-1.5">/</span>
+        <span className="text-gray-600">{recipe.name}</span>
+      </nav>
 
       <div className="grid lg:grid-cols-[1fr_350px] gap-6 md:gap-8 items-start">
         {/* ── Main column: header + all sections (keeps text at a readable width) ── */}
@@ -160,10 +166,15 @@ export default function RecipeView({ recipe, products, categoryLabel, related = 
               />
             </div>
             <div className="flex-1 min-w-0">
-              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 break-words">{recipe.name}</h1>
-              <p className="text-gray-600 mt-2 leading-relaxed">
-                {recipe.intro || recipe.description}
-              </p>
+              <h1 className="recipe-title break-words">{recipe.name}</h1>
+              <ReadMore
+                text={recipe.intro || recipe.description}
+                lines={3}
+                expandLabel="See full recipe"
+                collapseLabel="Hide recipe"
+                className="recipe-body mt-2"
+              />
+              <RecipeActions name={recipe.name} className="mt-3" />
               <div className="flex flex-wrap items-center gap-2 mt-4">
                 <TimingChip prepTime={recipe.prepTime} cookTime={recipe.cookTime} total={formatMinutes(totalMin)} />
                 <ServingsChip servings={recipe.servings} multiplier={multiplier} onChange={setMultiplier} />
@@ -180,7 +191,7 @@ export default function RecipeView({ recipe, products, categoryLabel, related = 
         <section className="space-y-7 md:space-y-10">
           {/* Ingredients */}
           <div id="ingredients" className="scroll-mt-24">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">Ingredients</h2>
+            <h2 className="recipe-heading">Ingredients</h2>
             <IngredientList
               ingredients={recipe.ingredients}
               products={products}
@@ -192,40 +203,60 @@ export default function RecipeView({ recipe, products, categoryLabel, related = 
 
           {/* Instructions */}
           <div id="instructions" className="scroll-mt-24">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">How to Make {recipe.name}</h2>
+            <h2 className="recipe-heading">How to Make {recipe.name}</h2>
             <ol className="space-y-4">
-              {recipe.steps.map((step, i) => (
+              {(showAllSteps ? recipe.steps : recipe.steps.slice(0, COLLAPSED_STEPS)).map((step, i) => (
                 <li key={i} className="flex gap-4">
                   <span className="flex-shrink-0 w-8 h-8 rounded-full bg-anv-green text-white font-bold text-sm flex items-center justify-center">
                     {i + 1}
                   </span>
-                  <p className="text-gray-700 leading-relaxed pt-1">
+                  <p className="recipe-body pt-1">
                     {renderStep(step, recipe.anveshanProducts)}
                   </p>
                 </li>
               ))}
             </ol>
+            {recipe.steps.length > COLLAPSED_STEPS && (
+              <button
+                type="button"
+                onClick={() => setShowAllSteps((v) => !v)}
+                aria-expanded={showAllSteps}
+                className="mt-3 inline-block rounded-sm text-[13.5px] font-medium text-anv-green no-underline hover:underline focus-visible:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-anv-green/30"
+              >
+                {showAllSteps ? "Show fewer steps" : `See all ${recipe.steps.length} steps`}
+              </button>
+            )}
           </div>
 
           {/* Tips */}
           {hasTips && (
             <div id="tips" className="scroll-mt-24">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Tips for the Best {recipe.name}</h2>
+              <h2 className="recipe-heading">Tips for the Best {recipe.name}</h2>
               <ul className="space-y-3">
-                {recipe.tips!.map((tip, i) => (
-                  <li key={i} className="flex gap-3 text-gray-700 leading-relaxed">
+                {(showAllTips ? recipe.tips! : recipe.tips!.slice(0, COLLAPSED_TIPS)).map((tip, i) => (
+                  <li key={i} className="recipe-body flex gap-3">
                     <span className="text-anv-green font-bold">✓</span>
                     <span>{highlightProductMentions(tip, recipe.anveshanProducts)}</span>
                   </li>
                 ))}
               </ul>
+              {recipe.tips!.length > COLLAPSED_TIPS && (
+                <button
+                  type="button"
+                  onClick={() => setShowAllTips((v) => !v)}
+                  aria-expanded={showAllTips}
+                  className="mt-3 inline-block rounded-sm text-[13.5px] font-medium text-anv-green no-underline hover:underline focus-visible:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-anv-green/30"
+                >
+                  {showAllTips ? "Show less" : `Load more (${recipe.tips!.length - COLLAPSED_TIPS})`}
+                </button>
+              )}
             </div>
           )}
 
           {/* FAQ — same accordion format as the product FAQs */}
           {hasFaq && (
             <div id="faq" className="scroll-mt-24">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Frequently Asked Questions</h2>
+              <h2 className="recipe-heading">Frequently Asked Questions</h2>
               <FaqAccordion
                 faqs={recipe.faqs!}
                 renderAnswer={(a) => highlightProductMentions(a, recipe.anveshanProducts)}
@@ -326,8 +357,8 @@ function JumpNav({
     { id: "ingredients", label: "Ingredients" },
     { id: "instructions", label: "Method" },
     ...(hasTips ? [{ id: "tips", label: "Tips" }] : []),
-    ...(hasFaq ? [{ id: "faq", label: "FAQ" }] : []),
     ...(hasProducts ? [{ id: "products", label: "Products" }] : []),
+    ...(hasFaq ? [{ id: "faq", label: "FAQ" }] : []),
   ];
 
   const [active, setActive] = useState(links[0]?.id);
