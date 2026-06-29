@@ -44,7 +44,7 @@ export default function Header() {
           <span className="text-anv-green font-medium text-lg lowercase tracking-tight">kitchen</span>
         </Link>
 
-        <div className="flex items-center gap-1">
+        <div className="flex min-w-0 items-center gap-1">
           {/* Search: icon only; expands an input when clicked */}
           <form onSubmit={onSubmit} className="flex items-center">
             <input
@@ -57,9 +57,9 @@ export default function Header() {
               }}
               placeholder="Search recipes…"
               tabIndex={open ? 0 : -1}
-              className={`text-sm text-gray-700 bg-gray-50 rounded-full outline-none transition-all duration-200 ${
+              className={`min-w-0 text-sm text-gray-700 bg-gray-50 rounded-full outline-none transition-all duration-200 ${
                 open
-                  ? "w-40 sm:w-56 px-3.5 py-1.5 mr-1 border border-gray-200 focus:border-anv-green"
+                  ? "w-28 sm:w-56 px-3.5 py-1.5 mr-1 border border-gray-200 focus:border-anv-green"
                   : "w-0 px-0 py-0 border-0"
               }`}
             />

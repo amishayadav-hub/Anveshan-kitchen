@@ -124,7 +124,7 @@ export default function RecipeView({ recipe, products, categoryLabel }: Props) {
   return (
     <div className="max-w-6xl mx-auto px-4 pt-6 pb-28">
       {/* Breadcrumb */}
-      <nav className="text-xs text-gray-400 mb-5">
+      <nav className="flex flex-wrap text-xs text-gray-400 mb-5">
         <span>Recipes</span>
         <span className="mx-1.5">/</span>
         <span>{categoryLabel}</span>
@@ -137,7 +137,7 @@ export default function RecipeView({ recipe, products, categoryLabel }: Props) {
         <div className="min-w-0">
           {/* Header: thumbnail + title + meta chips */}
           <header className="flex flex-col sm:flex-row gap-5 mb-10">
-            <div className="relative w-full sm:w-44 h-44 shrink-0 rounded-2xl overflow-hidden bg-anv-cream/40">
+            <div className="relative w-full h-40 sm:w-44 sm:h-44 shrink-0 rounded-2xl overflow-hidden bg-anv-cream/40">
               <Image
                 src={recipe.image || "/placeholder-recipe.jpg"}
                 alt={recipe.name}
@@ -149,7 +149,7 @@ export default function RecipeView({ recipe, products, categoryLabel }: Props) {
               />
             </div>
             <div className="flex-1 min-w-0">
-              <h1 className="text-3xl font-bold text-gray-900">{recipe.name}</h1>
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 break-words">{recipe.name}</h1>
               <p className="text-gray-600 mt-2 leading-relaxed">
                 {recipe.intro || recipe.description}
               </p>

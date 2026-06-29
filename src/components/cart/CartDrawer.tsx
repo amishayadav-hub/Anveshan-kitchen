@@ -31,9 +31,9 @@ export default function CartDrawer() {
         }`}
         aria-hidden={!isOpen}
       >
-        <header className="flex items-center justify-between px-5 h-14 border-b border-gray-100 shrink-0">
+        <header className="flex items-center justify-between pl-5 pr-2 h-14 border-b border-gray-100 shrink-0">
           <h2 className="font-bold text-gray-900">Your Cart{count > 0 ? ` (${count})` : ""}</h2>
-          <button onClick={close} aria-label="Close cart" className="text-gray-400 hover:text-gray-700 text-2xl leading-none">
+          <button onClick={close} aria-label="Close cart" className="w-10 h-10 flex items-center justify-center text-gray-400 hover:text-gray-700 text-2xl leading-none">
             ×
           </button>
         </header>
@@ -51,15 +51,20 @@ export default function CartDrawer() {
                     {l.image && <Image src={l.image} alt={l.name} fill className="object-cover" sizes="56px" />}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900 leading-tight line-clamp-2">{l.name}</p>
+                    <div className="flex items-start justify-between gap-2">
+                      <p className="text-sm font-medium text-gray-900 leading-tight line-clamp-2">{l.name}</p>
+                      {l.price > 0 && (
+                        <span className="text-sm font-semibold text-gray-900 shrink-0">₹{l.price * l.quantity}</span>
+                      )}
+                    </div>
                     {l.price > 0 && (
                       <p className="text-xs text-anv-green font-semibold mt-0.5">₹{l.price}</p>
                     )}
-                    <div className="flex items-center gap-3 mt-2">
-                      <div className="flex items-center border border-gray-200 rounded-full overflow-hidden">
+                    <div className="flex items-center justify-between gap-3 mt-2">
+                      <div className="flex items-center border border-gray-200 rounded-full overflow-hidden shrink-0">
                         <button
                           onClick={() => setQty(l.variantId, l.quantity - 1)}
-                          className="w-7 h-7 text-gray-600 hover:bg-gray-50"
+                          className="w-10 h-10 text-gray-600 hover:bg-gray-50"
                           aria-label="Decrease quantity"
                         >
                           −
@@ -67,7 +72,7 @@ export default function CartDrawer() {
                         <span className="w-7 text-center text-sm">{l.quantity}</span>
                         <button
                           onClick={() => setQty(l.variantId, l.quantity + 1)}
-                          className="w-7 h-7 text-gray-600 hover:bg-gray-50"
+                          className="w-10 h-10 text-gray-600 hover:bg-gray-50"
                           aria-label="Increase quantity"
                         >
                           +
@@ -75,15 +80,12 @@ export default function CartDrawer() {
                       </div>
                       <button
                         onClick={() => remove(l.variantId)}
-                        className="text-xs text-gray-400 hover:text-red-500"
+                        className="text-xs text-gray-400 hover:text-red-500 px-2 py-2"
                       >
                         Remove
                       </button>
                     </div>
                   </div>
-                  {l.price > 0 && (
-                    <span className="text-sm font-semibold text-gray-900 shrink-0">₹{l.price * l.quantity}</span>
-                  )}
                 </div>
               ))}
             </div>

@@ -40,7 +40,7 @@ function ColHeading({ children }: { children: React.ReactNode }) {
 export default function Footer() {
   return (
     <footer className="bg-anv-green text-white mt-16">
-      <div className="max-w-6xl mx-auto px-4 py-14">
+      <div className="max-w-6xl mx-auto px-4 py-10 md:py-14">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1.3fr] gap-10">
           {/* Brand + newsletter */}
           <div>
@@ -70,7 +70,7 @@ export default function Footer() {
               href="https://www.anveshan.farm"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-between max-w-sm rounded-md border border-white/30 px-4 py-3 text-sm text-white/70 hover:border-white/60 transition-colors"
+              className="flex items-center justify-between w-full max-w-sm rounded-md border border-white/30 px-4 py-3 text-sm text-white/70 hover:border-white/60 transition-colors"
             >
               Email
               <span className="text-anv-gold">→</span>

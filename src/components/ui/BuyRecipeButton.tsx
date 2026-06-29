@@ -35,10 +35,14 @@ export default function BuyRecipeButton({ products }: Props) {
     setTimeout(() => setAdded(false), 1500);
   }
 
+  const maxCircles = 3;
+  const shown = products.slice(0, maxCircles);
+  const overflow = products.length - shown.length;
+
   return (
-    <div className="flex items-center justify-between gap-2 mt-3">
+    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mt-3">
       <div className="flex -space-x-2 shrink-0">
-        {products.slice(0, 4).map((p) => (
+        {shown.map((p) => (
           <div
             key={p.id}
             className="relative w-8 h-8 rounded-full ring-2 ring-white overflow-hidden bg-anv-cream/40"
@@ -53,11 +57,16 @@ export default function BuyRecipeButton({ products }: Props) {
             )}
           </div>
         ))}
+        {overflow > 0 && (
+          <div className="relative w-8 h-8 rounded-full ring-2 ring-white flex items-center justify-center bg-anv-cream/40 text-anv-green text-[10px] font-bold">
+            +{overflow}
+          </div>
+        )}
       </div>
       <button
         type="button"
         onClick={handleClick}
-        className="shrink-0 bg-anv-green text-white text-xs font-semibold px-4 py-2 rounded-full hover:bg-anv-green-dark transition-colors whitespace-nowrap"
+        className="w-full sm:w-auto shrink-0 min-h-[40px] bg-anv-green text-white text-xs font-semibold px-4 py-2 rounded-full hover:bg-anv-green-dark transition-colors whitespace-nowrap"
       >
         {added ? "Added ✓" : "Add to Cart"}
       </button>

@@ -43,7 +43,7 @@ export default function GheeSelector({ variants, selected, onChange, showInfo = 
               }}
               onFocus={() => showInfo && setOpenInfo(v.type)}
               onBlur={() => setOpenInfo((cur) => (cur === v.type ? null : cur))}
-              className={`px-3 py-1.5 rounded-full text-sm font-medium border transition-all ${
+              className={`min-h-[40px] px-3 py-1.5 rounded-full text-sm font-medium border transition-all ${
                 selected === v.type
                   ? "bg-anv-green text-white border-anv-green"
                   : "bg-white text-anv-green border-anv-green/25 hover:border-anv-green hover:bg-anv-green/5"
@@ -54,7 +54,7 @@ export default function GheeSelector({ variants, selected, onChange, showInfo = 
             </button>
 
             {info && openInfo === v.type && (
-              <div className="absolute left-0 top-full mt-2 z-40 w-72 bg-white rounded-2xl shadow-xl border border-gray-200 p-4">
+              <div className="fixed inset-x-4 top-auto z-40 w-auto max-w-sm mx-auto sm:absolute sm:inset-x-auto sm:left-0 sm:top-full sm:mt-2 sm:w-72 sm:max-w-none sm:mx-0 bg-white rounded-2xl shadow-xl border border-gray-200 p-4">
                 <div className="flex items-center gap-3 mb-3">
                   <div className="relative w-14 h-14 shrink-0 rounded-lg overflow-hidden bg-anv-cream/40">
                     {/* eslint-disable-next-line @next/next/no-img-element */}

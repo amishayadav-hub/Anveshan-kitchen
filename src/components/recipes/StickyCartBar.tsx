@@ -29,13 +29,15 @@ export default function StickyCartBar({ products, lines, total, recipeName }: Pr
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 shadow-[0_-2px_12px_rgba(0,0,0,0.08)]">
-      <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
-        <div className="flex items-center gap-3 min-w-0">
+      <div className="max-w-4xl mx-auto px-3 sm:px-4 py-2.5 sm:py-3 flex items-center justify-between gap-2 sm:gap-3">
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
           <div className="flex -space-x-3 shrink-0">
-            {lines.slice(0, 3).map((l) => (
+            {lines.slice(0, 3).map((l, i) => (
               <div
                 key={l.variantId}
-                className="relative w-10 h-10 rounded-full ring-2 ring-white overflow-hidden bg-anv-cream/40"
+                className={`relative w-10 h-10 rounded-full ring-2 ring-white overflow-hidden bg-anv-cream/40 ${
+                  i === 2 ? "hidden sm:block" : ""
+                }`}
               >
                 {l.image ? (
                   <Image src={l.image} alt={l.name} fill className="object-cover" sizes="40px" />

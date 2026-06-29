@@ -31,7 +31,7 @@ export default function ProductInfoCard({
       {/* click-away layer */}
       <div className="fixed inset-0 z-30" onClick={onClose} />
 
-      <div className="absolute left-0 top-full mt-2 z-40 w-72 bg-white rounded-2xl shadow-xl border border-gray-200 p-4 text-left">
+      <div className="fixed inset-x-4 top-auto z-40 w-auto max-w-sm mx-auto sm:absolute sm:inset-x-auto sm:left-0 sm:top-full sm:mt-2 sm:w-72 sm:max-w-none sm:mx-0 bg-white rounded-2xl shadow-xl border border-gray-200 p-4 text-left">
         {pdpUrl && (
           <a
             href={pdpUrl}
@@ -71,7 +71,7 @@ export default function ProductInfoCard({
                     onSelectSize(s);
                     onClose();
                   }}
-                  className={`w-full flex items-center justify-between px-3 py-2 rounded-lg border text-sm transition-colors ${
+                  className={`w-full min-h-[40px] flex items-center justify-between px-3 py-2 rounded-lg border text-sm transition-colors ${
                     active
                       ? "border-anv-green bg-anv-green/5 text-anv-green font-semibold"
                       : "border-gray-200 hover:border-anv-green/40 text-gray-700"
