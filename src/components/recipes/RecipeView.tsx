@@ -10,7 +10,7 @@ import ProductInfoTabs from "@/components/recipes/ProductInfoTabs";
 import FaqAccordion from "@/components/recipes/FaqAccordion";
 import RecipeActions from "@/components/recipes/RecipeActions";
 import ReadMore from "@/components/recipes/ReadMore";
-import HScroll from "@/components/ui/HScroll";
+import HScrollDots from "@/components/ui/HScrollDots";
 import RelatedRecipes from "@/components/recipes/RelatedRecipes";
 import { highlightProductMentions, PRODUCT_HANDLES } from "@/lib/product-highlight";
 import { PRODUCT_PDP } from "@/data/product-pdp";
@@ -393,27 +393,27 @@ function JumpNav({
 
   return (
     <nav className="no-print sticky top-14 z-20 -mx-4 mb-6 md:mb-8 px-4 py-2 bg-white/90 backdrop-blur supports-[backdrop-filter]:bg-white/75">
-      {/* Pill chrome on the wrapper; the fade applies only to the chips inside. */}
-      <div className="w-max max-w-full rounded-full border border-anv-green/20 bg-white p-1">
-        <HScroll className="flex gap-1 overflow-x-auto no-scrollbar">
-          {links.map((l) => {
-            const isActive = active === l.id;
-            return (
-              <button
-                key={l.id}
-                type="button"
-                onClick={() => jump(l.id)}
-                aria-current={isActive ? "true" : undefined}
-                className={`whitespace-nowrap rounded-full px-3.5 py-1.5 text-sm font-medium transition-colors ${
-                  isActive ? "bg-anv-green text-white" : "text-anv-green hover:bg-anv-green/10"
-                }`}
-              >
-                {l.label}
-              </button>
-            );
-          })}
-        </HScroll>
-      </div>
+      <HScrollDots
+        className="flex w-max max-w-full gap-1 overflow-x-auto rounded-full border border-anv-green/20 bg-white p-1 no-scrollbar"
+        activeIndex={Math.max(0, links.findIndex((l) => l.id === active))}
+      >
+        {links.map((l) => {
+          const isActive = active === l.id;
+          return (
+            <button
+              key={l.id}
+              type="button"
+              onClick={() => jump(l.id)}
+              aria-current={isActive ? "true" : undefined}
+              className={`whitespace-nowrap rounded-full px-3.5 py-1.5 text-sm font-medium transition-colors ${
+                isActive ? "bg-anv-green text-white" : "text-anv-green hover:bg-anv-green/10"
+              }`}
+            >
+              {l.label}
+            </button>
+          );
+        })}
+      </HScrollDots>
     </nav>
   );
 }

@@ -2671,7 +2671,7 @@ const recipes = [
     "image": "https://images.unsplash.com/photo-1596662894155-8196e1599aec?w=1200&q=80&auto=format&fit=crop"
   },
   {
-    "id": "cozy-veggie-korma", "slug": "cozy-veggie-korma", "name": "Cozy Veggie Korma", "category": "main-course", "subCategory": null,
+    "id": "cozy-veggie-korma", "slug": "cozy-veggie-korma", "name": "Veggie Korma", "category": "main-course", "subCategory": null,
     "description": "A comforting, mildly spiced vegetable korma with its base bloomed in nutty Anveshan Groundnut Oil and finished with a spoon of aromatic Anveshan Ghee. A drizzle of raw Anveshan Honey rounds off the gravy with gentle sweetness.",
     "prepTime": "20 min", "cookTime": "30 min", "servings": 4,
     "ingredients": [
@@ -2692,7 +2692,7 @@ const recipes = [
     "image": "https://images.unsplash.com/photo-1574343033363-59ab8b5d7710?w=1200&q=80&auto=format&fit=crop"
   },
   {
-    "id": "chicken-tinga-tacos", "slug": "chicken-tinga-tacos", "name": "Chicken Tinga Tacos", "category": "main-course", "subCategory": null,
+    "id": "chicken-tinga-tacos", "slug": "chicken-tinga-tacos", "name": "Chicken Tacos", "category": "main-course", "subCategory": null,
     "description": "Shredded chicken simmered in a smoky chipotle-tomato sauce bloomed in Anveshan Groundnut Oil, piled into soft homemade tortillas rolled from nutty Anveshan Khapli Atta.",
     "prepTime": "25 min", "cookTime": "30 min", "servings": 4,
     "ingredients": [
@@ -2775,7 +2775,7 @@ const recipes = [
     "image": "https://images.unsplash.com/photo-1565976469782-7c92daebc42e?w=1200&q=80&auto=format&fit=crop"
   },
   {
-    "id": "antipasto-pasta-salad", "slug": "antipasto-pasta-salad", "name": "Delicioso Antipasto Pasta Salad", "category": "main-course", "subCategory": null,
+    "id": "antipasto-pasta-salad", "slug": "antipasto-pasta-salad", "name": "Delicious Pasta Salad", "category": "main-course", "subCategory": null,
     "description": "A colourful Italian antipasto pasta salad loaded with mozzarella, olives, salami, peppers and cherry tomatoes, tossed in a bright herb vinaigrette built on fruity Anveshan Olive Oil and a touch of raw Anveshan Honey to balance the tang.",
     "prepTime": "20 min", "cookTime": "12 min", "servings": 6,
     "ingredients": [

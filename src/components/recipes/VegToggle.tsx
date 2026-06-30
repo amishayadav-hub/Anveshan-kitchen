@@ -17,27 +17,20 @@ export default function VegToggle({ on, onChange }: Props) {
       className="inline-flex items-center gap-2 select-none"
       title="Show only vegetarian recipes"
     >
-      {/* Veg indicator mark (green square + dot) — replaces the text label */}
-      <span className="flex h-4 w-4 items-center justify-center rounded-[3px] border-[1.5px] border-green-600">
-        <span className="h-1.5 w-1.5 rounded-full bg-green-600" />
-      </span>
+      {/* Switch: square veg-mark thumb (always green) on a pill track that turns
+          green when active. */}
       <span
-        className={`relative w-9 h-5 rounded-full transition-colors ${
-          on ? "bg-anv-green" : "bg-gray-300"
+        className={`relative h-5 w-9 rounded-full transition-colors ${
+          on ? "bg-green-600" : "bg-gray-300"
         }`}
       >
         <span
-          className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform flex items-center justify-center ${
+          className={`absolute top-0.5 left-0.5 flex h-4 w-4 items-center justify-center rounded-[5px] bg-white shadow transition-transform ${
             on ? "translate-x-4" : "translate-x-0"
           }`}
         >
-          {/* veg square mark */}
-          <span
-            className={`w-2.5 h-2.5 rounded-[3px] border flex items-center justify-center ${
-              on ? "border-anv-green" : "border-gray-400"
-            }`}
-          >
-            <span className={`w-1 h-1 rounded-full ${on ? "bg-anv-green" : "bg-gray-400"}`} />
+          <span className="flex h-3 w-3 items-center justify-center rounded-[3px] border-[1.5px] border-green-600">
+            <span className="h-1 w-1 rounded-full bg-green-600" />
           </span>
         </span>
       </span>

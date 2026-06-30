@@ -3,7 +3,6 @@
 import Link from "next/link";
 import VegToggle from "@/components/recipes/VegToggle";
 import NonVegToggle from "@/components/recipes/NonVegToggle";
-import HScroll from "@/components/ui/HScroll";
 import { useDiet } from "@/components/recipes/DietProvider";
 
 // Green action stripe above the recipe pages — AI Generator, Share, and the
@@ -17,11 +16,11 @@ export default function RecipesHeader() {
       {/* Single row: Veg/Non-Veg + Recipes Generator + Share. Scrolls
           horizontally on narrow screens (can't fit four controls at phone
           widths); fits on one line from sm up, with the actions pushed right. */}
-      <HScroll className="max-w-6xl mx-auto px-4 py-3 flex items-center gap-3 sm:gap-4 overflow-x-auto no-scrollbar text-sm">
-        <div className="flex shrink-0 items-center bg-white rounded-full px-3 py-1.5 shadow-sm">
+      <div className="max-w-6xl mx-auto px-4 py-3 flex items-center gap-3 sm:gap-4 overflow-x-auto no-scrollbar text-sm">
+        <div className="flex shrink-0 items-center rounded-full sm:bg-white sm:px-3 sm:py-1.5 sm:shadow-sm">
           <VegToggle on={vegOnly} onChange={toggleVeg} />
         </div>
-        <div className="flex shrink-0 items-center bg-white rounded-full px-3 py-1.5 shadow-sm">
+        <div className="flex shrink-0 items-center rounded-full sm:bg-white sm:px-3 sm:py-1.5 sm:shadow-sm">
           <NonVegToggle on={nonVegOnly} onChange={toggleNonVeg} />
         </div>
 
@@ -37,7 +36,7 @@ export default function RecipesHeader() {
         >
           + Share Your Recipe
         </Link>
-      </HScroll>
+      </div>
     </header>
   );
 }

@@ -6,7 +6,7 @@ import { Recipe, AnveshanProduct } from "@/types";
 import { CATEGORIES, getCategory } from "@/lib/categories";
 import RecipeCard from "@/components/recipes/RecipeCard";
 import { useDiet } from "@/components/recipes/DietProvider";
-import HScroll from "@/components/ui/HScroll";
+import HScrollDots from "@/components/ui/HScrollDots";
 
 interface Props {
   recipes: Recipe[];
@@ -106,7 +106,7 @@ export default function RecipeBrowser({ recipes, productMap, initialCategory, in
       {/* Top-level filter row — single scrollable row (no wrapping to 3-4 lines).
           Bleeds to the screen edge on mobile so it's clear it scrolls sideways. */}
       <div className="-mx-4 px-4 sm:mx-0 sm:px-0">
-        <HScroll className="flex gap-2 overflow-x-auto no-scrollbar pb-1">
+        <HScrollDots className="flex gap-2 overflow-x-auto no-scrollbar pb-1">
           <FilterChip label="All Recipes" active={category === "all"} onClick={() => selectCategory("all")} />
           {CATEGORIES.map((c) => (
             <FilterChip
@@ -116,7 +116,7 @@ export default function RecipeBrowser({ recipes, productMap, initialCategory, in
               onClick={() => selectCategory(c.key)}
             />
           ))}
-        </HScroll>
+        </HScrollDots>
       </div>
 
       {/* Second-level sub-product row (only for product groups) — also one scroll row */}
