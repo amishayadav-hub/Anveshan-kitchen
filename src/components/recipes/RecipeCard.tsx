@@ -25,7 +25,7 @@ function RecipeCard({ recipe, productMap = {}, priority = false }: Props) {
   return (
     <Link
       href={`/recipes/${recipe.slug}`}
-      className="group block bg-white border border-gray-100 hover:border-anv-green/30 hover:shadow-md transition-all duration-200 rounded-xl overflow-hidden [content-visibility:auto] [contain-intrinsic-size:auto_280px]"
+      className="group flex h-full flex-col bg-white border border-gray-100 hover:border-anv-green/30 hover:shadow-md transition-all duration-200 rounded-xl overflow-hidden [content-visibility:auto] [contain-intrinsic-size:auto_280px]"
     >
       {/* Image — compact, recipes are supporting content */}
       <div className="relative h-32 w-full bg-anv-cream/30 overflow-hidden">
@@ -45,21 +45,24 @@ function RecipeCard({ recipe, productMap = {}, priority = false }: Props) {
         <VegMark isVeg={recipe.isVeg !== false} />
       </div>
 
-      {/* Content */}
-      <div className="p-3">
-        <h3 className="font-bold text-gray-900 text-sm leading-snug group-hover:text-anv-green transition-colors line-clamp-2">
+      {/* Content — fixed-height title/description blocks keep every card's buy
+          row aligned across a grid row regardless of name/description length. */}
+      <div className="p-3 flex flex-1 flex-col">
+        <h3 className="font-bold text-gray-900 text-sm leading-snug group-hover:text-anv-green transition-colors truncate">
           {recipe.name}
         </h3>
-        <p className="text-xs text-gray-500 mt-1 line-clamp-2 leading-relaxed">
+        <p className="text-xs text-gray-500 mt-1 line-clamp-2 leading-relaxed min-h-[2.4rem]">
           {recipe.description}
         </p>
-        <p className="text-xs text-gray-500 mt-2">
+        <p className="text-xs text-gray-500 mt-2 whitespace-nowrap">
           <span className="text-anv-green font-semibold">{recipeProducts.length} Anveshan</span>
           {total > 0 && <> · ₹{total}</>}
         </p>
 
-        {/* Buy row: product-image circles + Add to Cart pill */}
-        <BuyRecipeButton products={recipeProducts} />
+        {/* Buy row: product-image circles + Add to Cart pill — pinned to bottom */}
+        <div className="mt-auto">
+          <BuyRecipeButton products={recipeProducts} />
+        </div>
       </div>
     </Link>
   );

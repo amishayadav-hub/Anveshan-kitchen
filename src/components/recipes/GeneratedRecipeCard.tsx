@@ -1,75 +1,46 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
+import Image from "next/image";
 import { GeneratedRecipe } from "@/lib/ai-providers";
-import { CartLine, GheeVariant, GheeVariantOption } from "@/types";
-import AddToCartButton from "@/components/ui/AddToCartButton";
-import GheeSelector from "@/components/ui/GheeSelector";
-import AttaSelector from "@/components/ui/AttaSelector";
-import {
-  highlightProductMentions,
-  GHEE_VARIETY,
-  ATTA_VARIETY,
-  ATTA_PRODUCT_IDS,
-  attaDefaultVariety,
-  pdpUrl,
-  pdpUrlForProduct,
-  type AttaVariety,
-} from "@/lib/product-highlight";
-import { PRODUCT_CATALOG, GHEE_VARIANT_INFO } from "@/data/product-catalog";
-import { ClockIcon, FlameIcon, UsersIcon, UtensilsIcon, LeafIcon, SparklesIcon, ExternalLinkIcon } from "@/components/ui/icons";
+import ReadMore from "@/components/recipes/ReadMore";
+import { useCart } from "@/components/cart/CartProvider";
+import { generatedShopLines } from "@/lib/generated-cart";
+import { highlightProductMentions } from "@/lib/product-highlight";
+import { ClockIcon, FlameIcon, UsersIcon, UtensilsIcon, SparklesIcon } from "@/components/ui/icons";
 
-const ATTA_VARIETIES: AttaVariety[] = ["khapli", "multigrain"];
-
-const GHEE_OPTIONS: GheeVariantOption[] = (Object.keys(GHEE_VARIANT_INFO) as GheeVariant[]).map((t) => ({
-  type: t,
-  label: GHEE_VARIANT_INFO[t].label,
-  shopifyVariantId: GHEE_VARIANT_INFO[t].variantId,
-  price: GHEE_VARIANT_INFO[t].price,
-}));
-
-type ShopItem = { id: string; kind: "ghee" | "atta" | "plain"; name: string; price: number; image?: string; variantId: string; pdp: string | null };
+// How many ingredients / steps to show before the "See all" toggle.
+const INGREDIENT_PREVIEW = 5;
+const STEP_PREVIEW = 3;
 
 function brandName(name: string): string {
   const t = name.trim();
   return /^anveshan\b/i.test(t) ? t : `Anveshan ${t}`;
 }
 
-function prettify(id: string): string {
-  return id.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
-}
-
 export default function GeneratedRecipeCard({ recipe, index, total }: { recipe: GeneratedRecipe; index?: number; total?: number }) {
-  const [gheeVariant, setGheeVariant] = useState<GheeVariant>("gir-cow");
-  const [attaVariety, setAttaVariety] = useState<Record<string, AttaVariety>>({});
-
-  const attaFor = (id: string) => attaVariety[id] ?? attaDefaultVariety(id);
-
-  const shopItems: ShopItem[] = useMemo(() => {
-    const ids = [...new Set(recipe.anveshanProducts)];
-    return ids
-      .map((id): ShopItem => {
-        if (id === "ghee") {
-          const g = GHEE_VARIANT_INFO[gheeVariant];
-          return { id, kind: "ghee", name: brandName(`${g.label} Ghee`), price: g.price, image: GHEE_VARIETY[gheeVariant]?.image, variantId: g.variantId, pdp: pdpUrl(GHEE_VARIETY[gheeVariant].handle) };
-        }
-        if (ATTA_PRODUCT_IDS.includes(id)) {
-          const variety = attaFor(id);
-          const v = ATTA_VARIETY[variety];
-          return { id, kind: "atta", name: brandName(`${v.label} Atta`), price: v.price, image: v.image, variantId: v.variantId, pdp: pdpUrl(v.handle) };
-        }
-        const info = PRODUCT_CATALOG[id];
-        return { id, kind: "plain", name: brandName(prettify(id)), price: info?.price ?? 0, image: info?.image, variantId: info?.variantId ?? "", pdp: pdpUrlForProduct(id) };
-      })
-      .filter((s) => s.variantId);
-  }, [recipe.anveshanProducts, gheeVariant, attaVariety]);
-
-  const cartLines: CartLine[] = useMemo(
-    () => shopItems.map((s) => ({ variantId: s.variantId, name: s.name, image: s.image, price: s.price, quantity: 1 })),
-    [shopItems]
-  );
-  const subtotal = cartLines.reduce((sum, l) => sum + l.price, 0);
   const providerLabel = /anveshan/i.test(recipe.provider) ? "Anveshan Collection" : "AI-crafted";
+
+  const [showAllIngredients, setShowAllIngredients] = useState(false);
+  const [showAllSteps, setShowAllSteps] = useState(false);
+
+  // Footer Add-to-Cart bar: resolves this variant's Anveshan products to cart
+  // lines, so the products + subtotal differ per generated recipe variation.
+  const { addLines, open } = useCart();
+  const [added, setAdded] = useState(false);
+  const { lines: cartLines, total: cartTotal } = generatedShopLines(recipe.anveshanProducts || []);
+
+  function handleAddToCart() {
+    addLines(cartLines);
+    open();
+    setAdded(true);
+    setTimeout(() => setAdded(false), 1500);
+  }
+
+  const visibleIngredients = showAllIngredients
+    ? recipe.ingredients
+    : recipe.ingredients.slice(0, INGREDIENT_PREVIEW);
+  const visibleSteps = showAllSteps ? recipe.steps : recipe.steps.slice(0, STEP_PREVIEW);
 
   return (
     <div className="bg-white rounded-2xl border-2 sm:border border-gray-200 sm:border-gray-100 shadow-md sm:shadow-sm hover:shadow-md transition-shadow overflow-hidden">
@@ -86,22 +57,33 @@ export default function GeneratedRecipeCard({ recipe, index, total }: { recipe: 
             <SparklesIcon className="w-3 h-3" /> {providerLabel}
           </span>
         </div>
-        {recipe.description && <p className="text-gray-500 mt-2 text-sm leading-relaxed max-w-2xl">{recipe.description}</p>}
+        {recipe.description && (
+          <div className="mt-2 max-w-2xl">
+            <ReadMore
+              text={recipe.description}
+              lines={3}
+              expandLabel="…see full description"
+              collapseLabel="Show less"
+              className="text-gray-500 text-sm leading-relaxed"
+            />
+          </div>
+        )}
 
-        <div className="flex flex-wrap gap-2 mt-4 text-sm text-gray-600">
-          <span className="inline-flex items-center gap-1.5 bg-white border border-gray-100 rounded-full px-3 py-1"><ClockIcon /> Prep {recipe.prepTime}</span>
-          <span className="inline-flex items-center gap-1.5 bg-white border border-gray-100 rounded-full px-3 py-1"><FlameIcon /> Cook {recipe.cookTime}</span>
-          <span className="inline-flex items-center gap-1.5 bg-white border border-gray-100 rounded-full px-3 py-1"><UsersIcon /> {recipe.servings} servings</span>
+        {/* Meta chips: stay on a single row (scrolls if needed) on mobile. */}
+        <div className="flex flex-nowrap gap-1.5 sm:gap-2 mt-4 text-xs sm:text-sm text-gray-600 overflow-x-auto no-scrollbar">
+          <span className="inline-flex shrink-0 whitespace-nowrap items-center gap-1.5 bg-white border border-gray-100 rounded-full px-2.5 sm:px-3 py-1"><ClockIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> Prep {recipe.prepTime}</span>
+          <span className="inline-flex shrink-0 whitespace-nowrap items-center gap-1.5 bg-white border border-gray-100 rounded-full px-2.5 sm:px-3 py-1"><FlameIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> Cook {recipe.cookTime}</span>
+          <span className="inline-flex shrink-0 whitespace-nowrap items-center gap-1.5 bg-white border border-gray-100 rounded-full px-2.5 sm:px-3 py-1"><UsersIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> {recipe.servings} servings</span>
         </div>
       </div>
 
-      <div className="grid lg:grid-cols-[1fr_340px] gap-8 p-6 sm:p-7 items-start">
-        {/* Content: ingredients + method */}
-        <div className="min-w-0 space-y-7">
+      <div className="p-6 sm:p-7">
+        {/* Ingredients + method, side by side (stacked on phones) */}
+        <div className="min-w-0 grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
           <div>
             <h3 className="text-lg font-bold text-gray-900 mb-3">Ingredients</h3>
             <ul className="space-y-2">
-              {recipe.ingredients.map((ing, i) => (
+              {visibleIngredients.map((ing, i) => (
                 <li key={`${ing.name}-${i}`} className="flex items-start gap-2.5 text-sm">
                   <span className={`mt-[7px] w-1.5 h-1.5 rounded-full shrink-0 ${ing.anveshan ? "bg-anv-green" : "bg-gray-300"}`} />
                   <span className={ing.anveshan ? "font-semibold text-anv-green" : "text-gray-700"}>
@@ -113,13 +95,25 @@ export default function GeneratedRecipeCard({ recipe, index, total }: { recipe: 
                 </li>
               ))}
             </ul>
+            {recipe.ingredients.length > INGREDIENT_PREVIEW && (
+              <button
+                type="button"
+                onClick={() => setShowAllIngredients((v) => !v)}
+                aria-expanded={showAllIngredients}
+                className="mt-3 text-sm font-semibold text-anv-green hover:underline"
+              >
+                {showAllIngredients
+                  ? "Show fewer ingredients"
+                  : `See all ${recipe.ingredients.length} ingredients`}
+              </button>
+            )}
           </div>
 
           {recipe.steps.length > 0 && (
           <div>
             <h3 className="text-lg font-bold text-gray-900 mb-4">Method</h3>
             <ol className="space-y-3">
-              {recipe.steps.map((step, i) => (
+              {visibleSteps.map((step, i) => (
                 <li key={`${i}-${step.slice(0, 16)}`} className="flex gap-3">
                   <span className="shrink-0 w-7 h-7 rounded-full bg-anv-green text-white text-xs font-bold flex items-center justify-center mt-0.5">
                     {i + 1}
@@ -128,6 +122,16 @@ export default function GeneratedRecipeCard({ recipe, index, total }: { recipe: 
                 </li>
               ))}
             </ol>
+            {recipe.steps.length > STEP_PREVIEW && (
+              <button
+                type="button"
+                onClick={() => setShowAllSteps((v) => !v)}
+                aria-expanded={showAllSteps}
+                className="mt-3 text-sm font-semibold text-anv-green hover:underline"
+              >
+                {showAllSteps ? "Show fewer steps" : `See all ${recipe.steps.length} steps`}
+              </button>
+            )}
 
             {recipe.servingSuggestion && (
               <p className="mt-5 text-sm text-anv-green bg-anv-green/[0.06] border border-anv-green/15 rounded-lg p-3 flex items-start gap-2">
@@ -138,96 +142,46 @@ export default function GeneratedRecipeCard({ recipe, index, total }: { recipe: 
           </div>
           )}
         </div>
-
-        {/* Commerce sidebar */}
-        {shopItems.length > 0 && (
-          <aside className="lg:sticky lg:top-20">
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-              <div className="bg-anv-green text-white px-5 py-4">
-                <p className="font-bold text-base flex items-center gap-1.5"><LeafIcon className="w-4 h-4" /> Shop the Anveshan products</p>
-                <p className="text-xs text-white/70 mt-0.5">Cook it the pure, farm-direct way</p>
-              </div>
-
-              <div className="p-4 space-y-3">
-                {shopItems.map((s) => (
-                  <div key={s.id} className="rounded-xl border border-gray-100 p-3 hover:border-anv-green/30 transition-colors">
-                    <a
-                      href={s.pdp ?? undefined}
-                      target={s.pdp ? "_blank" : undefined}
-                      rel={s.pdp ? "noopener noreferrer" : undefined}
-                      className="flex gap-3 items-center group/prod"
-                    >
-                      <div className="w-14 h-14 shrink-0 rounded-lg overflow-hidden bg-gray-50 border border-gray-100 flex items-center justify-center">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        {s.image ? (
-                          <img src={s.image} alt={s.name} width={56} height={56} loading="lazy" decoding="async" className="w-full h-full object-cover" />
-                        ) : (
-                          <span className="text-anv-green font-bold text-lg">{s.name.replace(/^Anveshan\s+/i, "").charAt(0)}</span>
-                        )}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="font-semibold text-sm text-gray-900 leading-tight break-words group-hover/prod:text-anv-green transition-colors">{s.name}</p>
-                        <p className="text-anv-green font-bold text-sm mt-0.5">₹{s.price}</p>
-                      </div>
-                    </a>
-                    {s.kind === "ghee" && (
-                      <div className="mt-2.5">
-                        <GheeSelector variants={GHEE_OPTIONS} selected={gheeVariant} onChange={setGheeVariant} showInfo={false} />
-                        <dl className="mt-3 grid grid-cols-2 gap-x-3 gap-y-2 rounded-lg bg-anv-green/[0.05] border border-anv-green/15 p-2.5">
-                          <Attr label="Flavour" value={GHEE_VARIETY[gheeVariant].flavour} />
-                          <Attr label="Texture" value={GHEE_VARIETY[gheeVariant].texture} />
-                          <Attr label="Best for" value={GHEE_VARIETY[gheeVariant].bestFor} />
-                          <Attr label="Ayurvedic" value={GHEE_VARIETY[gheeVariant].ayurvedic} />
-                        </dl>
-                      </div>
-                    )}
-                    {s.kind === "atta" && (
-                      <div className="mt-2.5">
-                        <AttaSelector
-                          varieties={ATTA_VARIETIES}
-                          selected={attaFor(s.id)}
-                          onChange={(v) => setAttaVariety((prev) => ({ ...prev, [s.id]: v }))}
-                        />
-                      </div>
-                    )}
-                  </div>
-                ))}
-
-                <div className="flex items-center justify-between border-t border-gray-100 pt-3 text-sm">
-                  <span className="text-gray-500">Subtotal</span>
-                  <span className="font-bold text-gray-900">₹{subtotal}</span>
-                </div>
-
-                <div className="flex flex-wrap gap-x-3 gap-y-1.5 text-xs text-gray-500">
-                  <span className="inline-flex items-center gap-1.5"><LeafIcon className="w-3.5 h-3.5 text-anv-green" /> Farm-direct</span>
-                  <span className="inline-flex items-center gap-1.5"><LeafIcon className="w-3.5 h-3.5 text-anv-green" /> Chemical-free</span>
-                  <span className="inline-flex items-center gap-1.5"><LeafIcon className="w-3.5 h-3.5 text-anv-green" /> Wood-pressed &amp; bilona</span>
-                </div>
-
-                <AddToCartButton lines={cartLines} label={`Add to Cart · ₹${subtotal}`} />
-
-                <a
-                  href="https://www.anveshan.farm/collections/all-products"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-1 text-xs font-medium text-anv-green hover:underline"
-                >
-                  Shop all Anveshan products <ExternalLinkIcon className="w-3 h-3" aria-hidden="true" />
-                </a>
-              </div>
-            </div>
-          </aside>
-        )}
       </div>
-    </div>
-  );
-}
 
-function Attr({ label, value }: { label: string; value: string }) {
-  return (
-    <div>
-      <dt className="text-gray-400">{label}</dt>
-      <dd className="font-semibold text-anv-green">{value}</dd>
+      {/* Footer Add-to-Cart bar — round product images + subtotal, per variant */}
+      {cartLines.length > 0 && (
+        <div className="border-t border-gray-100 bg-anv-cream/20 px-4 sm:px-7 py-3 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="flex -space-x-3 shrink-0">
+              {cartLines.slice(0, 3).map((l, i) => (
+                <div
+                  key={l.variantId}
+                  className={`relative w-10 h-10 rounded-full ring-2 ring-white overflow-hidden bg-anv-cream/40 ${
+                    i === 2 ? "hidden sm:block" : ""
+                  }`}
+                >
+                  {l.image ? (
+                    <Image src={l.image} alt={l.name} fill className="object-cover" sizes="40px" />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-anv-green text-xs font-bold">
+                      {l.name.charAt(0)}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+            <div className="min-w-0">
+              <p className="font-semibold text-sm text-gray-900 truncate">{recipe.name || "Recipe"}</p>
+              <p className="text-xs text-gray-500">
+                {cartLines.length} Anveshan product{cartLines.length !== 1 ? "s" : ""} ·{" "}
+                <span className="font-bold text-anv-green">₹{cartTotal}</span>
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={handleAddToCart}
+            className="shrink-0 bg-anv-green text-white font-semibold text-sm px-5 sm:px-7 py-2.5 rounded-full hover:bg-anv-green-dark transition-colors whitespace-nowrap"
+          >
+            {added ? "Added ✓" : "Add to Cart"}
+          </button>
+        </div>
+      )}
     </div>
   );
 }

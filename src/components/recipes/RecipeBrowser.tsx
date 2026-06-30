@@ -6,7 +6,7 @@ import { Recipe, AnveshanProduct } from "@/types";
 import { CATEGORIES, getCategory } from "@/lib/categories";
 import RecipeCard from "@/components/recipes/RecipeCard";
 import { useDiet } from "@/components/recipes/DietProvider";
-import { SearchIcon } from "@/components/ui/icons";
+import HScroll from "@/components/ui/HScroll";
 
 interface Props {
   recipes: Recipe[];
@@ -103,35 +103,10 @@ export default function RecipeBrowser({ recipes, productMap, initialCategory, in
 
   return (
     <div>
-      {/* Search */}
-      <div className="relative mb-4">
-        <SearchIcon className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-        <input
-          type="search"
-          inputMode="search"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          onKeyDown={(e) => e.key === "Escape" && setQuery("")}
-          placeholder="Search recipes…"
-          aria-label="Search recipes by name"
-          className="w-full rounded-full border border-gray-200 bg-white py-3 pl-11 pr-11 text-sm text-gray-800 placeholder:text-gray-400 outline-none transition-colors focus:border-anv-green focus:ring-2 focus:ring-anv-green/30"
-        />
-        {query && (
-          <button
-            type="button"
-            onClick={() => setQuery("")}
-            aria-label="Clear search"
-            className="absolute right-3 top-1/2 -translate-y-1/2 flex h-6 w-6 items-center justify-center rounded-full text-gray-400 hover:bg-gray-100 hover:text-anv-green"
-          >
-            <span aria-hidden="true" className="text-lg leading-none">&times;</span>
-          </button>
-        )}
-      </div>
-
       {/* Top-level filter row — single scrollable row (no wrapping to 3-4 lines).
           Bleeds to the screen edge on mobile so it's clear it scrolls sideways. */}
       <div className="-mx-4 px-4 sm:mx-0 sm:px-0">
-        <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1">
+        <HScroll className="flex gap-2 overflow-x-auto no-scrollbar pb-1">
           <FilterChip label="All Recipes" active={category === "all"} onClick={() => selectCategory("all")} />
           {CATEGORIES.map((c) => (
             <FilterChip
@@ -141,7 +116,7 @@ export default function RecipeBrowser({ recipes, productMap, initialCategory, in
               onClick={() => selectCategory(c.key)}
             />
           ))}
-        </div>
+        </HScroll>
       </div>
 
       {/* Second-level sub-product row (only for product groups) — also one scroll row */}

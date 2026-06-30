@@ -17,7 +17,10 @@ export default function VegToggle({ on, onChange }: Props) {
       className="inline-flex items-center gap-2 select-none"
       title="Show only vegetarian recipes"
     >
-      <span className="text-xs font-semibold text-gray-700">Veg</span>
+      {/* Veg indicator mark (green square + dot) — replaces the text label */}
+      <span className="flex h-4 w-4 items-center justify-center rounded-[3px] border-[1.5px] border-green-600">
+        <span className="h-1.5 w-1.5 rounded-full bg-green-600" />
+      </span>
       <span
         className={`relative w-9 h-5 rounded-full transition-colors ${
           on ? "bg-anv-green" : "bg-gray-300"

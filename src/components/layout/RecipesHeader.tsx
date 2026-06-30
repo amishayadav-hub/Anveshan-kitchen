@@ -3,6 +3,7 @@
 import Link from "next/link";
 import VegToggle from "@/components/recipes/VegToggle";
 import NonVegToggle from "@/components/recipes/NonVegToggle";
+import HScroll from "@/components/ui/HScroll";
 import { useDiet } from "@/components/recipes/DietProvider";
 
 // Green action stripe above the recipe pages — AI Generator, Share, and the
@@ -13,10 +14,10 @@ export default function RecipesHeader() {
 
   return (
     <header className="bg-anv-green text-white">
-      {/* Single row: Veg/Non-Veg + AI Generator + Share. Scrolls horizontally on
-          narrow screens (can't fit four controls at phone widths); fits on one
-          line from sm up, with the actions pushed right. */}
-      <div className="max-w-6xl mx-auto px-4 py-3 flex items-center gap-3 sm:gap-4 overflow-x-auto no-scrollbar text-sm">
+      {/* Single row: Veg/Non-Veg + Recipes Generator + Share. Scrolls
+          horizontally on narrow screens (can't fit four controls at phone
+          widths); fits on one line from sm up, with the actions pushed right. */}
+      <HScroll className="max-w-6xl mx-auto px-4 py-3 flex items-center gap-3 sm:gap-4 overflow-x-auto no-scrollbar text-sm">
         <div className="flex shrink-0 items-center bg-white rounded-full px-3 py-1.5 shadow-sm">
           <VegToggle on={vegOnly} onChange={toggleVeg} />
         </div>
@@ -28,7 +29,7 @@ export default function RecipesHeader() {
           href="/recipes/generate"
           className="shrink-0 whitespace-nowrap font-medium text-white/90 hover:text-white transition-colors sm:ml-auto"
         >
-          ✨ AI Generator
+          ✨ Recipes Generator
         </Link>
         <Link
           href="/recipes/share"
@@ -36,7 +37,7 @@ export default function RecipesHeader() {
         >
           + Share Your Recipe
         </Link>
-      </div>
+      </HScroll>
     </header>
   );
 }

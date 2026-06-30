@@ -13,6 +13,7 @@ import {
   ChefHatIcon,
   LeafIcon,
   WandIcon,
+  ArrowLeftIcon,
 } from "@/components/ui/icons";
 
 const SUGGESTIONS = {
@@ -96,9 +97,10 @@ export default function GenerateClient() {
           <div className="flex items-center justify-between gap-3">
             <Link
               href="/recipes"
-              className="inline-flex items-center h-8 px-3.5 rounded-full bg-anv-green text-white text-[13px] font-medium hover:bg-anv-green-dark transition-colors"
+              aria-label="Back to recipes"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-full text-anv-green hover:bg-anv-green/10 transition-colors"
             >
-              Back to Recipes
+              <ArrowLeftIcon className="w-5 h-5" />
             </Link>
 
             <div role="group" aria-label="Language" className="inline-flex items-center h-8 bg-white border border-gray-200 rounded-full p-1 shadow-sm">
@@ -301,7 +303,7 @@ export default function GenerateClient() {
 
       {/* Results */}
       {result && result.variations.length > 0 && (
-        <section ref={resultsRef} aria-live="polite" className="max-w-4xl mx-auto px-4 pt-12 pb-20 scroll-mt-20">
+        <section ref={resultsRef} aria-live="polite" className="max-w-5xl mx-auto px-4 pt-12 pb-24 scroll-mt-20">
           {(() => {
             const ld = buildGeneratedRecipesJsonLd(result.variations);
             return ld ? <JsonLd data={ld} /> : null;
@@ -323,7 +325,9 @@ export default function GenerateClient() {
           </div>
           <div className="space-y-4 sm:space-y-8">
             {result.variations.map((v, i) => (
-              <VariantBlock key={`${v.name}-${i}`} recipe={v} index={i} total={result.variations.length} first={i === 0} />
+              <div key={`${v.name}-${i}`}>
+                <VariantBlock recipe={v} index={i} total={result.variations.length} first={i === 0} />
+              </div>
             ))}
           </div>
         </section>

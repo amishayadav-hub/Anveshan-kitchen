@@ -10,6 +10,7 @@ import ProductInfoTabs from "@/components/recipes/ProductInfoTabs";
 import FaqAccordion from "@/components/recipes/FaqAccordion";
 import RecipeActions from "@/components/recipes/RecipeActions";
 import ReadMore from "@/components/recipes/ReadMore";
+import HScroll from "@/components/ui/HScroll";
 import RelatedRecipes from "@/components/recipes/RelatedRecipes";
 import { highlightProductMentions, PRODUCT_HANDLES } from "@/lib/product-highlight";
 import { PRODUCT_PDP } from "@/data/product-pdp";
@@ -140,13 +141,11 @@ export default function RecipeView({ recipe, products, categoryLabel, related = 
 
   return (
     <div className="max-w-6xl mx-auto px-4 pt-4 md:pt-6 pb-28">
-      {/* Breadcrumb */}
+      {/* Breadcrumb — parent hierarchy only (no current recipe name) */}
       <nav className="flex flex-wrap text-xs text-gray-400 mb-3 md:mb-5">
         <span>Recipes</span>
         <span className="mx-1.5">/</span>
-        <span>{categoryLabel}</span>
-        <span className="mx-1.5">/</span>
-        <span className="text-gray-600">{recipe.name}</span>
+        <span className="text-gray-600">{categoryLabel}</span>
       </nav>
 
       <div className="grid lg:grid-cols-[1fr_350px] gap-6 md:gap-8 items-start">
@@ -166,7 +165,11 @@ export default function RecipeView({ recipe, products, categoryLabel, related = 
               />
             </div>
             <div className="flex-1 min-w-0">
-              <h1 className="recipe-title break-words">{recipe.name}</h1>
+              {/* Title left, Share pinned to the top-right corner */}
+              <div className="flex items-start justify-between gap-3">
+                <h1 className="recipe-title break-words">{recipe.name}</h1>
+                <RecipeActions name={recipe.name} className="shrink-0" />
+              </div>
               <ReadMore
                 text={recipe.intro || recipe.description}
                 lines={3}
@@ -174,7 +177,6 @@ export default function RecipeView({ recipe, products, categoryLabel, related = 
                 collapseLabel="Hide recipe"
                 className="recipe-body mt-2"
               />
-              <RecipeActions name={recipe.name} className="mt-3" />
               <div className="flex flex-wrap items-center gap-2 mt-4">
                 <TimingChip prepTime={recipe.prepTime} cookTime={recipe.cookTime} total={formatMinutes(totalMin)} />
                 <ServingsChip servings={recipe.servings} multiplier={multiplier} onChange={setMultiplier} />
@@ -357,8 +359,8 @@ function JumpNav({
     { id: "ingredients", label: "Ingredients" },
     { id: "instructions", label: "Method" },
     ...(hasTips ? [{ id: "tips", label: "Tips" }] : []),
-    ...(hasProducts ? [{ id: "products", label: "Products" }] : []),
     ...(hasFaq ? [{ id: "faq", label: "FAQ" }] : []),
+    ...(hasProducts ? [{ id: "products", label: "Products" }] : []),
   ];
 
   const [active, setActive] = useState(links[0]?.id);
@@ -391,23 +393,26 @@ function JumpNav({
 
   return (
     <nav className="no-print sticky top-14 z-20 -mx-4 mb-6 md:mb-8 px-4 py-2 bg-white/90 backdrop-blur supports-[backdrop-filter]:bg-white/75">
-      <div className="flex w-max max-w-full gap-1 overflow-x-auto rounded-full border border-anv-green/20 bg-white p-1 no-scrollbar">
-        {links.map((l) => {
-          const isActive = active === l.id;
-          return (
-            <button
-              key={l.id}
-              type="button"
-              onClick={() => jump(l.id)}
-              aria-current={isActive ? "true" : undefined}
-              className={`whitespace-nowrap rounded-full px-3.5 py-1.5 text-sm font-medium transition-colors ${
-                isActive ? "bg-anv-green text-white" : "text-anv-green hover:bg-anv-green/10"
-              }`}
-            >
-              {l.label}
-            </button>
-          );
-        })}
+      {/* Pill chrome on the wrapper; the fade applies only to the chips inside. */}
+      <div className="w-max max-w-full rounded-full border border-anv-green/20 bg-white p-1">
+        <HScroll className="flex gap-1 overflow-x-auto no-scrollbar">
+          {links.map((l) => {
+            const isActive = active === l.id;
+            return (
+              <button
+                key={l.id}
+                type="button"
+                onClick={() => jump(l.id)}
+                aria-current={isActive ? "true" : undefined}
+                className={`whitespace-nowrap rounded-full px-3.5 py-1.5 text-sm font-medium transition-colors ${
+                  isActive ? "bg-anv-green text-white" : "text-anv-green hover:bg-anv-green/10"
+                }`}
+              >
+                {l.label}
+              </button>
+            );
+          })}
+        </HScroll>
       </div>
     </nav>
   );

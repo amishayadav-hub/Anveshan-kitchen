@@ -31,22 +31,27 @@ export default function Header() {
 
   return (
     <header className="bg-white border-b border-gray-100 sticky top-0 z-50">
-      <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
-        <Link href="/recipes" aria-label="Anveshan Kitchen" className="shrink-0 flex items-baseline gap-1.5">
+      {/* Logo pinned left; search + cart grouped on the right. */}
+      <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between gap-2">
+        <Link
+          href="/recipes"
+          aria-label="Anveshan Kitchen"
+          className={`shrink-0 items-baseline gap-1 ${open ? "hidden" : "flex"}`}
+        >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="https://cdn.shopify.com/s/files/1/0270/3346/9006/files/anveshan-logo-updates-register-mark.png?v=1728463199"
             alt="Anveshan"
             width={120}
             height={28}
-            className="h-7 w-auto"
+            className="h-4 w-auto"
           />
-          <span className="text-anv-green font-medium text-lg lowercase tracking-tight">kitchen</span>
+          <span className="text-anv-green font-medium text-sm lowercase tracking-tight">kitchen</span>
         </Link>
 
-        <div className="flex min-w-0 items-center gap-1">
-          {/* Search: icon only; expands an input when clicked */}
-          <form onSubmit={onSubmit} className="flex items-center">
+        <div className={`flex min-w-0 items-center gap-1 ${open ? "flex-1" : ""}`}>
+          {/* Search: icon only; expands to fill the whole bar when clicked */}
+          <form onSubmit={onSubmit} className={`flex items-center ${open ? "flex-1" : ""}`}>
             <input
               ref={inputRef}
               type="search"
@@ -59,7 +64,7 @@ export default function Header() {
               tabIndex={open ? 0 : -1}
               className={`min-w-0 text-sm text-gray-700 bg-gray-50 rounded-full outline-none transition-all duration-200 ${
                 open
-                  ? "w-28 sm:w-56 px-3.5 py-1.5 mr-1 border border-gray-200 focus:border-anv-green"
+                  ? "flex-1 w-full px-3.5 py-1.5 mr-1 border border-gray-200 focus:border-anv-green"
                   : "w-0 px-0 py-0 border-0"
               }`}
             />

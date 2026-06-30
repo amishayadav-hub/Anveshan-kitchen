@@ -17,7 +17,10 @@ export default function NonVegToggle({ on, onChange }: Props) {
       className="inline-flex items-center gap-2 select-none"
       title="Show only non-vegetarian recipes"
     >
-      <span className="text-xs font-semibold text-gray-700">Non-Veg</span>
+      {/* Non-veg indicator mark (red square + triangle) — replaces the text label */}
+      <span className="flex h-4 w-4 items-center justify-center rounded-[3px] border-[1.5px] border-red-600">
+        <span className="h-0 w-0 border-l-[3px] border-r-[3px] border-b-[5px] border-l-transparent border-r-transparent border-b-red-600" />
+      </span>
       <span
         className={`relative w-9 h-5 rounded-full transition-colors ${
           on ? "bg-red-600" : "bg-gray-300"

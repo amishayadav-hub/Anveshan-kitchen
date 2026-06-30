@@ -152,7 +152,7 @@ export default function IngredientList({ ingredients, products, selection, onSel
               onClick={() => toggleCheck(i)}
               aria-pressed={isChecked}
               aria-label={`Mark ${ing.name} as done`}
-              className="flex h-11 w-9 shrink-0 items-center justify-center"
+              className="flex h-9 w-9 shrink-0 items-center justify-center"
             >
               <span
                 className={`flex h-[18px] w-[18px] items-center justify-center rounded-[5px] border transition-colors ${
@@ -166,7 +166,7 @@ export default function IngredientList({ ingredients, products, selection, onSel
                 )}
               </span>
             </button>
-            <div className="min-w-0 flex-1 py-2.5">
+            <div className="min-w-0 flex-1 py-1">
               <span className={`recipe-body transition-colors ${isChecked ? "text-gray-400 line-through" : ""}`}>
                 <button onClick={() => toggleCheck(i)} className="text-left">
                   {qty} {ing.unit}

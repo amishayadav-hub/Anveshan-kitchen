@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import SearchBar from "@/components/ui/SearchBar";
 
 interface Result {
   name: string;
@@ -11,32 +12,46 @@ interface Result {
   score: number;
 }
 
-export default function SmartSearch() {
-  const [query, setQuery] = useState("");
+export default function SmartSearch({ initialQuery = "" }: { initialQuery?: string }) {
   const [results, setResults] = useState<Result[]>([]);
-  const [state, setState] = useState<"idle" | "loading" | "error">("idle");
+  // Seed "loading" up front when we arrive with a query, so the mount effect
+  // doesn't need a synchronous setState to show the spinner.
+  const [state, setState] = useState<"idle" | "loading" | "error">(
+    initialQuery.trim() ? "loading" : "idle"
+  );
   const [error, setError] = useState("");
 
-  async function run(e: React.FormEvent) {
-    e.preventDefault();
-    if (!query.trim()) return;
-    setState("loading");
-    setError("");
-    try {
-      const res = await fetch("/api/search", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query, topK: 3 }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Search failed");
-      setResults(data.results);
-      setState("idle");
-    } catch (err) {
-      setError((err as Error).message);
-      setState("error");
-    }
-  }
+  // Run the full search whenever we land here with a query (?q=…). The page
+  // remounts this component per query (key={q}), so a fresh mount = a fresh run.
+  // The fetch is inlined (rather than a shared helper) so all setState calls
+  // happen inside this nested async callback, after an await — never
+  // synchronously in the effect body.
+  useEffect(() => {
+    const query = initialQuery.trim();
+    if (!query) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch("/api/search", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ query, topK: 8 }),
+        });
+        const data = await res.json();
+        if (cancelled) return;
+        if (!res.ok) throw new Error(data.error || "Search failed");
+        setResults(data.results);
+        setState("idle");
+      } catch (err) {
+        if (cancelled) return;
+        setError((err as Error).message);
+        setState("error");
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [initialQuery]);
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-10">
@@ -45,21 +60,15 @@ export default function SmartSearch() {
         Describe what you feel like — it understands context, not just keywords.
       </p>
 
-      <form onSubmit={run} className="flex gap-2">
-        <input
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="e.g. something warm and sweet for winter"
-          className="flex-1 rounded-full border border-gray-300 px-5 py-3 text-sm focus:border-anv-green focus:outline-none"
-        />
-        <button
-          type="submit"
-          disabled={state === "loading"}
-          className="rounded-full bg-anv-green text-white font-semibold px-6 py-3 text-sm hover:bg-anv-green-dark transition-colors disabled:opacity-60"
-        >
-          {state === "loading" ? "Searching…" : "Search"}
-        </button>
-      </form>
+      <SearchBar
+        defaultValue={initialQuery}
+        placeholder="Find your favorite items"
+        action="/recipes/search"
+      />
+
+      {state === "loading" && (
+        <p className="mt-4 text-sm text-gray-500">Searching…</p>
+      )}
 
       {state === "error" && (
         <p className="mt-4 text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg p-3">
