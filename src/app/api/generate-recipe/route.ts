@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { generateRecipes, Language, GeneratedRecipe } from "@/lib/ai-providers";
-import { searchRecipes, SearchHit } from "@/lib/semantic-search";
+import { generateRecipes, Language, GeneratedRecipe, GroundingHit } from "@/lib/ai-providers";
+import { searchRecipes } from "@/lib/semantic-search";
 import { rateLimit, clientIp } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
@@ -14,10 +14,11 @@ function sanitize(s: string): string {
   return s.replace(/\p{Cc}/gu, " ").replace(/\s+/g, " ").trim();
 }
 
-// Minimum cosine score for a dataset match to be served instead of calling AI.
-const SEARCH_THRESHOLD = 0.45;
+// Cosine floor for a dataset row to be trusted enough to GROUND generation.
+// (We no longer serve rows raw above a threshold — we generate, grounded.)
+const GROUNDING_THRESHOLD = 0.5;
 
-// Branded dataset ingredient → our internal productId (so cart/links work).
+// Branded dataset ingredient → our internal productId (for the degraded fallback).
 const BRAND_TO_PID: Record<string, string> = {
   "Anveshan Ghee": "ghee",
   "Anveshan Khapli Atta": "khapli-atta",
@@ -32,26 +33,22 @@ const BRAND_TO_PID: Record<string, string> = {
   "Anveshan Kashmiri Saffron": "saffron",
 };
 
-// Map a 10k dataset hit into the GeneratedRecipe shape the UI already renders.
-function hitToRecipe(hit: SearchHit, language: Language): GeneratedRecipe {
+// Degraded last-resort only: map a raw dataset row into the render shape when
+// BOTH AI providers are unavailable. Measurements are absent by design here.
+function hitToDegradedRecipe(
+  hit: { name: string; description?: string; ingredients: string[]; steps?: string[] },
+  language: Language
+): GeneratedRecipe {
   const ingredients = hit.ingredients.map((s) => {
     const pid = BRAND_TO_PID[s];
-    return {
-      name: s,
-      quantity: "",
-      unit: "",
-      anveshan: !!pid,
-      ...(pid ? { anveshanProductId: pid } : {}),
-    };
+    return { name: s, quantity: "", unit: "", anveshan: !!pid, ...(pid ? { anveshanProductId: pid } : {}) };
   });
-  const anveshanProducts = [
-    ...new Set(hit.ingredients.map((s) => BRAND_TO_PID[s]).filter(Boolean) as string[]),
-  ];
+  const anveshanProducts = [...new Set(hit.ingredients.map((s) => BRAND_TO_PID[s]).filter(Boolean) as string[])];
   return {
     name: hit.name,
     description: hit.description ?? "",
-    prepTime: "15 min",
-    cookTime: "25 min",
+    prepTime: "—",
+    cookTime: "—",
     servings: 4,
     ingredients,
     steps: hit.steps ?? [],
@@ -86,42 +83,51 @@ export async function POST(req: NextRequest) {
     const lang: Language = body.language === "hi" ? "hi" : "en";
 
     if (!dish && items.length === 0) {
-      return NextResponse.json(
-        { error: "Enter a dish name or at least one ingredient" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Enter a dish name or at least one ingredient" }, { status: 400 });
     }
 
-    // 1) Dataset-first: try the 10k semantic index (English only). Any failure
-    //    (index missing / model error) falls through to AI.
-    if (lang !== "hi") {
-      try {
-        const hits = await searchRecipes([dish, ...items].join(" ").trim(), 5);
-        if (hits.length && hits[0].score >= SEARCH_THRESHOLD) {
-          const variations = hits.slice(0, 3).map((h) => hitToRecipe(h, lang));
-          return NextResponse.json({
-            query: dish || hits[0].name,
-            variations,
-            provider: "Anveshan Collection",
-            language: lang,
-            source: "dataset",
-            topScore: hits[0].score,
-          });
-        }
-      } catch (e) {
-        console.warn("Dataset search unavailable, using AI:", (e as Error).message);
+    // 1) RETRIEVE (RAG): find the closest dataset recipe to GROUND generation —
+    //    the dish name is the primary signal. Any index failure just means we
+    //    generate ungrounded. Applies to both English and Hinglish.
+    let grounding: GroundingHit | undefined;
+    let topHits: { name: string; description?: string; ingredients: string[]; steps?: string[]; score: number }[] = [];
+    try {
+      const q = (dish || items.join(" ")).trim();
+      topHits = await searchRecipes(q, 5);
+      if (topHits.length && topHits[0].score >= GROUNDING_THRESHOLD) {
+        const h = topHits[0];
+        grounding = { name: h.name, ingredients: h.ingredients, steps: h.steps, location: (h as { location?: string }).location };
+      }
+    } catch (e) {
+      console.warn("Semantic index unavailable, generating ungrounded:", (e as Error).message);
+    }
+
+    // 2) GENERATE (always) — grounded when we have a good dataset match.
+    try {
+      const result = await generateRecipes(dish, items, lang, grounding);
+      if (result.variations.length > 0) {
+        return NextResponse.json({ ...result, source: grounding ? "ai+grounded" : "ai" });
+      }
+    } catch (e) {
+      console.error("AI generation failed:", (e as Error).message);
+    }
+
+    // 3) DEGRADED LAST RESORT — both providers unavailable. Serve top dataset
+    //    rows (English only; they lack measurements) rather than nothing.
+    if (lang !== "hi" && topHits.length) {
+      const variations = topHits.slice(0, 3).map((h) => hitToDegradedRecipe(h, lang));
+      if (variations.length) {
+        return NextResponse.json({
+          query: dish || topHits[0].name,
+          variations,
+          provider: "Anveshan Collection",
+          language: lang,
+          source: "dataset-degraded",
+        });
       }
     }
 
-    // 2) Fallback: live AI generation.
-    const result = await generateRecipes(dish, items, lang);
-    if (!result.variations.length) {
-      return NextResponse.json(
-        { error: "Couldn't generate variations. Please try again." },
-        { status: 502 }
-      );
-    }
-    return NextResponse.json({ ...result, source: "ai" });
+    return NextResponse.json({ error: "Couldn't generate recipes right now. Please try again in a moment." }, { status: 502 });
   } catch (e) {
     console.error("Recipe generation failed:", e);
     return NextResponse.json({ error: "Failed to generate recipes. Please try again." }, { status: 500 });

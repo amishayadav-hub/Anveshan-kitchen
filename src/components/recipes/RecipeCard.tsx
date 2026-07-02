@@ -39,7 +39,7 @@ function RecipeCard({ recipe, productMap = {}, priority = false }: Props) {
           className="object-cover group-hover:scale-[1.03] transition-transform duration-300"
           sizes="(max-width:640px) 50vw, (max-width:1024px) 33vw, 25vw"
         />
-        <span className="absolute top-2 left-2 bg-white/90 text-anv-green text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 rounded-full">
+        <span className="absolute top-2 left-2 max-w-[calc(100%-1rem)] truncate bg-black/55 text-white text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 rounded-full backdrop-blur-[2px]">
           {categoryLabel}
         </span>
         <VegMark isVeg={recipe.isVeg !== false} />
@@ -48,10 +48,10 @@ function RecipeCard({ recipe, productMap = {}, priority = false }: Props) {
       {/* Content — fixed-height title/description blocks keep every card's buy
           row aligned across a grid row regardless of name/description length. */}
       <div className="p-3 flex flex-1 flex-col">
-        <h3 className="font-bold text-gray-900 text-sm leading-snug group-hover:text-anv-green transition-colors truncate">
+        <h3 className="font-bold text-gray-900 text-[15px] leading-snug group-hover:text-anv-green transition-colors truncate">
           {recipe.name}
         </h3>
-        <p className="text-xs text-gray-500 mt-1 line-clamp-2 leading-relaxed min-h-[2.4rem]">
+        <p className="text-[11px] text-gray-400 mt-1 line-clamp-2 leading-relaxed min-h-[2.2rem]">
           {recipe.description}
         </p>
         <p className="text-xs text-gray-500 mt-2 whitespace-nowrap">

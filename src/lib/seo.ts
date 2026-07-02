@@ -15,7 +15,7 @@ export function toISODuration(input?: string): string | undefined {
   if (!input) return undefined;
   const hr = input.match(/(\d+)\s*(?:h\b|hr|hour)/i);
   const min = input.match(/(\d+)\s*(?:m\b|min|minute)/i);
-  let h = hr ? parseInt(hr[1], 10) : 0;
+  const h = hr ? parseInt(hr[1], 10) : 0;
   let m = min ? parseInt(min[1], 10) : 0;
   if (!hr && !min) {
     const n = input.match(/\d+/); // bare number → assume minutes
@@ -79,6 +79,8 @@ export function buildRecipeJsonLd(recipe: Recipe, products: AnveshanProduct[]) {
     recipeCategory:
       getSubLabel(recipe.category, recipe.subCategory) ?? getCategoryLabel(recipe.category),
     recipeCuisine: "Indian",
+    // isVeg already drives the Veg-mode filter; surface it for dietary search/AEO.
+    suitableForDiet: recipe.isVeg === false ? undefined : "https://schema.org/VegetarianDiet",
     keywords: keywords.join(", "),
     prepTime: toISODuration(recipe.prepTime),
     cookTime: toISODuration(recipe.cookTime),
@@ -129,22 +131,62 @@ export function buildFaqJsonLd(recipe: Recipe) {
 
 /** Organization + WebSite JSON-LD for the site root — brand entity for GEO. */
 export function buildSiteJsonLd() {
+  const orgId = `${BRAND_URL}/#organization`;
   return [
     {
       "@context": "https://schema.org",
-      "@type": "Organization",
+      "@type": ["Organization", "OnlineStore"],
+      "@id": orgId,
       name: "Anveshan",
+      legalName: "Anveshan Farm Technologies Pvt. Ltd.",
       url: BRAND_URL,
+      logo: {
+        "@type": "ImageObject",
+        url: "https://cdn.shopify.com/s/files/1/0270/3346/9006/files/anveshan-logo-updates-register-mark.png?v=1728463199",
+      },
+      email: "support@anveshan.farm",
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: "Sector 32",
+        addressLocality: "Gurugram",
+        addressRegion: "Haryana",
+        postalCode: "122001",
+        addressCountry: "IN",
+      },
+      contactPoint: {
+        "@type": "ContactPoint",
+        email: "support@anveshan.farm",
+        contactType: "customer support",
+        areaServed: "IN",
+      },
+      // D2C brand shipping pan-India; called out for the target city markets.
+      areaServed: [
+        { "@type": "City", name: "Mumbai" },
+        { "@type": "City", name: "Bengaluru" },
+        { "@type": "Country", name: "India" },
+      ],
       sameAs: [
-        "https://www.instagram.com/anveshan.farm",
-        "https://www.facebook.com/anveshanfarm",
+        "https://www.instagram.com/anveshan.farms",
+        "https://www.facebook.com/Anveshan-325859228089056",
+        "https://twitter.com/Anveshan_farms",
       ],
     },
     {
       "@context": "https://schema.org",
       "@type": "WebSite",
+      "@id": `${SITE_URL}/#website`,
       name: SITE_NAME,
       url: SITE_URL,
+      publisher: { "@id": orgId },
+      // Enables Google's sitelinks searchbox + signals a queryable corpus (GEO).
+      potentialAction: {
+        "@type": "SearchAction",
+        target: {
+          "@type": "EntryPoint",
+          urlTemplate: `${SITE_URL}/recipes?q={search_term_string}`,
+        },
+        "query-input": "required name=search_term_string",
+      },
     },
   ];
 }

@@ -1,0 +1,465 @@
+<style>
+  :root{
+    --paper:#FBFAF8; --card:#FFFFFF; --ink:#242424; --muted:#6A7A70;
+    --green:#235A49; --green-deep:#1B4638; --gold:#B9974F; --gold-soft:#C7A867;
+    --line:#E6E3DA; --tint:#EEF4F0; --tint-line:#D7E3DB;
+    --serif:"Iowan Old Style",Georgia,"Times New Roman",serif;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --maxw:1120px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);
+    font-size:16.5px;line-height:1.65;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+
+  /* ---- masthead ---- */
+  .masthead{border-bottom:1px solid var(--line);background:linear-gradient(180deg,#fff,var(--paper))}
+  .masthead .wrap{padding-top:34px;padding-bottom:30px}
+  .brand{display:flex;align-items:baseline;gap:8px;color:var(--green);font-weight:700;
+    letter-spacing:-.01em;font-size:20px}
+  .brand .k{color:var(--ink);font-weight:500}
+  .brand .reg{font-size:11px;color:var(--gold-soft);transform:translateY(-6px)}
+  .masthead h1{font-family:var(--serif);font-weight:600;font-size:clamp(28px,4.4vw,42px);
+    line-height:1.08;margin:18px 0 10px;text-wrap:balance;letter-spacing:-.01em}
+  .masthead p{margin:0;max-width:60ch;color:var(--muted);font-size:16px}
+  .kicker{display:inline-block;font-size:12px;font-weight:600;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--gold);margin-bottom:4px}
+
+  /* ---- two-column shell ---- */
+  .shell{display:grid;grid-template-columns:238px minmax(0,1fr);gap:56px;
+    align-items:start;padding:40px 0 80px}
+  nav.toc{position:sticky;top:24px;font-size:14px}
+  nav.toc .grp{margin-bottom:22px}
+  nav.toc .grp-t{font-family:var(--serif);font-size:15px;color:var(--ink);font-weight:600;
+    margin:0 0 8px;padding-bottom:7px;border-bottom:1px solid var(--line)}
+  nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:4px 0 4px 12px;
+    border-left:2px solid transparent;line-height:1.35}
+  nav.toc a:hover,nav.toc a:focus-visible{color:var(--green);border-left-color:var(--gold-soft)}
+  nav.toc a:focus-visible{outline:2px solid var(--green);outline-offset:2px;border-radius:2px}
+
+  main{min-width:0}
+
+  /* ---- PRD article ---- */
+  article{scroll-margin-top:20px}
+  article + article{margin-top:76px;padding-top:60px;border-top:2px solid var(--tint-line)}
+  .doc-no{font-family:var(--serif);font-size:13px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--gold);font-weight:600}
+  article > h2{font-family:var(--serif);font-weight:600;font-size:clamp(24px,3.4vw,32px);
+    line-height:1.12;margin:6px 0 4px;text-wrap:balance;letter-spacing:-.01em}
+  .path{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;
+    color:var(--green);background:var(--tint);border:1px solid var(--tint-line);
+    padding:2px 8px;border-radius:5px}
+
+  .meta{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 6px}
+  .chip{font-size:12.5px;color:var(--green-deep);background:var(--tint);border:1px solid var(--tint-line);
+    padding:4px 11px;border-radius:999px;display:inline-flex;gap:6px;align-items:center}
+  .chip b{font-weight:600}
+  .chip.live::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--green);display:inline-block}
+
+  section{padding-top:30px;scroll-margin-top:20px}
+  h3{font-family:var(--serif);font-weight:600;font-size:19px;margin:0 0 10px;
+    display:flex;align-items:center;gap:11px;letter-spacing:-.005em}
+  h3 .n{font-family:var(--sans);font-size:12px;font-weight:700;color:var(--gold);
+    letter-spacing:.06em;background:#fff;border:1px solid var(--line);border-radius:6px;
+    padding:2px 7px;line-height:1}
+  section > p{margin:0 0 12px;max-width:68ch}
+  em{color:var(--green-deep);font-style:italic}
+  strong{font-weight:600}
+
+  .lede{max-width:68ch}
+  .lede p{margin:0 0 12px}
+
+  ol.reqs{margin:6px 0 0;padding:0;counter-reset:req;list-style:none;max-width:70ch}
+  ol.reqs > li{counter-increment:req;position:relative;padding:11px 0 11px 42px;
+    border-top:1px solid var(--line)}
+  ol.reqs > li:first-child{border-top:none}
+  ol.reqs > li::before{content:counter(req);position:absolute;left:0;top:11px;
+    font-variant-numeric:tabular-nums;font-size:12.5px;font-weight:700;color:var(--green);
+    background:var(--tint);border:1px solid var(--tint-line);border-radius:6px;
+    min-width:26px;height:22px;display:inline-flex;align-items:center;justify-content:center}
+  .req-group{font-family:var(--sans);font-size:12px;font-weight:700;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--muted);margin:22px 0 4px}
+
+  ul.plain{margin:6px 0;padding-left:0;list-style:none;max-width:70ch}
+  ul.plain > li{position:relative;padding:7px 0 7px 22px;border-top:1px solid var(--line)}
+  ul.plain > li:first-child{border-top:none}
+  ul.plain > li::before{content:"";position:absolute;left:2px;top:15px;width:6px;height:6px;
+    border-radius:50%;background:var(--gold-soft)}
+
+  /* goals / non-goals two-up */
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:6px}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+  .panel.goals{border-top:3px solid var(--green)}
+  .panel.non{border-top:3px solid var(--gold-soft)}
+  .panel h4{margin:0 0 10px;font-family:var(--serif);font-size:16px}
+  .panel ul{margin:0;padding-left:18px}
+  .panel li{margin:6px 0}
+  .panel.non li{color:var(--muted)}
+
+  .flow{list-style:none;counter-reset:step;margin:8px 0 0;padding:0;max-width:70ch}
+  .flow > li{counter-increment:step;position:relative;padding:0 0 18px 40px}
+  .flow > li:last-child{padding-bottom:0}
+  .flow > li::before{content:counter(step);position:absolute;left:0;top:0;width:26px;height:26px;
+    border-radius:50%;background:var(--green);color:#fff;font-size:13px;font-weight:700;
+    display:flex;align-items:center;justify-content:center}
+  .flow > li::after{content:"";position:absolute;left:12.5px;top:30px;bottom:2px;width:1px;background:var(--tint-line)}
+  .flow > li:last-child::after{display:none}
+
+  .callout{background:var(--tint);border:1px solid var(--tint-line);border-left:3px solid var(--green);
+    border-radius:8px;padding:14px 18px;margin:8px 0;max-width:70ch}
+  .callout p{margin:0;color:var(--green-deep)}
+
+  .foot{border-top:1px solid var(--line);color:var(--muted);font-size:13.5px;padding:26px 0 60px}
+  a.inline{color:var(--green);text-decoration:none;border-bottom:1px solid var(--tint-line)}
+  a.inline:hover{border-bottom-color:var(--green)}
+
+  @media (max-width:860px){
+    .shell{grid-template-columns:1fr;gap:0;padding-top:8px}
+    nav.toc{position:static;margin-bottom:14px;border:1px solid var(--line);border-radius:10px;
+      padding:14px 16px;background:var(--card)}
+    nav.toc .grp{margin-bottom:14px}
+    .cols{grid-template-columns:1fr}
+  }
+  @media print{
+    nav.toc{display:none}
+    .shell{grid-template-columns:1fr;padding:0}
+    body{font-size:11pt}
+    article + article{border-top:1px solid #ccc}
+  }
+</style>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="brand">anveshan<span class="reg">®</span> <span class="k">kitchen</span></div>
+    <span class="kicker" style="margin-top:22px">Product Requirements</span>
+    <h1>Recipe Generator &amp; Recipes</h1>
+    <p>Two product requirement documents for the recipe surfaces of Anveshan Kitchen.
+    Both surfaces share one job: help people cook, and make the Anveshan products in
+    each recipe one tap to buy.</p>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="shell">
+    <nav class="toc" aria-label="Contents">
+      <div class="grp">
+        <p class="grp-t">1 · Recipe Generator</p>
+        <a href="#gen-what">What it is &amp; why</a>
+        <a href="#gen-scope">Goals &amp; non-goals</a>
+        <a href="#gen-flow">User flow</a>
+        <a href="#gen-reqs">Requirements</a>
+        <a href="#gen-quality">Quality bar</a>
+        <a href="#gen-edge">Edge cases</a>
+        <a href="#gen-metrics">Metrics &amp; constraints</a>
+      </div>
+      <div class="grp">
+        <p class="grp-t">2 · Recipes</p>
+        <a href="#rec-what">What it is &amp; why</a>
+        <a href="#rec-scope">Goals &amp; non-goals</a>
+        <a href="#rec-browse">Browse flow</a>
+        <a href="#rec-page">Recipe page flow</a>
+        <a href="#rec-reqs">Requirements</a>
+        <a href="#rec-edge">Edge cases</a>
+        <a href="#rec-metrics">Metrics &amp; constraints</a>
+      </div>
+    </nav>
+
+    <main>
+      <!-- ================= PRD 1 ================= -->
+      <article id="gen">
+        <span class="doc-no">Document 1</span>
+        <h2>AI Recipe Generator</h2>
+        <div class="meta">
+          <span class="chip"><span class="path">/recipes/generate</span></span>
+          <span class="chip live"><b>Live</b></span>
+          <span class="chip">Updated <b>Jul 2026</b></span>
+        </div>
+
+        <section id="gen-what">
+          <h3><span class="n">01</span>What it is &amp; why</h3>
+          <div class="lede">
+            <p>A visitor types a dish they want to cook — or just the ingredients sitting
+            in their kitchen — and gets four to five complete, cookable recipe variations
+            back in a few seconds. Every variation swaps in Anveshan products where they
+            naturally fit, and each one can be added to the cart in a click.</p>
+            <p>The recipes on this site exist to sell Anveshan products, not as an end in
+            themselves. A fixed library only covers the dishes we've written up. The
+            generator removes that ceiling: whatever someone wants to cook, we can show
+            them how to cook it <em>with Anveshan products</em> and give them a direct path
+            to buy. It turns “I don't have a recipe for that” into a sale.</p>
+          </div>
+        </section>
+
+        <section id="gen-scope">
+          <h3><span class="n">02</span>Goals &amp; non-goals</h3>
+          <div class="cols">
+            <div class="panel goals">
+              <h4>Goals</h4>
+              <ul>
+                <li>Turn any dish or ingredient list into recipes that are actually correct and cookable.</li>
+                <li>Make Anveshan products the natural hero of every recipe, with a working add-to-cart.</li>
+                <li>Feel instant and reliable, in English and Hinglish.</li>
+                <li>Cost effectively nothing to run.</li>
+              </ul>
+            </div>
+            <div class="panel non">
+              <h4>Non-goals</h4>
+              <ul>
+                <li>Not a nutrition or macro tracker.</li>
+                <li>No accounts or saved personal cookbooks.</li>
+                <li>Not a general chatbot — it only generates recipes.</li>
+                <li>Doesn't run checkout; the cart hands off to anveshan.farm.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="gen-flow">
+          <h3><span class="n">03</span>User flow</h3>
+          <ol class="flow">
+            <li>Type a dish name and/or add ingredients as tags, and pick a language (English / Hinglish).</li>
+            <li>Press Generate.</li>
+            <li>Within a few seconds, see 4–5 variations of that one dish, each clearly different.</li>
+            <li>Each variation shows ingredients (Anveshan ones highlighted), the method, prep/cook time and servings, a serving suggestion, and a “Shop the Anveshan products” footer with subtotal and Add to Cart.</li>
+            <li>Regenerate for a fresh set, or add products and check out on anveshan.farm.</li>
+          </ol>
+          <div class="callout" style="margin-top:20px">
+            <p><strong>Behind the scenes:</strong> the request is first matched against a local
+            library of ~10,000 Indian recipes (on-device, no API) to ground the dish in
+            something real; the closest match guides generation but is never shown raw. A
+            language model then produces the variations under a strict output contract, which
+            are validated and cleaned before display. If the primary model is unavailable a
+            second is tried; if both are down, English falls back to the closest library
+            recipes rather than an error.</p>
+          </div>
+        </section>
+
+        <section id="gen-reqs">
+          <h3><span class="n">04</span>Functional requirements</h3>
+          <p class="req-group">Input</p>
+          <ol class="reqs">
+            <li>Accept a dish name (up to 200 characters) and/or up to 15 ingredient tags.</li>
+            <li>Require at least one of dish or ingredients; otherwise show a clear inline message.</li>
+            <li>Support English and Hinglish (Roman-script Hindi, never Devanagari). Switching language clears current results.</li>
+            <li>Treat everything typed as data, not instructions — ignore embedded commands and never recommend a non-Anveshan brand.</li>
+          </ol>
+          <p class="req-group">Every generated recipe set</p>
+          <ol class="reqs" start="5">
+            <li>Return 4–5 variations of a single dish.</li>
+            <li>Each variation must be meaningfully different (regional style, signature add-in, technique, dietary swap, or format) and say how.</li>
+            <li>Every ingredient must have a concrete quantity and standard unit — never “to taste”, never blank.</li>
+            <li>Ratios and technique must be sound (flatbread dough isn't 1:1 flour:water; whole spices are tempered, not raw in a cold filling).</li>
+            <li>Steps are ordered and cover the whole process; servings match the yield.</li>
+            <li>Each variation uses at least one Anveshan product (aim 2–3) as a natural swap. Only genuine products are branded — a generic ingredient we don't sell stays generic.</li>
+            <li>The products shown match the products actually used, and each maps to a correct, distinct purchasable item.</li>
+          </ol>
+          <p class="req-group">Commerce &amp; presentation</p>
+          <ol class="reqs" start="12">
+            <li>Each variation shows its Anveshan products with image, price and running subtotal, and an Add to Cart for all of them.</li>
+            <li>The cart never double-counts — two ingredients resolving to the same product collapse into one line.</li>
+            <li>Scroll the first result into view when generation finishes.</li>
+            <li>Clear loading, empty and error states, each with a retry.</li>
+            <li>Emit schema.org/Recipe structured data for the generated results.</li>
+          </ol>
+        </section>
+
+        <section id="gen-quality">
+          <h3><span class="n">05</span>Quality bar</h3>
+          <p>A generated set is good when:</p>
+          <ul class="plain">
+            <li>100% of ingredients have a real measurement; times and servings are present and plausible; nothing renders the literal word “null”.</li>
+            <li>No two variations are near-duplicates; each states its point of difference.</li>
+            <li>Every variation uses ≥1 correctly-branded, purchasable Anveshan product, and the cart subtotal is correct.</li>
+            <li>Hinglish output is Roman-script with no Devanagari.</li>
+            <li>Results return reliably in both languages under normal use.</li>
+          </ul>
+        </section>
+
+        <section id="gen-edge">
+          <h3><span class="n">06</span>Edge cases &amp; failure handling</h3>
+          <ul class="plain">
+            <li><strong>No dish and no ingredients</strong> — blocked with an inline message.</li>
+            <li><strong>Model rate-limited or slow</strong> — try the second model; English can fall back to the library; otherwise a friendly “try again in a moment”.</li>
+            <li><strong>Malformed output</strong> — repaired and re-validated; a variation that can't be made complete is dropped, not shown broken.</li>
+            <li><strong>Abuse</strong> — requests are rate-limited per visitor (15/minute).</li>
+            <li><strong>A product we don't sell</strong> — never invented or mis-linked; left as a plain ingredient.</li>
+          </ul>
+        </section>
+
+        <section id="gen-metrics">
+          <h3><span class="n">07</span>Metrics &amp; constraints</h3>
+          <div class="cols">
+            <div class="panel goals">
+              <h4>Success metrics</h4>
+              <ul>
+                <li>Generation success rate (a usable set returned).</li>
+                <li><strong>Add-to-Cart rate</strong> from a generated recipe — this is a sales tool.</li>
+                <li>Median time to first result.</li>
+                <li>Regenerate rate (proxy for “first set wasn't good enough”).</li>
+              </ul>
+            </div>
+            <div class="panel non">
+              <h4>Dependencies &amp; constraints</h4>
+              <ul>
+                <li>Free API tiers + a local embedding model — ~zero cost at current volume.</li>
+                <li>Free tiers are rate-limited; heavy traffic needs paid keys.</li>
+                <li>Deployed on Vercel (serverless) — no self-hosted local model.</li>
+                <li>Product prices/links mirror the store and must stay in sync.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+      </article>
+
+      <!-- ================= PRD 2 ================= -->
+      <article id="recipes">
+        <span class="doc-no">Document 2</span>
+        <h2>Recipes — Browse &amp; Recipe Page</h2>
+        <div class="meta">
+          <span class="chip"><span class="path">/recipes</span></span>
+          <span class="chip"><span class="path">/recipes/[slug]</span></span>
+          <span class="chip live"><b>Live</b></span>
+          <span class="chip">Updated <b>Jul 2026</b></span>
+        </div>
+
+        <section id="rec-what">
+          <h3><span class="n">01</span>What it is &amp; why</h3>
+          <div class="lede">
+            <p>The curated recipe catalogue. <span class="path">/recipes</span> lets a visitor
+            browse and filter the full set; each recipe has its own page with the ingredients,
+            method, tips, FAQ — and the Anveshan products it uses, ready to add to the cart.</p>
+            <p>Recipes are the hook; products are the sale. A good recipe page earns trust —
+            “this is a real, well-written recipe” — and then makes it effortless to buy the exact
+            ghee, oil, atta or superfood the recipe calls for. Browse exists to get people from
+            “I want to cook something” to the right recipe page quickly.</p>
+          </div>
+        </section>
+
+        <section id="rec-scope">
+          <h3><span class="n">02</span>Goals &amp; non-goals</h3>
+          <div class="cols">
+            <div class="panel goals">
+              <h4>Goals</h4>
+              <ul>
+                <li>Find a relevant recipe fast — by dish type, by Anveshan product, by veg/non-veg, or by name.</li>
+                <li>Make every recipe page genuinely useful to cook from.</li>
+                <li>Surface the products a recipe uses and make them one tap to add.</li>
+                <li>Load fast and be fully usable on a phone.</li>
+              </ul>
+            </div>
+            <div class="panel non">
+              <h4>Non-goals</h4>
+              <ul>
+                <li>No accounts, ratings, comments, or user-submitted recipes here.</li>
+                <li>No on-site checkout — the cart hands off to anveshan.farm.</li>
+                <li>Not a nutrition tool.</li>
+                <li>Content is editorial/seeded, not user-generated.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="rec-browse">
+          <h3><span class="n">03</span>Browse flow</h3>
+          <ol class="flow">
+            <li>A grid of recipe cards — image, name, short text, how many Anveshan products it uses and their combined price, and a veg/non-veg mark.</li>
+            <li>A single scrollable row of category filters: “All Recipes” plus product groups (Ghee, Oil, Atta, Superfood) and dish types.</li>
+            <li>Choosing a product group reveals a second row of sub-filters (Oil → Groundnut, Mustard, Sesame…).</li>
+            <li>A Veg / Non-Veg toggle filters the grid; search by name filters live and syncs to the URL (<span class="path">?q=</span>), so it's shareable and survives refresh.</li>
+            <li>A result count is shown; no matches shows an empty state with “Reset filters”.</li>
+            <li>The grid loads in batches and grows as you scroll; each card can add its Anveshan products to the cart without opening the recipe.</li>
+          </ol>
+        </section>
+
+        <section id="rec-page">
+          <h3><span class="n">04</span>Recipe page flow</h3>
+          <ol class="flow">
+            <li><strong>Header</strong> — image, title, an intro that expands, and Share.</li>
+            <li><strong>At-a-glance chips</strong> — total time (tap for prep vs cook), servings, difficulty, category.</li>
+            <li><strong>Serving scaler</strong> — 1×/2×/3× rescales every ingredient quantity on the page.</li>
+            <li><strong>Jump nav</strong> — sticky links to Ingredients / Method / Tips / Products / FAQ.</li>
+            <li><strong>Ingredients</strong> — a checkable list; Anveshan items are highlighted and offer a variety picker (ghee variety, atta variety) that drives the cart line.</li>
+            <li><strong>Method</strong> — numbered steps (long recipes show the first few with “See all steps”); product mentions link out.</li>
+            <li><strong>Tips &amp; FAQ</strong> — tips collapse with “Load more”; an FAQ accordion when present.</li>
+            <li><strong>Shop the Anveshan products</strong> — each product with image, variant, price, subtotal, trust signals, and Add to Cart.</li>
+            <li><strong>Related recipes</strong> and a persistent <strong>sticky Add-to-Cart bar</strong> so buying is always one tap away.</li>
+          </ol>
+        </section>
+
+        <section id="rec-reqs">
+          <h3><span class="n">05</span>Functional requirements</h3>
+          <p class="req-group">Browse</p>
+          <ol class="reqs">
+            <li>List all published recipes as cards showing image, name, short text, count + combined price of Anveshan products, and a veg/non-veg mark.</li>
+            <li>Filter by top-level category and sub-product; filters combine with search and the veg/non-veg toggle.</li>
+            <li>Name search syncs to <span class="path">?q=</span> (shareable, restorable); category reflects in <span class="path">?category=</span>.</li>
+            <li>Show a live result count and a friendly empty state with a reset action.</li>
+            <li>Render the grid in batches and extend on scroll; keep filtering responsive on a large list.</li>
+            <li>Add a recipe's Anveshan products to the cart from the card.</li>
+          </ol>
+          <p class="req-group">Recipe page</p>
+          <ol class="reqs" start="7">
+            <li>Show image, title, expandable intro, time (with prep/cook breakdown), servings, difficulty, category.</li>
+            <li>Serving scaler (1×/2×/3×) rescales all ingredient quantities consistently.</li>
+            <li>Checkable ingredients; Anveshan items branded, with a variety selector that drives the cart line.</li>
+            <li>Ordered, numbered steps; product mentions in steps link to the product.</li>
+            <li>Show tips and FAQ only when the recipe has them.</li>
+            <li>Products panel with per-product variant/price/image, a correct subtotal, Add to Cart, plus a persistent sticky bar.</li>
+            <li>Cart never double-counts; checkout redirects to anveshan.farm.</li>
+            <li>Related recipes and a breadcrumb to the category.</li>
+            <li>Emit schema.org/Recipe structured data and correct page metadata.</li>
+          </ol>
+          <p class="req-group">Both</p>
+          <ol class="reqs" start="16">
+            <li>Fully responsive; legible on phones with no horizontal scrolling.</li>
+            <li>Images a remote optimiser rejects load directly, so nothing appears broken.</li>
+          </ol>
+        </section>
+
+        <section id="rec-edge">
+          <h3><span class="n">06</span>Edge cases &amp; failure handling</h3>
+          <ul class="plain">
+            <li><strong>No results</strong> — empty state + “Reset filters”.</li>
+            <li><strong>Recipe with no Anveshan products</strong> — the products panel and Add-to-Cart are hidden; the recipe still reads fine.</li>
+            <li><strong>Missing tips/FAQ</strong> — those sections are omitted, not shown empty.</li>
+            <li><strong>Broken/blocked image</strong> — falls back so the layout never shows a broken image.</li>
+            <li><strong>Bad <span class="path">?category=</span> / <span class="path">?q=</span></strong> — ignored gracefully (defaults to all).</li>
+          </ul>
+        </section>
+
+        <section id="rec-metrics">
+          <h3><span class="n">07</span>Metrics &amp; constraints</h3>
+          <div class="cols">
+            <div class="panel goals">
+              <h4>Success metrics</h4>
+              <ul>
+                <li><strong>Add-to-Cart rate</strong> from recipe pages and browse cards — the primary measure.</li>
+                <li>Browse → recipe-page click-through.</li>
+                <li>Search usage and search→result rate.</li>
+                <li>Core Web Vitals, especially on mobile.</li>
+              </ul>
+            </div>
+            <div class="panel non">
+              <h4>Dependencies &amp; constraints</h4>
+              <ul>
+                <li>Database for recipe/product content; product data must match the live store.</li>
+                <li>Cart hands off to anveshan.farm for payment.</li>
+                <li>Recipe pages are statically generated for speed — avoid anything that forces per-request rendering on them.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+      </article>
+    </main>
+  </div>
+</div>
+
+<footer class="foot">
+  <div class="wrap">
+    Anveshan Kitchen — Product Requirements · Recipe Generator &amp; Recipes.
+    Success measure for both surfaces is add-to-cart rate: these are sales surfaces, not a recipe site.
+  </div>
+</footer>

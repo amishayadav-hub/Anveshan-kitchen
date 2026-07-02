@@ -1,0 +1,99 @@
+.logoSlider {
+  background: #fff;
+  height: 100px;
+  margin: auto;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  padding-bottom: 1.5rem;
+  box-sizing: border-box;
+}
+
+.logoSlider::before,
+.logoSlider::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 200px;
+  z-index: 2;
+  background: linear-gradient(to right, #fff 0%, rgba(255, 255, 255, 0) 100%);
+}
+
+.logoSlider::before {
+  left: 0;
+}
+
+.logoSlider::after {
+  right: 0;
+  transform: rotateZ(180deg);
+}
+
+.logoSlideTrack {
+  display: flex;
+  width: max-content;
+  animation: scroll 40s linear infinite;
+}
+
+.logoSlider:hover .logoSlideTrack {
+  animation-play-state: paused;
+}
+
+.logoSlide {
+  height: 100px;
+  width: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.logoSlide img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  max-width: 90px;
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    /* Track holds the badge set duplicated once, so -50% is exactly one set —
+       a seamless loop at any cell size / breakpoint. */
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 767px) {
+  .logoSlider {
+    height: 70px;
+    padding-bottom: 1rem;
+  }
+
+  .logoSlider::before,
+  .logoSlider::after {
+    width: 60px;
+  }
+
+  .logoSlideTrack {
+    /* Slightly faster on the shorter visible strip so it doesn't feel sluggish. */
+    animation-duration: 25s;
+  }
+
+  .logoSlide {
+    height: 70px;
+    width: 90px;
+  }
+
+  .logoSlide img {
+    max-width: 55px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logoSlideTrack {
+    animation: none;
+  }
+}

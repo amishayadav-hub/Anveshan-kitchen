@@ -17,11 +17,11 @@ export const PRODUCT_HANDLES: Record<string, string> = {
   "sesame-oil": "wood-pressed-black-sesame-oil",
   "olive-oil": "extra-virgin-olive-oil",
   "multigrain-atta": "khapli-multigrain-atta",
-  "protein-atta": "khapli-multigrain-atta",
+  "protein-atta": "", // no distinct SKU yet — brand + bold, don't link to multigrain
   "moringa-powder": "",
   sattu: "",
   "turmeric-latte-mix": "turmeric-latte",
-  "ashwagandha-mix": "turmeric-latte",
+  "ashwagandha-mix": "", // no distinct SKU yet — don't link to the turmeric PDP
   saffron: "kashmiri-mongra-saffron",
   "jaggery-powder": "jaggerypowder",
   amlaprash: "amlaprash",

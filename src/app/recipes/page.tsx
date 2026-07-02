@@ -8,8 +8,13 @@ const TITLE = "Healthy Indian Recipes with Ghee, Cold-Pressed Oils & Atta | Anve
 const DESCRIPTION =
   "Browse healthy Indian recipes made with Anveshan's pure bilona ghee, wood-pressed oils, ancient-grain attas and superfoods. Cook tastier, shop the ingredients in one click.";
 
+// Re-fetch Firestore hourly so newly added recipes/slugs get picked up (ISR).
+export const revalidate = 3600;
+
 export const metadata = {
-  title: TITLE,
+  // `absolute` so the root layout's "%s | Anveshan Kitchen" template doesn't
+  // double-append the brand (TITLE already ends in "| Anveshan Kitchen").
+  title: { absolute: TITLE },
   description: DESCRIPTION,
   keywords: [
     "Indian recipes",

@@ -5,8 +5,15 @@ import { SITE_URL, SITE_NAME, buildSiteJsonLd } from "@/lib/seo";
 import JsonLd from "@/components/JsonLd";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import CertificationsMarquee from "@/components/CertificationsMarquee";
 import CartProvider from "@/components/cart/CartProvider";
 import CartDrawer from "@/components/cart/CartDrawer";
+import MobileBottomNav from "@/components/MobileBottomNav";
+import { GoogleAnalytics } from "@next/third-parties/google";
+
+// GA4 loads on every page (root layout) only when a measurement ID is configured
+// — set NEXT_PUBLIC_GA_ID (G-XXXXXXX) in Vercel + .env.local. Absent = no-op.
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -70,14 +77,18 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} ${robotoSlab.variable} ${figtree.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">
+      {/* pb on mobile so page content/footer clears the fixed bottom tab bar */}
+      <body className="min-h-full flex flex-col pb-[56px] md:pb-0">
         <CartProvider>
           <JsonLd data={buildSiteJsonLd()} />
           <Header />
           {children}
+          <CertificationsMarquee />
           <Footer />
           <CartDrawer />
         </CartProvider>
+        <MobileBottomNav />
+        {GA_ID && <GoogleAnalytics gaId={GA_ID} />}
       </body>
     </html>
   );

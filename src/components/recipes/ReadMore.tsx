@@ -90,10 +90,20 @@ function LineClamp({
   // Show the toggle only once we know the text actually overflows the clamp.
   const [needsToggle, setNeedsToggle] = useState(false);
 
+  // Measure via ResizeObserver, not a one-shot mount read: cards that are hidden
+  // on mount (e.g. collapsed generator variations 2+) report a 0px height, so a
+  // mount-only check would never show the toggle. The observer fires again when
+  // the element becomes visible and gets real dimensions.
   useEffect(() => {
     const el = ref.current;
-    if (!el || expanded) return; // only measure while clamped
-    if (el.scrollHeight > el.clientHeight + 1) setNeedsToggle(true);
+    if (!el) return;
+    const measure = () => {
+      // Only meaningful while clamped; once overflow is detected keep the toggle.
+      if (!expanded && el.scrollHeight > el.clientHeight + 1) setNeedsToggle(true);
+    };
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
   }, [text, lines, expanded]);
 
   return (

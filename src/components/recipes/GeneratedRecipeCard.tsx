@@ -71,8 +71,12 @@ export default function GeneratedRecipeCard({ recipe, index, total }: { recipe: 
 
         {/* Meta chips: stay on a single row (scrolls if needed) on mobile. */}
         <div className="flex flex-nowrap gap-1.5 sm:gap-2 mt-4 text-xs sm:text-sm text-gray-600 overflow-x-auto no-scrollbar">
-          <span className="inline-flex shrink-0 whitespace-nowrap items-center gap-1.5 bg-white border border-gray-100 rounded-full px-2.5 sm:px-3 py-1"><ClockIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> Prep {recipe.prepTime}</span>
-          <span className="inline-flex shrink-0 whitespace-nowrap items-center gap-1.5 bg-white border border-gray-100 rounded-full px-2.5 sm:px-3 py-1"><FlameIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> Cook {recipe.cookTime}</span>
+          {recipe.prepTime && recipe.prepTime !== "—" && (
+            <span className="inline-flex shrink-0 whitespace-nowrap items-center gap-1.5 bg-white border border-gray-100 rounded-full px-2.5 sm:px-3 py-1"><ClockIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> Prep {recipe.prepTime}</span>
+          )}
+          {recipe.cookTime && recipe.cookTime !== "—" && (
+            <span className="inline-flex shrink-0 whitespace-nowrap items-center gap-1.5 bg-white border border-gray-100 rounded-full px-2.5 sm:px-3 py-1"><FlameIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> Cook {recipe.cookTime}</span>
+          )}
           <span className="inline-flex shrink-0 whitespace-nowrap items-center gap-1.5 bg-white border border-gray-100 rounded-full px-2.5 sm:px-3 py-1"><UsersIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> {recipe.servings} servings</span>
         </div>
       </div>
@@ -83,17 +87,18 @@ export default function GeneratedRecipeCard({ recipe, index, total }: { recipe: 
           <div>
             <h3 className="text-lg font-bold text-gray-900 mb-3">Ingredients</h3>
             <ul className="space-y-2">
-              {visibleIngredients.map((ing, i) => (
-                <li key={`${ing.name}-${i}`} className="flex items-start gap-2.5 text-sm">
-                  <span className={`mt-[7px] w-1.5 h-1.5 rounded-full shrink-0 ${ing.anveshan ? "bg-anv-green" : "bg-gray-300"}`} />
-                  <span className={ing.anveshan ? "font-semibold text-anv-green" : "text-gray-700"}>
-                    {(ing.quantity || ing.unit) && (
-                      <span className="text-gray-400 font-normal">{ing.quantity} {ing.unit} </span>
-                    )}
-                    {ing.anveshan ? brandName(ing.name) : ing.name}
-                  </span>
-                </li>
-              ))}
+              {visibleIngredients.map((ing, i) => {
+                const measure = [ing.quantity, ing.unit].filter(Boolean).join(" ");
+                return (
+                  <li key={`${ing.name}-${i}`} className="flex items-start gap-2.5 text-sm">
+                    <span className={`mt-[7px] w-1.5 h-1.5 rounded-full shrink-0 ${ing.anveshan ? "bg-anv-green" : "bg-gray-300"}`} />
+                    <span className={ing.anveshan ? "font-semibold text-anv-green" : "text-gray-700"}>
+                      {measure && <span className="text-gray-400 font-normal">{measure} </span>}
+                      {ing.anveshan ? brandName(ing.name) : ing.name}
+                    </span>
+                  </li>
+                );
+              })}
             </ul>
             {recipe.ingredients.length > INGREDIENT_PREVIEW && (
               <button

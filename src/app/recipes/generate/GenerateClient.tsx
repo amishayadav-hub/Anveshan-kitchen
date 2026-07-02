@@ -344,7 +344,7 @@ export default function GenerateClient() {
 
       {/* Mobile sticky Generate bar (input phase only; inline button covers desktop) */}
       {!result && (
-        <div className="sm:hidden fixed inset-x-0 bottom-0 z-40 border-t border-gray-100 bg-white/95 backdrop-blur px-4 pt-3 pb-[calc(env(safe-area-inset-bottom)+0.75rem)]">
+        <div className="sm:hidden fixed inset-x-0 bottom-14 z-40 border-t border-gray-100 bg-white/95 backdrop-blur px-4 pt-3 pb-[calc(env(safe-area-inset-bottom)+0.75rem)]">
           <button
             onClick={handleGenerate}
             disabled={loading || !canGenerate}

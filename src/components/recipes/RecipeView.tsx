@@ -12,9 +12,27 @@ import RecipeActions from "@/components/recipes/RecipeActions";
 import ReadMore from "@/components/recipes/ReadMore";
 import HScrollDots from "@/components/ui/HScrollDots";
 import RelatedRecipes from "@/components/recipes/RelatedRecipes";
-import { highlightProductMentions, PRODUCT_HANDLES } from "@/lib/product-highlight";
+import ProductInfoCard from "@/components/recipes/ProductInfoCard";
+import {
+  highlightProductMentions,
+  PRODUCT_HANDLES,
+  pdpUrl,
+  pdpUrlForProduct,
+  ATTA_PRODUCT_IDS,
+  ATTA_VARIETY,
+} from "@/lib/product-highlight";
 import { PRODUCT_PDP } from "@/data/product-pdp";
+import { PRODUCT_SIZES } from "@/data/product-variants";
 import { ClockIcon, UsersIcon, GaugeIcon, UtensilsIcon } from "@/components/ui/icons";
+
+// Reverse lookup: a selected variantId -> its product handle, so the cart panel
+// can show the right size options for ghee/atta even though the type/variety is
+// picked in the ingredient list. Covers size variants + each default type/variety.
+const VARIANT_TO_HANDLE: Record<string, string> = {};
+for (const [handle, sizes] of Object.entries(PRODUCT_SIZES)) {
+  for (const s of sizes) VARIANT_TO_HANDLE[s.variantId] = handle;
+}
+for (const v of Object.values(ATTA_VARIETY)) VARIANT_TO_HANDLE[v.variantId] = v.handle;
 
 interface Props {
   recipe: Recipe;
@@ -95,6 +113,9 @@ export default function RecipeView({ recipe, products, categoryLabel, related = 
       },
     }));
   }
+
+  // Which product's size popup is open in the "Shop the Anveshan products" panel.
+  const [openProduct, setOpenProduct] = useState<string | null>(null);
 
   // Serving multiplier (1x/2x/3x) — owned here so the header chip's popover and
   // the ingredient amounts share one source of truth.
@@ -280,27 +301,90 @@ export default function RecipeView({ recipe, products, categoryLabel, related = 
               </div>
 
               <div className="p-4 space-y-3">
-                {products.map((p) => (
-                  <div
-                    key={p.id}
-                    className="flex gap-3 items-center rounded-xl border border-gray-100 p-2.5 hover:border-anv-green/30 transition-colors"
-                  >
-                    <div className="relative w-16 h-16 shrink-0 rounded-lg overflow-hidden bg-anv-cream/40">
-                      {imageFor(p) ? (
-                        <Image src={imageFor(p)!} alt={p.name} fill className="object-cover" sizes="64px" />
+                {products.map((p) => {
+                  // Ghee & atta can switch size from here. Resolve the current
+                  // handle from the selected variant, then offer its sizes.
+                  const isGhee = !!p.variants?.length;
+                  const isAtta = ATTA_PRODUCT_IDS.includes(p.id);
+                  const currentVariantId =
+                    selection[p.id]?.variantId ??
+                    (p.variants ? p.variants[0].shopifyVariantId : p.shopifyVariantId);
+                  const handle = VARIANT_TO_HANDLE[currentVariantId];
+                  const sizes = handle ? PRODUCT_SIZES[handle] ?? [] : [];
+                  const canChooseSize = (isGhee || isAtta) && sizes.length > 0;
+                  const currentSize = sizes.find((s) => s.variantId === currentVariantId);
+                  const open = openProduct === p.id;
+
+                  const rowInner = (
+                    <>
+                      <div className="relative w-16 h-16 shrink-0 rounded-lg overflow-hidden bg-anv-cream/40">
+                        {imageFor(p) ? (
+                          <Image src={imageFor(p)!} alt={p.name} fill className="object-cover" sizes="64px" />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-anv-green font-bold">
+                            {p.name.charAt(0)}
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-semibold text-sm text-gray-900 leading-tight">{nameFor(p)}</p>
+                        {canChooseSize ? (
+                          <p className="mt-0.5 flex items-center gap-1 text-xs font-medium text-anv-green">
+                            {currentSize?.label ?? "Choose size"}
+                            <svg
+                              viewBox="0 0 24 24"
+                              className={`h-3.5 w-3.5 transition-transform ${open ? "rotate-180" : ""}`}
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2.5"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              aria-hidden="true"
+                            >
+                              <path d="m6 9 6 6 6-6" />
+                            </svg>
+                          </p>
+                        ) : (
+                          <p className="text-xs text-gray-500 line-clamp-2 mt-0.5">{p.whyAnveshan}</p>
+                        )}
+                      </div>
+                      <span className="font-bold text-anv-green text-sm shrink-0">₹{priceFor(p)}</span>
+                    </>
+                  );
+
+                  return (
+                    <div key={p.id} className="relative">
+                      {canChooseSize ? (
+                        <button
+                          type="button"
+                          onClick={() => setOpenProduct((cur) => (cur === p.id ? null : p.id))}
+                          aria-expanded={open}
+                          aria-label={`Change size for ${nameFor(p)}`}
+                          className="flex w-full items-center gap-3 rounded-xl border border-gray-100 p-2.5 text-left transition-colors hover:border-anv-green/40"
+                        >
+                          {rowInner}
+                        </button>
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center text-anv-green font-bold">
-                          {p.name.charAt(0)}
+                        <div className="flex items-center gap-3 rounded-xl border border-gray-100 p-2.5">
+                          {rowInner}
                         </div>
                       )}
+
+                      {canChooseSize && open && (
+                        <ProductInfoCard
+                          name={nameFor(p)}
+                          image={imageFor(p)}
+                          about={p.whyAnveshan}
+                          pdpUrl={handle ? pdpUrl(handle) : pdpUrlForProduct(p.id)}
+                          sizes={sizes}
+                          selectedVariantId={currentVariantId}
+                          onSelectSize={(s) => handleSelect(p.id, s.variantId, s.price, imageFor(p), nameFor(p))}
+                          onClose={() => setOpenProduct(null)}
+                        />
+                      )}
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="font-semibold text-sm text-gray-900 leading-tight">{nameFor(p)}</p>
-                      <p className="text-xs text-gray-500 line-clamp-2 mt-0.5">{p.whyAnveshan}</p>
-                    </div>
-                    <span className="font-bold text-anv-green text-sm shrink-0">₹{priceFor(p)}</span>
-                  </div>
-                ))}
+                  );
+                })}
 
                 <div className="flex items-center justify-between px-1 pt-1">
                   <span className="text-sm text-gray-500">

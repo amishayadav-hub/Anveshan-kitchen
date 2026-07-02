@@ -16,6 +16,10 @@ interface Props {
   params: Promise<{ slug: string }>;
 }
 
+// ISR: re-fetch Firestore hourly so recipes added after a deploy get prerendered
+// (and enter the sitemap) instead of being frozen at build time.
+export const revalidate = 3600;
+
 // Prerender every recipe at build time → static HTML with metadata + JSON-LD
 // in the initial <head>, which crawlers and answer engines read most reliably.
 export async function generateStaticParams() {

@@ -5,37 +5,34 @@ import VegToggle from "@/components/recipes/VegToggle";
 import NonVegToggle from "@/components/recipes/NonVegToggle";
 import { useDiet } from "@/components/recipes/DietProvider";
 
-// Green action stripe above the recipe pages — AI Generator, Share, and the
-// Veg / Non-Veg diet toggles (kept on a white capsule so their colours read
-// clearly against the green background).
+// Green action stripe above the recipe pages. Veg / Non-Veg diet symbols stack
+// in the left corner; Recipes Generator + Share sit on the right.
 export default function RecipesHeader() {
   const { vegOnly, nonVegOnly, toggleVeg, toggleNonVeg } = useDiet();
 
   return (
     <header className="bg-anv-green text-white">
-      {/* Single row: Veg/Non-Veg + Recipes Generator + Share. Scrolls
-          horizontally on narrow screens (can't fit four controls at phone
-          widths); fits on one line from sm up, with the actions pushed right. */}
-      <div className="max-w-6xl mx-auto px-4 py-3 flex items-center gap-3 sm:gap-4 overflow-x-auto no-scrollbar text-sm">
-        <div className="flex shrink-0 items-center rounded-full sm:bg-white sm:px-3 sm:py-1.5 sm:shadow-sm">
+      <div className="max-w-6xl mx-auto px-4 py-2 flex items-center justify-between gap-4 text-sm">
+        {/* Diet symbols, side by side, at the left corner */}
+        <div className="flex shrink-0 items-center gap-2">
           <VegToggle on={vegOnly} onChange={toggleVeg} />
-        </div>
-        <div className="flex shrink-0 items-center rounded-full sm:bg-white sm:px-3 sm:py-1.5 sm:shadow-sm">
           <NonVegToggle on={nonVegOnly} onChange={toggleNonVeg} />
         </div>
 
-        <Link
-          href="/recipes/generate"
-          className="shrink-0 whitespace-nowrap font-medium text-white/90 hover:text-white transition-colors sm:ml-auto"
-        >
-          ✨ Recipes Generator
-        </Link>
-        <Link
-          href="/recipes/share"
-          className="shrink-0 whitespace-nowrap bg-anv-cream text-anv-green px-3 sm:px-4 py-1.5 rounded-full text-xs font-semibold hover:bg-white transition-colors shadow-sm"
-        >
-          + Share Your Recipe
-        </Link>
+        <div className="flex items-center gap-4">
+          <Link
+            href="/recipes/generate"
+            className="shrink-0 whitespace-nowrap font-medium text-white/90 hover:text-white transition-colors"
+          >
+            ✨ Recipes Generator
+          </Link>
+          <Link
+            href="/recipes/share"
+            className="shrink-0 whitespace-nowrap bg-anv-cream text-anv-green px-3 sm:px-4 py-1.5 rounded-full text-xs font-semibold hover:bg-white transition-colors shadow-sm"
+          >
+            + Share Recipe
+          </Link>
+        </div>
       </div>
     </header>
   );

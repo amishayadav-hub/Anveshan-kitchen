@@ -2,6 +2,9 @@ import type { MetadataRoute } from "next";
 import { getAllRecipes } from "@/lib/recipes";
 import { SITE_URL } from "@/lib/seo";
 
+// Rebuild hourly so newly added recipes appear in the sitemap without a redeploy.
+export const revalidate = 3600;
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const recipes = await getAllRecipes();
 

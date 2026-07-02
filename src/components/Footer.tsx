@@ -77,7 +77,7 @@ function ChevronIcon({ className }: { className?: string }) {
 
 export default function Footer() {
   return (
-    <footer className="bg-anv-green text-white mt-16">
+    <footer className="bg-anv-green text-white">
       <div className="max-w-6xl mx-auto px-4 py-8 md:py-14">
         <div className="grid grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1.3fr] gap-x-6 gap-y-5 md:gap-10">
           {/* Brand + newsletter */}

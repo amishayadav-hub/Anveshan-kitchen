@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
 import CartButton from "@/components/cart/CartButton";
+import HamburgerMenu from "@/components/HamburgerMenu";
 import { SearchIcon } from "@/components/ui/icons";
 
 // Slim top header: Anveshan logo + search & cart on the right.
@@ -31,13 +32,15 @@ export default function Header() {
 
   return (
     <header className="bg-white border-b border-gray-100 sticky top-0 z-50">
-      {/* Logo pinned left; search + cart grouped on the right. */}
+      {/* Hamburger + logo pinned left; search + cart grouped on the right. */}
       <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between gap-2">
-        <Link
-          href="/recipes"
-          aria-label="Anveshan Kitchen"
-          className={`shrink-0 items-baseline gap-1 ${open ? "hidden" : "flex"}`}
-        >
+        <div className="flex shrink-0 items-center gap-1">
+          <HamburgerMenu />
+          <Link
+            href="/recipes"
+            aria-label="Anveshan Kitchen"
+            className={`shrink-0 items-baseline gap-1 ${open ? "hidden" : "flex"}`}
+          >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="https://cdn.shopify.com/s/files/1/0270/3346/9006/files/anveshan-logo-updates-register-mark.png?v=1728463199"
@@ -46,8 +49,9 @@ export default function Header() {
             height={28}
             className="h-4 w-auto"
           />
-          <span className="text-anv-green font-medium text-sm lowercase tracking-tight">kitchen</span>
-        </Link>
+            <span className="text-anv-green font-medium text-sm lowercase tracking-tight">kitchen</span>
+          </Link>
+        </div>
 
         <div className={`flex min-w-0 items-center gap-1 ${open ? "flex-1" : ""}`}>
           {/* Search: icon only; expands to fill the whole bar when clicked */}

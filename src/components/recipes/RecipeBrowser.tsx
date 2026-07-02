@@ -103,8 +103,8 @@ export default function RecipeBrowser({ recipes, productMap, initialCategory, in
 
   return (
     <div>
-      {/* Top-level filter row — single scrollable row (no wrapping to 3-4 lines).
-          Bleeds to the screen edge on mobile so it's clear it scrolls sideways. */}
+      {/* Top-level filter row — single scrollable row. Bleeds to the screen
+          edge on mobile so it's clear it scrolls sideways. */}
       <div className="-mx-4 px-4 sm:mx-0 sm:px-0">
         <HScrollDots className="flex gap-2 overflow-x-auto no-scrollbar pb-1">
           <FilterChip label="All Recipes" active={category === "all"} onClick={() => selectCategory("all")} />
@@ -133,7 +133,7 @@ export default function RecipeBrowser({ recipes, productMap, initialCategory, in
       )}
 
       {/* Count */}
-      <p className="mt-4 text-sm text-gray-500" aria-live="polite">
+      <p className="mt-2 text-sm text-gray-500" aria-live="polite">
         {filtered.length} {filtered.length === 1 ? "recipe" : "recipes"}
         {q && (
           <>

@@ -21,7 +21,7 @@ function prettify(id: string): string {
 // sticky bar; the in-card panel still lets users switch variants.
 export function generatedShopLines(anveshanProducts: string[]): { lines: CartLine[]; total: number } {
   const ids = [...new Set(anveshanProducts ?? [])];
-  const lines: CartLine[] = ids
+  const resolved: CartLine[] = ids
     .map((id): CartLine => {
       if (id === "ghee") {
         const g = GHEE_VARIANT_INFO["gir-cow" as GheeVariant];
@@ -35,6 +35,12 @@ export function generatedShopLines(anveshanProducts: string[]): { lines: CartLin
       return { variantId: info?.variantId ?? "", name: brandName(prettify(id)), image: info?.image, price: info?.price ?? 0, quantity: 1 };
     })
     .filter((l) => l.variantId);
+
+  // Dedupe by RESOLVED variantId so two product ids that map to the same SKU
+  // never double-count the subtotal.
+  const byVariant = new Map<string, CartLine>();
+  for (const l of resolved) if (!byVariant.has(l.variantId)) byVariant.set(l.variantId, l);
+  const lines = [...byVariant.values()];
   const total = lines.reduce((sum, l) => sum + l.price, 0);
   return { lines, total };
 }
