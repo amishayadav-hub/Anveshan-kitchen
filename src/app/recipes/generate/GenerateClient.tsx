@@ -30,6 +30,20 @@ export default function GenerateClient() {
   const [result, setResult] = useState<GeneratedRecipeSet | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  // True when the dish/ingredients changed since the last successful generation.
+  // Keeps the Generate action available (esp. the mobile bar) so a NEW dish can
+  // always be generated after a result is already on screen.
+  const [dirty, setDirty] = useState(false);
+
+  // Update input + flag it dirty so the Generate action reappears.
+  function updateQuery(value: string) {
+    setQuery(value);
+    setDirty(true);
+  }
+  function updateIngredients(next: string[]) {
+    setIngredients(next);
+    setDirty(true);
+  }
 
   const hi = language === "hi";
   const canGenerate = query.trim().length > 0 || ingredients.length > 0;
@@ -65,6 +79,7 @@ export default function GenerateClient() {
       const data = await res.json().catch(() => null);
       if (!res.ok || !data) throw new Error(data?.error || fallback);
       setResult(data);
+      setDirty(false); // input now matches the on-screen result
     } catch (e) {
       setError(e instanceof Error && e.message && e.name !== "AbortError" ? e.message : fallback);
     } finally {
@@ -74,7 +89,7 @@ export default function GenerateClient() {
   }
 
   function addSuggestion(item: string) {
-    if (!ingredients.includes(item)) setIngredients([...ingredients, item]);
+    if (!ingredients.includes(item)) updateIngredients([...ingredients, item]);
   }
 
   const heading = result
@@ -145,7 +160,7 @@ export default function GenerateClient() {
               </span>
               <input
                 value={query}
-                onChange={(e) => setQuery(e.target.value)}
+                onChange={(e) => updateQuery(e.target.value)}
                 onKeyDown={(e) => { if (e.key === "Enter") handleGenerate(); }}
                 placeholder={hi ? "jaise: Aloo Paratha, Besan Ladoo..." : "e.g. Aloo Paratha, Besan Ladoo, Dal Tadka..."}
                 className="w-full pl-11 pr-4 py-3.5 border border-gray-200 rounded-xl text-base text-gray-900 outline-none focus:border-anv-green focus:ring-2 focus:ring-anv-green/15 transition-all"
@@ -158,7 +173,7 @@ export default function GenerateClient() {
                 <button
                   key={d}
                   aria-pressed={query === d}
-                  onClick={() => setQuery((q) => (q === d ? "" : d))}
+                  onClick={() => updateQuery(query === d ? "" : d)}
                   className={`shrink-0 text-xs px-3 py-1.5 rounded-full border transition-all ${
                     query === d
                       ? "bg-anv-green text-white border-anv-green"
@@ -185,7 +200,7 @@ export default function GenerateClient() {
             </label>
             <IngredientTagInput
               tags={ingredients}
-              onChange={setIngredients}
+              onChange={updateIngredients}
               placeholder={hi ? "Ingredient type karo aur Enter dabao..." : "Type an ingredient and press Enter..."}
             />
             <div className="mt-3 flex gap-2 overflow-x-auto no-scrollbar sm:flex-wrap sm:overflow-visible">
@@ -342,8 +357,10 @@ export default function GenerateClient() {
         </section>
       )}
 
-      {/* Mobile sticky Generate bar (input phase only; inline button covers desktop) */}
-      {!result && (
+      {/* Mobile sticky Generate bar. Shows when there's no result yet, OR when the
+          input changed since the last result — so a NEW dish can always be
+          generated on mobile (the inline button covers desktop). */}
+      {(!result || dirty) && (
         <div className="sm:hidden fixed inset-x-0 bottom-14 z-40 border-t border-gray-100 bg-white/95 backdrop-blur px-4 pt-3 pb-[calc(env(safe-area-inset-bottom)+0.75rem)]">
           <button
             onClick={handleGenerate}

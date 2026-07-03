@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
+import { useAuth } from "@/components/auth/AuthProvider";
 
 // Brand palette (natural/organic food brand).
 const GREEN = "#245b49";
@@ -72,11 +73,12 @@ interface Tab {
   icon: ReactNode;
 }
 
-const TABS: Tab[] = [
+// `authOnly` tabs only appear for signed-in users (e.g. Liked recipes).
+const TABS: (Tab & { authOnly?: boolean })[] = [
   { href: "/recipes", label: "Home", icon: <HomeIcon /> },
   { href: "/recipes/real-peeps", label: "Real Peeps", icon: <PeepsIcon /> },
-  { href: "/recipes/share", label: "Share", icon: <ShareIcon /> },
-  { href: "/recipes/liked", label: "Liked", icon: <HeartIcon /> },
+  { href: "/recipes/share", label: "Publish", icon: <ShareIcon /> },
+  { href: "/recipes/liked", label: "Liked", icon: <HeartIcon />, authOnly: true },
   { href: "/account", label: "Account", icon: <UserIcon /> },
 ];
 
@@ -84,6 +86,10 @@ const TABS: Tab[] = [
 // takes over there). 5 equal-width items, icon-on-top + label-below.
 export default function MobileBottomNav() {
   const pathname = usePathname();
+  const { user } = useAuth();
+
+  // Hide auth-only tabs (Liked) from guests.
+  const tabs = TABS.filter((t) => !t.authOnly || user);
 
   return (
     <nav
@@ -92,7 +98,7 @@ export default function MobileBottomNav() {
       aria-label="Primary"
     >
       <ul className="flex items-stretch">
-        {TABS.map((t) => {
+        {tabs.map((t) => {
           const active = pathname === t.href;
           return (
             <li key={t.href} className="relative flex-1 text-center" style={{ flex: "1 1 0" }}>

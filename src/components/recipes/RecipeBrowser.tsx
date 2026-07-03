@@ -5,8 +5,12 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Recipe, AnveshanProduct } from "@/types";
 import { CATEGORIES, getCategory } from "@/lib/categories";
 import RecipeCard from "@/components/recipes/RecipeCard";
+import { CategoryIcon } from "@/components/recipes/CategoryIcon";
 import { useDiet } from "@/components/recipes/DietProvider";
 import HScrollDots from "@/components/ui/HScrollDots";
+
+// Short label for the icon chips — drop the " Recipes" suffix.
+const shortLabel = (label: string) => label.replace(/\s+Recipes$/i, "");
 
 interface Props {
   recipes: Recipe[];
@@ -106,12 +110,13 @@ export default function RecipeBrowser({ recipes, productMap, initialCategory, in
       {/* Top-level filter row — single scrollable row. Bleeds to the screen
           edge on mobile so it's clear it scrolls sideways. */}
       <div className="-mx-4 px-4 sm:mx-0 sm:px-0">
-        <HScrollDots className="flex gap-2 overflow-x-auto no-scrollbar pb-1">
-          <FilterChip label="All Recipes" active={category === "all"} onClick={() => selectCategory("all")} />
+        <HScrollDots variant="bar" className="flex gap-4 sm:gap-8 lg:gap-12 overflow-x-auto no-scrollbar pb-1 pt-1">
+          <FilterChip iconKey="all" label="All" active={category === "all"} onClick={() => selectCategory("all")} />
           {CATEGORIES.map((c) => (
             <FilterChip
               key={c.key}
-              label={c.label}
+              iconKey={c.key}
+              label={shortLabel(c.label)}
               active={category === c.key}
               onClick={() => selectCategory(c.key)}
             />
@@ -180,17 +185,39 @@ export default function RecipeBrowser({ recipes, productMap, initialCategory, in
   );
 }
 
-function FilterChip({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
+function FilterChip({
+  iconKey,
+  label,
+  active,
+  onClick,
+}: {
+  iconKey: string;
+  label: string;
+  active: boolean;
+  onClick: () => void;
+}) {
   return (
     <button
       onClick={onClick}
-      className={`shrink-0 whitespace-nowrap px-3.5 py-1.5 rounded-full text-sm font-medium border transition-colors ${
-        active
-          ? "bg-anv-green text-white border-anv-green"
-          : "bg-white text-gray-600 border-gray-200 hover:border-anv-green hover:text-anv-green"
-      }`}
+      aria-current={active ? "true" : undefined}
+      className="group shrink-0 flex flex-col items-center gap-1.5"
     >
-      {label}
+      <span
+        className={`flex h-8 w-8 sm:h-14 sm:w-14 items-center justify-center rounded-full ring-1 transition-all duration-200 ${
+          active
+            ? "bg-anv-green text-white ring-anv-green shadow-md shadow-anv-green/20"
+            : "bg-anv-cream/40 text-anv-green/80 ring-anv-cream-dark group-hover:bg-anv-green/10 group-hover:text-anv-green group-hover:ring-anv-green/30"
+        }`}
+      >
+        <CategoryIcon name={iconKey} className="h-4 w-4 sm:h-6 sm:w-6" />
+      </span>
+      <span
+        className={`whitespace-nowrap text-xs transition-colors ${
+          active ? "font-semibold text-anv-green" : "font-medium text-gray-500 group-hover:text-anv-green"
+        }`}
+      >
+        {label}
+      </span>
     </button>
   );
 }

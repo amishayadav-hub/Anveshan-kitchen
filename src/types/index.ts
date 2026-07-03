@@ -55,6 +55,13 @@ export interface CartItem {
   productName: string;
 }
 
+// One selectable size/pack option for a cart line (e.g. "500ml Jar" · ₹1250).
+export interface CartLineVariant {
+  label: string;
+  price: number;
+  variantId: string;
+}
+
 // A line in the local AJAX cart (drawer). Keyed by variantId.
 export interface CartLine {
   variantId: string;
@@ -62,4 +69,8 @@ export interface CartLine {
   image?: string;
   price: number;
   quantity: number;
+  // Optional variant metadata so the size/pack can be changed from the cart.
+  // `variants` lists all packs for this product; `variantLabel` is the current one.
+  variantLabel?: string;
+  variants?: CartLineVariant[];
 }

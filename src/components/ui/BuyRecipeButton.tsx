@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { AnveshanProduct, CartLine } from "@/types";
 import { useCart } from "@/components/cart/CartProvider";
+import { variantMetaFor } from "@/lib/cart-variants";
 
 interface Props {
   products: AnveshanProduct[];
@@ -20,13 +21,17 @@ export default function BuyRecipeButton({ products }: Props) {
     e.preventDefault();
     e.stopPropagation();
     const lines: CartLine[] = products
-      .map((p) => ({
-        variantId: p.variants ? p.variants[0].shopifyVariantId : p.shopifyVariantId,
-        name: p.name,
-        image: p.image,
-        price: p.variants ? p.variants[0].price : p.price,
-        quantity: 1,
-      }))
+      .map((p) => {
+        const variantId = p.variants ? p.variants[0].shopifyVariantId : p.shopifyVariantId;
+        return {
+          variantId,
+          name: p.name,
+          image: p.image,
+          price: p.variants ? p.variants[0].price : p.price,
+          quantity: 1,
+          ...variantMetaFor(variantId, p.id), // size options for the in-cart selector
+        };
+      })
       .filter((l) => l.variantId);
     if (lines.length === 0) return;
     addLines(lines);
@@ -40,7 +45,7 @@ export default function BuyRecipeButton({ products }: Props) {
   const overflow = products.length - shown.length;
 
   return (
-    <div className="flex flex-col items-start sm:flex-row sm:items-center sm:justify-between gap-2 mt-3">
+    <div className="flex flex-row items-center justify-between gap-2 mt-3">
       <div className="flex -space-x-1.5 shrink-0">
         {shown.map((p) => (
           <div
@@ -66,10 +71,33 @@ export default function BuyRecipeButton({ products }: Props) {
       <button
         type="button"
         onClick={handleClick}
-        className="shrink-0 bg-anv-green text-white text-[11px] font-semibold px-3 py-1.5 rounded-full hover:bg-anv-green-dark transition-colors whitespace-nowrap"
+        aria-label="Add to cart"
+        className="shrink-0 inline-flex items-center gap-1 bg-anv-green text-white text-[11px] font-semibold px-3 py-1.5 rounded-full hover:bg-anv-green-dark transition-colors whitespace-nowrap"
       >
-        {added ? "Added ✓" : "Add to Cart"}
+        {added ? (
+          <>Added <CheckIcon /></>
+        ) : (
+          <>ADD <CartIcon /></>
+        )}
       </button>
     </div>
+  );
+}
+
+function CartIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <circle cx="9" cy="21" r="1" />
+      <circle cx="20" cy="21" r="1" />
+      <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+    </svg>
+  );
+}
+
+function CheckIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M5 13l4 4L19 7" />
+    </svg>
   );
 }

@@ -18,6 +18,8 @@ interface Props {
   activeIndex?: number;
   /** Force the dots to show even when the row doesn't overflow. */
   alwaysShow?: boolean;
+  /** "dots" (default) = carousel dots; "bar" = a thin themed scroll-progress line. */
+  variant?: "dots" | "bar";
 }
 
 // Wraps a horizontally-scrolling row and renders carousel-style dots beneath it —
@@ -31,11 +33,15 @@ export default function HScrollDots({
   inactiveColor = "bg-gray-300",
   activeIndex,
   alwaysShow = false,
+  variant = "dots",
 }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const [count, setCount] = useState(0);
   const [scrollActive, setScrollActive] = useState(0);
   const [overflowing, setOverflowing] = useState(false);
+  // For the "bar" variant: thumb width (visible fraction) + position (0..1).
+  const [viewFrac, setViewFrac] = useState(1);
+  const [scrollFrac, setScrollFrac] = useState(0);
 
   useEffect(() => {
     const el = ref.current;
@@ -44,7 +50,10 @@ export default function HScrollDots({
     function update() {
       if (!el) return;
       const items = Array.from(el.children) as HTMLElement[];
-      setOverflowing(el.scrollWidth - el.clientWidth > 1);
+      const max = el.scrollWidth - el.clientWidth;
+      setOverflowing(max > 1);
+      setViewFrac(el.scrollWidth > 0 ? el.clientWidth / el.scrollWidth : 1);
+      setScrollFrac(max > 0 ? el.scrollLeft / max : 0);
       setCount(items.length);
       if (items.length === 0) return;
       // Active = the item whose left edge sits closest to the row's left edge.
@@ -107,21 +116,34 @@ export default function HScrollDots({
       <div ref={ref} className={className}>
         {children}
       </div>
-      {show && (
-        <div className="mt-2 flex justify-center gap-1.5">
-          {Array.from({ length: count }).map((_, i) => (
-            <button
-              key={i}
-              type="button"
-              aria-label={`Go to item ${i + 1}`}
-              onClick={() => go(i)}
-              className={`h-1.5 rounded-full transition-all duration-200 ${
-                i === active ? `w-4 ${activeColor}` : `w-1.5 ${inactiveColor}`
-              }`}
-            />
-          ))}
-        </div>
-      )}
+      {variant === "bar"
+        ? (overflowing || alwaysShow) && (
+            // Thin scroll-progress line — a green thumb slides along a soft track.
+            <div className="mx-auto mt-2.5 h-[3px] w-24 overflow-hidden rounded-full bg-anv-green/10">
+              <div
+                className="h-full rounded-full bg-anv-green/50"
+                style={{
+                  width: `${Math.max(viewFrac * 100, 15)}%`,
+                  marginLeft: `${scrollFrac * (100 - Math.max(viewFrac * 100, 15))}%`,
+                }}
+              />
+            </div>
+          )
+        : show && (
+            <div className="mt-2 flex justify-center gap-1.5">
+              {Array.from({ length: count }).map((_, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  aria-label={`Go to item ${i + 1}`}
+                  onClick={() => go(i)}
+                  className={`h-1.5 rounded-full transition-all duration-200 ${
+                    i === active ? `w-4 ${activeColor}` : `w-1.5 ${inactiveColor}`
+                  }`}
+                />
+              ))}
+            </div>
+          )}
     </div>
   );
 }

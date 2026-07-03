@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
-import { CartLine } from "@/types";
+import { CartLine, CartLineVariant } from "@/types";
 
 const STORAGE_KEY = "anveshan-cart";
 
@@ -11,6 +11,7 @@ interface CartContextValue {
   subtotal: number;
   addLines: (lines: CartLine[]) => void;
   setQty: (variantId: string, qty: number) => void;
+  changeVariant: (currentVariantId: string, next: CartLineVariant) => void;
   remove: (variantId: string) => void;
   clear: () => void;
   isOpen: boolean;
@@ -60,6 +61,9 @@ export default function CartProvider({ children }: { children: ReactNode }) {
             ...next[i],
             name: line.name,
             image: line.image,
+            // Adopt the latest variant metadata so an in-cart size list stays available.
+            variantLabel: line.variantLabel ?? next[i].variantLabel,
+            variants: line.variants ?? next[i].variants,
             quantity: Math.min(next[i].quantity + (line.quantity || 1), MAX_QTY),
           };
         else next.push({ ...line, quantity: line.quantity || 1 });
@@ -75,6 +79,36 @@ export default function CartProvider({ children }: { children: ReactNode }) {
         : prev.map((l) => (l.variantId === variantId ? { ...l, quantity: qty } : l))
     );
     if (qty <= 0 && lines.length <= 1) setIsOpen(false); // emptied → close drawer
+  }
+
+  // Swap a line's size/pack in place. If the target variant is already in the
+  // cart, merge the two lines (summing quantity) instead of creating a duplicate.
+  function changeVariant(currentVariantId: string, next: CartLineVariant) {
+    if (currentVariantId === next.variantId) return;
+    setLines((prev) => {
+      const idx = prev.findIndex((l) => l.variantId === currentVariantId);
+      if (idx < 0) return prev;
+      const line = prev[idx];
+      const dupIdx = prev.findIndex((l) => l.variantId === next.variantId);
+      const updated: CartLine = {
+        ...line,
+        variantId: next.variantId,
+        price: next.price,
+        variantLabel: next.label,
+      };
+      if (dupIdx >= 0 && dupIdx !== idx) {
+        const merged = [...prev];
+        merged[dupIdx] = {
+          ...merged[dupIdx],
+          quantity: Math.min(merged[dupIdx].quantity + line.quantity, MAX_QTY),
+        };
+        merged.splice(idx, 1);
+        return merged;
+      }
+      const copy = [...prev];
+      copy[idx] = updated;
+      return copy;
+    });
   }
 
   function remove(variantId: string) {
@@ -94,6 +128,7 @@ export default function CartProvider({ children }: { children: ReactNode }) {
         subtotal,
         addLines,
         setQty,
+        changeVariant,
         remove,
         clear,
         isOpen,

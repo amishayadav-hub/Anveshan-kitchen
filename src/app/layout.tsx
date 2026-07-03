@@ -6,6 +6,8 @@ import JsonLd from "@/components/JsonLd";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CertificationsMarquee from "@/components/CertificationsMarquee";
+import AuthProvider from "@/components/auth/AuthProvider";
+import LikesProvider from "@/components/likes/LikesProvider";
 import CartProvider from "@/components/cart/CartProvider";
 import CartDrawer from "@/components/cart/CartDrawer";
 import MobileBottomNav from "@/components/MobileBottomNav";
@@ -79,15 +81,19 @@ export default function RootLayout({
     >
       {/* pb on mobile so page content/footer clears the fixed bottom tab bar */}
       <body className="min-h-full flex flex-col pb-[56px] md:pb-0">
-        <CartProvider>
-          <JsonLd data={buildSiteJsonLd()} />
-          <Header />
-          {children}
-          <CertificationsMarquee />
-          <Footer />
-          <CartDrawer />
-        </CartProvider>
-        <MobileBottomNav />
+        <AuthProvider>
+          <LikesProvider>
+            <CartProvider>
+              <JsonLd data={buildSiteJsonLd()} />
+              <Header />
+              {children}
+              <CertificationsMarquee />
+              <Footer />
+              <CartDrawer />
+            </CartProvider>
+            <MobileBottomNav />
+          </LikesProvider>
+        </AuthProvider>
         {GA_ID && <GoogleAnalytics gaId={GA_ID} />}
       </body>
     </html>

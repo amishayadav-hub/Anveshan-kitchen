@@ -27,14 +27,14 @@ export default function FaqAccordion({ faqs, renderAnswer, defaultOpen = -1 }: P
           <div key={i} className="rounded-xl overflow-hidden border border-gray-200 bg-gray-50/60">
             <button
               onClick={() => setOpen(isOpen ? -1 : i)}
-              className={`w-full flex items-center justify-between gap-4 text-left px-5 py-4 transition-colors ${
-                isOpen ? "bg-anv-green text-white" : "text-gray-900 hover:bg-gray-100"
+              className={`w-full flex items-center justify-between gap-4 text-left px-4 py-3 transition-colors ${
+                isOpen ? "bg-anv-green text-white" : "text-gray-600 hover:bg-gray-100"
               }`}
             >
-              <span className="font-semibold">
+              <span className="text-[13.5px] font-medium">
                 <span className={isOpen ? "text-white" : "text-anv-green"}>Q.</span> {f.question}
               </span>
-              <span className="shrink-0 text-xl leading-none">{isOpen ? "−" : "+"}</span>
+              <span className="shrink-0 text-lg leading-none">{isOpen ? "−" : "+"}</span>
             </button>
             {isOpen && (
               <div className="px-5 py-4 text-gray-600 leading-relaxed text-sm">

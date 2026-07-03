@@ -1,16 +1,25 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
+import { useRouter } from "next/navigation";
+import { useLikes } from "@/components/likes/LikesProvider";
 
 interface Props {
   name: string;
+  slug: string;
+  image?: string;
   className?: string;
 }
 
-// Single Share action shown at the foot of the recipe description.
-// Uses the native share sheet when available, else copies the link.
-export default function RecipeActions({ name, className }: Props) {
+// Share + Like actions shown at the foot of the recipe description.
+// Share uses the native share sheet when available, else copies the link.
+// The heart saves the recipe to the signed-in user's liked collection.
+export default function RecipeActions({ name, slug, image, className }: Props) {
   const [copied, setCopied] = useState(false);
+  const router = useRouter();
+  const { isLiked, toggle, signedIn } = useLikes();
+  const liked = isLiked(slug);
+  const [busy, setBusy] = useState(false);
 
   async function share() {
     const url = window.location.href;
@@ -27,8 +36,37 @@ export default function RecipeActions({ name, className }: Props) {
     } catch {}
   }
 
+  async function like() {
+    // Liking requires an account — send guests to sign in first.
+    if (!signedIn) {
+      router.push("/account");
+      return;
+    }
+    if (busy) return;
+    setBusy(true);
+    try {
+      await toggle({ slug, name, image });
+    } finally {
+      setBusy(false);
+    }
+  }
+
   return (
-    <div className={`no-print ${className ?? "mt-4"}`}>
+    <div className={`no-print flex items-center gap-0.5 ${className ?? "mt-4"}`}>
+      <button
+        type="button"
+        onClick={like}
+        aria-pressed={liked}
+        aria-label={liked ? "Remove from liked recipes" : "Save to liked recipes"}
+        title={signedIn ? (liked ? "Liked" : "Save to liked") : "Sign in to save"}
+        className={`inline-flex h-9 w-8 items-center justify-center transition-colors disabled:opacity-60 ${
+          liked ? "text-[#7B1E3C]" : "text-[#7B1E3C]/60 hover:text-[#7B1E3C]"
+        }`}
+        disabled={busy}
+      >
+        <HeartIcon filled={liked} />
+      </button>
+
       <button
         type="button"
         onClick={share}
@@ -41,13 +79,13 @@ export default function RecipeActions({ name, className }: Props) {
   );
 }
 
-function Svg({ children }: { children: ReactNode }) {
+function Svg({ children, fill = "none" }: { children: ReactNode; fill?: string }) {
   return (
     <svg
       width="18"
       height="18"
       viewBox="0 0 24 24"
-      fill="none"
+      fill={fill}
       stroke="currentColor"
       strokeWidth="2"
       strokeLinecap="round"
@@ -56,6 +94,15 @@ function Svg({ children }: { children: ReactNode }) {
     >
       {children}
     </svg>
+  );
+}
+
+// Filled red heart when liked; outline otherwise (color comes from currentColor).
+function HeartIcon({ filled }: { filled: boolean }) {
+  return (
+    <Svg fill={filled ? "currentColor" : "none"}>
+      <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+    </Svg>
   );
 }
 

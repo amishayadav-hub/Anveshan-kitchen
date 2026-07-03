@@ -25,7 +25,7 @@ function RecipeCard({ recipe, productMap = {}, priority = false }: Props) {
   return (
     <Link
       href={`/recipes/${recipe.slug}`}
-      className="group flex h-full flex-col bg-white border border-gray-100 hover:border-anv-green/30 hover:shadow-md transition-all duration-200 rounded-xl overflow-hidden [content-visibility:auto] [contain-intrinsic-size:auto_280px]"
+      className="group flex h-full flex-col bg-white border border-anv-green/40 hover:border-anv-green/60 hover:shadow-md transition-all duration-200 rounded-xl overflow-hidden [content-visibility:auto] [contain-intrinsic-size:auto_280px]"
     >
       {/* Image — compact, recipes are supporting content */}
       <div className="relative h-32 w-full bg-anv-cream/30 overflow-hidden">
@@ -51,7 +51,7 @@ function RecipeCard({ recipe, productMap = {}, priority = false }: Props) {
         <h3 className="font-bold text-gray-900 text-[15px] leading-snug group-hover:text-anv-green transition-colors truncate">
           {recipe.name}
         </h3>
-        <p className="text-[11px] text-gray-400 mt-1 line-clamp-2 leading-relaxed min-h-[2.2rem]">
+        <p className="text-[11px] text-gray-600 mt-1 line-clamp-2 leading-relaxed min-h-[2.2rem]">
           {recipe.description}
         </p>
         <p className="text-xs text-gray-500 mt-2 whitespace-nowrap">

@@ -23,7 +23,8 @@ import {
 } from "@/lib/product-highlight";
 import { PRODUCT_PDP } from "@/data/product-pdp";
 import { PRODUCT_SIZES } from "@/data/product-variants";
-import { ClockIcon, UsersIcon, GaugeIcon, UtensilsIcon } from "@/components/ui/icons";
+import { variantMetaFor } from "@/lib/cart-variants";
+import { ClockIcon, UsersIcon } from "@/components/ui/icons";
 
 // Reverse lookup: a selected variantId -> its product handle, so the cart panel
 // can show the right size options for ghee/atta even though the type/variety is
@@ -134,23 +135,22 @@ export default function RecipeView({ recipe, products, categoryLabel, related = 
   const nameFor = (p: AnveshanProduct) => selection[p.id]?.name ?? p.name;
 
   const cartLines: CartLine[] = products
-    .map((p) => ({
-      variantId: selection[p.id]?.variantId ?? p.shopifyVariantId,
-      name: nameFor(p),
-      image: imageFor(p),
-      price: priceFor(p),
-      quantity: 1,
-    }))
+    .map((p) => {
+      const variantId = selection[p.id]?.variantId ?? p.shopifyVariantId;
+      return {
+        variantId,
+        name: nameFor(p),
+        image: imageFor(p),
+        price: priceFor(p),
+        quantity: 1,
+        // Size options for the in-cart switcher — resolves for EVERY product.
+        ...variantMetaFor(variantId, p.id),
+      };
+    })
     .filter((l) => l.variantId);
   const total = products.reduce((sum, p) => sum + priceFor(p), 0);
 
   const totalMin = parseMinutes(recipe.prepTime) + parseMinutes(recipe.cookTime);
-  const difficulty =
-    totalMin <= 30 && recipe.steps.length <= 8
-      ? "Easy"
-      : totalMin <= 60
-        ? "Medium"
-        : "Advanced";
 
   const hasTips = !!recipe.tips?.length;
   const hasFaq = !!recipe.faqs?.length;
@@ -189,7 +189,7 @@ export default function RecipeView({ recipe, products, categoryLabel, related = 
               {/* Title left, Share pinned to the top-right corner */}
               <div className="flex items-start justify-between gap-3">
                 <h1 className="recipe-title break-words">{recipe.name}</h1>
-                <RecipeActions name={recipe.name} className="shrink-0" />
+                <RecipeActions name={recipe.name} slug={recipe.slug} image={recipe.image} className="shrink-0" />
               </div>
               <ReadMore
                 text={recipe.intro || recipe.description}
@@ -199,10 +199,8 @@ export default function RecipeView({ recipe, products, categoryLabel, related = 
                 className="recipe-body mt-2"
               />
               <div className="flex flex-wrap items-center gap-2 mt-4">
-                <TimingChip prepTime={recipe.prepTime} cookTime={recipe.cookTime} total={formatMinutes(totalMin)} />
                 <ServingsChip servings={recipe.servings} multiplier={multiplier} onChange={setMultiplier} />
-                <Chip><GaugeIcon /> {difficulty}</Chip>
-                <Chip><UtensilsIcon /> {categoryLabel}</Chip>
+                <TimingChip prepTime={recipe.prepTime} cookTime={recipe.cookTime} total={formatMinutes(totalMin)} />
               </div>
             </div>
           </header>
@@ -229,11 +227,11 @@ export default function RecipeView({ recipe, products, categoryLabel, related = 
             <h2 className="recipe-heading">How to Make {recipe.name}</h2>
             <ol className="space-y-4">
               {(showAllSteps ? recipe.steps : recipe.steps.slice(0, COLLAPSED_STEPS)).map((step, i) => (
-                <li key={i} className="flex gap-4">
-                  <span className="flex-shrink-0 w-8 h-8 rounded-full bg-anv-green text-white font-bold text-sm flex items-center justify-center">
+                <li key={i} className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-anv-green text-white font-bold text-[11px] flex items-center justify-center">
                     {i + 1}
                   </span>
-                  <p className="recipe-body pt-1">
+                  <p className="recipe-body pt-0.5">
                     {renderStep(step, recipe.anveshanProducts)}
                   </p>
                 </li>
@@ -292,8 +290,10 @@ export default function RecipeView({ recipe, products, categoryLabel, related = 
         {/* ── Right: Anveshan products (image-2 style) ── */}
         {products.length > 0 && (
           <aside id="products" className="scroll-mt-24 lg:sticky lg:top-6 space-y-4">
-            <div className="bg-white rounded-2xl border border-anv-cream-dark shadow-sm overflow-hidden">
-              <div className="bg-anv-green text-white px-5 py-4">
+            {/* No overflow-hidden here: it would clip the size dropdown that opens
+                from a product row. Corners are rounded on the children instead. */}
+            <div className="bg-white rounded-2xl border border-anv-cream-dark shadow-sm">
+              <div className="bg-anv-green text-white px-5 py-4 rounded-t-2xl">
                 <h3 className="font-bold text-base">Shop the Anveshan products</h3>
                 <p className="text-xs text-white/70 mt-0.5">
                   The healthy swaps in this recipe — pure, traceable, farmer-direct.
@@ -401,7 +401,7 @@ export default function RecipeView({ recipe, products, categoryLabel, related = 
               </div>
 
               {/* Trust signals — compact strip under the products */}
-              <div className="border-t border-gray-100 px-4 py-3 grid grid-cols-2 gap-x-3 gap-y-2">
+              <div className="border-t border-gray-100 px-4 py-3 grid grid-cols-2 gap-x-3 gap-y-2 rounded-b-2xl">
                 {TRUST.map((t) => (
                   <div key={t.label} className="flex items-center gap-2 text-xs text-gray-600">
                     <span className="text-anv-green shrink-0">{t.icon}</span>
@@ -476,9 +476,9 @@ function JumpNav({
   }
 
   return (
-    <nav className="no-print sticky top-14 z-20 -mx-4 mb-6 md:mb-8 px-4 py-2 bg-white/90 backdrop-blur supports-[backdrop-filter]:bg-white/75">
+    <nav className="no-print sticky top-14 z-20 -mx-4 mb-5 md:mb-6 px-4 py-2 bg-white/90 backdrop-blur supports-[backdrop-filter]:bg-white/75">
       <HScrollDots
-        className="flex w-max max-w-full gap-1 overflow-x-auto rounded-full border border-anv-green/20 bg-white p-1 no-scrollbar"
+        className="flex w-max max-w-full gap-0.5 overflow-x-auto rounded-full border border-gray-200 bg-white p-0.5 shadow-sm no-scrollbar"
         activeIndex={Math.max(0, links.findIndex((l) => l.id === active))}
       >
         {links.map((l) => {
@@ -489,8 +489,8 @@ function JumpNav({
               type="button"
               onClick={() => jump(l.id)}
               aria-current={isActive ? "true" : undefined}
-              className={`whitespace-nowrap rounded-full px-3.5 py-1.5 text-sm font-medium transition-colors ${
-                isActive ? "bg-anv-green text-white" : "text-anv-green hover:bg-anv-green/10"
+              className={`whitespace-nowrap rounded-full px-3 py-1 text-[13px] font-medium transition-colors ${
+                isActive ? "bg-anv-green text-white shadow-sm" : "text-gray-600 hover:text-anv-green hover:bg-anv-green/5"
               }`}
             >
               {l.label}
@@ -513,8 +513,16 @@ function ServingsChip({
   multiplier: number;
   onChange: (m: number) => void;
 }) {
-  const [open, setOpen] = useState(false);
+  // Start open as a one-time preview on load, then auto-hide (like TimingChip).
+  const [open, setOpen] = useState(true);
   const hovering = useRef(false);
+
+  useEffect(() => {
+    const t = setTimeout(() => {
+      if (!hovering.current) setOpen(false);
+    }, 3000);
+    return () => clearTimeout(t);
+  }, []);
 
   const base = typeof servings === "number" ? servings : parseInt(String(servings).match(/\d+/)?.[0] ?? "", 10);
   const scaled = Number.isFinite(base) ? base * multiplier : null;
@@ -547,41 +555,28 @@ function ServingsChip({
         )}
       </button>
       <div
-        className={`absolute top-full left-0 mt-2 z-30 w-56 bg-white rounded-xl shadow-lg border border-gray-200 p-3.5 space-y-3 transition-all duration-150 ${
+        className={`absolute top-full left-0 mt-1.5 z-30 w-auto bg-white rounded-lg shadow-md border border-gray-200 p-1.5 space-y-1 transition-all duration-150 ${
           open ? "opacity-100 translate-y-0" : "pointer-events-none opacity-0 -translate-y-1"
         }`}
       >
-        <p className="text-xs font-semibold text-anv-green">Scale recipe</p>
-        <div className="inline-flex w-full overflow-hidden rounded-full border border-anv-green/30">
+        <div className="flex gap-1">
           {[1, 2, 3].map((m) => (
             <button
               key={m}
               type="button"
               onClick={() => onChange(m)}
               aria-pressed={multiplier === m}
-              className={`flex-1 px-3 py-2 text-sm font-semibold transition-colors ${
-                multiplier === m ? "bg-anv-green text-white" : "bg-white text-anv-green hover:bg-anv-green/10"
+              className={`rounded-full px-2.5 py-0.5 text-[10px] font-semibold transition-colors ${
+                multiplier === m
+                  ? "bg-anv-green text-white"
+                  : "border border-anv-green/30 text-anv-green hover:bg-anv-green/10"
               }`}
             >
               {m}x
             </button>
           ))}
         </div>
-        {scaled !== null && (
-          <p className="text-xs text-gray-500">
-            Ingredient amounts scaled for{" "}
-            <span className="font-semibold text-gray-700">{scaled} servings</span>.
-          </p>
-        )}
       </div>
-    </span>
-  );
-}
-
-function Chip({ children }: { children: ReactNode }) {
-  return (
-    <span className="inline-flex items-center gap-1.5 text-sm text-gray-600 bg-gray-100 rounded-full px-3 py-1">
-      {children}
     </span>
   );
 }
@@ -589,11 +584,11 @@ function Chip({ children }: { children: ReactNode }) {
 // Total-time chip with a floating time breakdown. Auto-previews once on load,
 // then hides; re-opens on hover or click.
 function TimingChip({ prepTime, cookTime, total }: { prepTime?: string; cookTime?: string; total: string }) {
-  const [open, setOpen] = useState(false);
+  // Start open as a one-time preview on load, then auto-hide.
+  const [open, setOpen] = useState(true);
   const hovering = useRef(false);
 
   useEffect(() => {
-    setOpen(true); // preview the breakdown on first visit…
     const t = setTimeout(() => {
       if (!hovering.current) setOpen(false); // …then hide it
     }, 3000);
@@ -620,11 +615,11 @@ function TimingChip({ prepTime, cookTime, total }: { prepTime?: string; cookTime
         <ClockIcon /> {total}
       </button>
       <div
-        className={`absolute top-full left-0 mt-2 z-30 w-56 bg-white rounded-xl shadow-lg border border-gray-200 p-3.5 space-y-2.5 transition-all duration-150 ${
-          open ? "opacity-100 translate-y-0" : "pointer-events-none opacity-0 -translate-y-1"
+        className={`absolute left-full top-1/2 ml-2 -translate-y-1/2 z-30 w-32 bg-white rounded-lg shadow-md border border-gray-200 p-1.5 space-y-0.5 transition-opacity duration-150 ${
+          open ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
       >
-        <p className="text-xs font-semibold text-anv-green">Time breakdown</p>
+        <p className="text-[9px] font-semibold uppercase tracking-wide text-anv-green">Time breakdown</p>
         <TimeRow label="Prep Time" value={prepTime} />
         <TimeRow label="Cook Time" value={cookTime} />
         <TimeRow label="Total Time" value={total} bold />
@@ -635,7 +630,7 @@ function TimingChip({ prepTime, cookTime, total }: { prepTime?: string; cookTime
 
 function TimeRow({ label, value, bold }: { label: string; value?: string; bold?: boolean }) {
   return (
-    <div className="flex items-center justify-between text-sm">
+    <div className="flex items-center justify-between text-[10px]">
       <span className="text-gray-500">{label}</span>
       <span className={bold ? "font-bold text-anv-green" : "font-medium text-gray-800"}>
         {value || "—"}
