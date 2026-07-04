@@ -6,6 +6,7 @@ import { useState, useRef, useEffect } from "react";
 import CartButton from "@/components/cart/CartButton";
 import HamburgerMenu from "@/components/HamburgerMenu";
 import { SearchIcon } from "@/components/ui/icons";
+import { track } from "@/lib/analytics";
 
 // Slim top header: Anveshan logo + search & cart on the right.
 export default function Header() {
@@ -21,6 +22,7 @@ export default function Header() {
 
   function go() {
     const q = query.trim();
+    if (q) track("search", { search_term: q, source: "header" });
     router.push(q ? `/recipes?q=${encodeURIComponent(q)}` : "/recipes");
     setOpen(false);
   }

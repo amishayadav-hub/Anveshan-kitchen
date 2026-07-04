@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { CartLine } from "@/types";
 import { useCart } from "@/components/cart/CartProvider";
+import { track } from "@/lib/analytics";
 
 interface Props {
   lines: CartLine[];
@@ -16,6 +17,11 @@ export default function AddToCartButton({ lines, label = "Add Anveshan Products 
 
   function handleClick() {
     if (lines.length === 0) return;
+    track("add_to_cart", {
+      source: "pdp_panel",
+      items: lines.length,
+      value: lines.reduce((s, l) => s + l.price * l.quantity, 0),
+    });
     addLines(lines);
     open();
     setAdded(true);

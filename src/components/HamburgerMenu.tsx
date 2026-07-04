@@ -5,6 +5,7 @@ import { createPortal } from "react-dom";
 import Link from "next/link";
 import { GHEE_VARIETY, ATTA_VARIETY } from "@/lib/product-highlight";
 import { PRODUCT_CATALOG } from "@/data/product-catalog";
+import { track } from "@/lib/analytics";
 
 const STORE = "https://www.anveshan.farm";
 
@@ -217,7 +218,10 @@ export default function HamburgerMenu() {
       <button
         ref={triggerRef}
         type="button"
-        onClick={() => setOpen(true)}
+        onClick={() => {
+          track("menu_open");
+          setOpen(true);
+        }}
         aria-label="Open navigation menu"
         aria-haspopup="dialog"
         aria-expanded={open}
@@ -280,7 +284,16 @@ export default function HamburgerMenu() {
                 <ul className="divide-y divide-gray-100 border-y border-gray-100">
                   {PRODUCTS.map((item) => (
                     <li key={item.title}>
-                      <a href={item.href} target="_blank" rel="noopener noreferrer" onClick={close} className={ROW}>
+                      <a
+                        href={item.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={() => {
+                          track("menu_click", { item: item.title, type: "product" });
+                          close();
+                        }}
+                        className={ROW}
+                      >
                         <span className="shrink-0 text-anv-green">{item.icon}</span>
                         <span className="flex-1 text-sm font-semibold">{item.title}</span>
                         <ArrowRight />
@@ -320,7 +333,14 @@ export default function HamburgerMenu() {
                 <ul className="mt-4 divide-y divide-gray-100 border-y border-gray-100">
                   {PAGES.map((item) => (
                     <li key={item.title}>
-                      <Link href={item.href} onClick={close} className={ROW}>
+                      <Link
+                        href={item.href}
+                        onClick={() => {
+                          track("menu_click", { item: item.title, type: "page" });
+                          close();
+                        }}
+                        className={ROW}
+                      >
                         <span className="shrink-0 text-anv-green">{item.icon}</span>
                         <span className="flex-1 text-sm font-semibold">{item.title}</span>
                         <ArrowRight />

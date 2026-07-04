@@ -8,6 +8,7 @@ import RecipeCard from "@/components/recipes/RecipeCard";
 import { CategoryIcon } from "@/components/recipes/CategoryIcon";
 import { useDiet } from "@/components/recipes/DietProvider";
 import HScrollDots from "@/components/ui/HScrollDots";
+import { track } from "@/lib/analytics";
 
 // Short label for the icon chips — drop the " Recipes" suffix.
 const shortLabel = (label: string) => label.replace(/\s+Recipes$/i, "");
@@ -44,8 +45,10 @@ export default function RecipeBrowser({ recipes, productMap, initialCategory, in
     const t = setTimeout(() => {
       const params = new URLSearchParams(searchParams.toString());
       const trimmed = query.trim();
-      if (trimmed) params.set("q", trimmed);
-      else params.delete("q");
+      if (trimmed) {
+        params.set("q", trimmed);
+        track("search", { search_term: trimmed, source: "plp" });
+      } else params.delete("q");
       const qs = params.toString();
       router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
     }, 300);
@@ -73,6 +76,7 @@ export default function RecipeBrowser({ recipes, productMap, initialCategory, in
   function selectCategory(key: string) {
     setCategory(key);
     setSub("all"); // reset sub whenever top-level changes
+    track("filter_category", { category: key });
   }
 
   // Clear every filter (q + category + sub + diet) and wipe the URL params.

@@ -5,6 +5,7 @@ import Image from "next/image";
 import { AnveshanProduct, CartLine } from "@/types";
 import { useCart } from "@/components/cart/CartProvider";
 import { variantMetaFor } from "@/lib/cart-variants";
+import { track } from "@/lib/analytics";
 
 interface Props {
   products: AnveshanProduct[];
@@ -34,6 +35,11 @@ export default function BuyRecipeButton({ products }: Props) {
       })
       .filter((l) => l.variantId);
     if (lines.length === 0) return;
+    track("add_to_cart", {
+      source: "recipe_card",
+      items: lines.length,
+      value: lines.reduce((s, l) => s + l.price * l.quantity, 0),
+    });
     addLines(lines);
     open();
     setAdded(true);

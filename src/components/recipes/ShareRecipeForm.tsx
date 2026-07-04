@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { AnveshanProduct } from "@/types";
 import { submitRecipe } from "@/lib/submissions";
+import { track } from "@/lib/analytics";
 
 interface Props {
   products: AnveshanProduct[];
@@ -35,6 +36,7 @@ export default function ShareRecipeForm({ products }: Props) {
     setState("loading");
     try {
       await submitRecipe({ name: name.trim(), city: city.trim(), recipeName: recipeName.trim(), products: selected, story: story.trim() });
+      track("share_recipe_submit", { recipe: recipeName.trim(), products: selected.length });
       setState("done");
     } catch {
       setState("error");

@@ -6,6 +6,7 @@ import { getAllRecipesClient, getAllProductsClient } from "@/lib/recipes";
 import { Recipe, AnveshanProduct, CartLine } from "@/types";
 import { useCart } from "./CartProvider";
 import { variantMetaFor } from "@/lib/cart-variants";
+import { track } from "@/lib/analytics";
 
 // Small "You might also like" recipe strip shown in the cart. Each tiny card
 // adds that recipe's Anveshan products to the cart.
@@ -48,7 +49,15 @@ export default function CartRecommendations() {
         };
       })
       .filter((l) => l.variantId);
-    if (lines.length) addLines(lines);
+    if (lines.length) {
+      track("add_to_cart", {
+        source: "cart_recommendation",
+        recipe: r.name,
+        items: lines.length,
+        value: lines.reduce((s, l) => s + l.price * l.quantity, 0),
+      });
+      addLines(lines);
+    }
   }
 
   return (

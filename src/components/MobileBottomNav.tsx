@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 import { useAuth } from "@/components/auth/AuthProvider";
+import { track } from "@/lib/analytics";
 
 // Brand palette (natural/organic food brand).
 const GREEN = "#245b49";
@@ -104,6 +105,7 @@ export default function MobileBottomNav() {
             <li key={t.href} className="relative flex-1 text-center" style={{ flex: "1 1 0" }}>
               <Link
                 href={t.href}
+                onClick={() => track("bottom_nav_click", { tab: t.label })}
                 aria-current={active ? "page" : undefined}
                 className="flex min-h-[56px] flex-col items-center justify-center gap-1 py-1.5"
               >

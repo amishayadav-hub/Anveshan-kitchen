@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { AnveshanProduct, CartLine } from "@/types";
 import { useCart } from "@/components/cart/CartProvider";
+import { track } from "@/lib/analytics";
 
 interface Props {
   products: AnveshanProduct[];
@@ -21,6 +22,7 @@ export default function StickyCartBar({ products, lines, total, recipeName }: Pr
 
   function handleClick() {
     if (lines.length === 0) return;
+    track("add_to_cart", { source: "sticky_bar", items: lines.length, value: total });
     addLines(lines);
     open();
     setAdded(true);

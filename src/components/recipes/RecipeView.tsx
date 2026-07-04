@@ -24,6 +24,7 @@ import {
 import { PRODUCT_PDP } from "@/data/product-pdp";
 import { PRODUCT_SIZES } from "@/data/product-variants";
 import { variantMetaFor } from "@/lib/cart-variants";
+import { track } from "@/lib/analytics";
 import { ClockIcon, UsersIcon } from "@/components/ui/icons";
 
 // Reverse lookup: a selected variantId -> its product handle, so the cart panel
@@ -113,6 +114,7 @@ export default function RecipeView({ recipe, products, categoryLabel, related = 
         name: name ?? prev[productId]?.name,
       },
     }));
+    track("select_variant", { product: productId, variant_id: variantId, price });
   }
 
   // Which product's size popup is open in the "Shop the Anveshan products" panel.

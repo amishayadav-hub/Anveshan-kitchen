@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useCart } from "./CartProvider";
 import { buildCartPermalink } from "@/lib/shopify-cart";
 import CartRecommendations from "./CartRecommendations";
+import { track } from "@/lib/analytics";
 
 export default function CartDrawer() {
   const { lines, isOpen, close, subtotal, count, setQty, changeVariant, remove } = useCart();
@@ -13,6 +14,7 @@ export default function CartDrawer() {
 
   function checkout() {
     if (lines.length === 0) return;
+    track("begin_checkout", { value: subtotal, items: count });
     const url = buildCartPermalink(
       lines.map((l) => ({ shopifyVariantId: l.variantId, quantity: l.quantity, productName: l.name }))
     );

@@ -3,8 +3,10 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import {
   createUserWithEmailAndPassword,
+  GoogleAuthProvider,
   onAuthStateChanged,
   signInWithEmailAndPassword,
+  signInWithPopup,
   signOut,
   updateProfile,
   type User,
@@ -17,6 +19,7 @@ interface AuthContextValue {
   loading: boolean;
   register: (name: string, email: string, password: string) => Promise<void>;
   login: (email: string, password: string) => Promise<void>;
+  loginWithGoogle: () => Promise<void>;
   logout: () => Promise<void>;
 }
 
@@ -54,12 +57,17 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
     await signInWithEmailAndPassword(auth, email, password);
   }
 
+  async function loginWithGoogle() {
+    // Popup flow. onAuthStateChanged sets the user on success.
+    await signInWithPopup(auth, new GoogleAuthProvider());
+  }
+
   async function logout() {
     await signOut(auth);
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, register, login, logout }}>
+    <AuthContext.Provider value={{ user, loading, register, login, loginWithGoogle, logout }}>
       {children}
     </AuthContext.Provider>
   );

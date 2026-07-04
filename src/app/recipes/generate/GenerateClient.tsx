@@ -6,6 +6,7 @@ import IngredientTagInput from "@/components/ui/IngredientTagInput";
 import GeneratedRecipeCard from "@/components/recipes/GeneratedRecipeCard";
 import JsonLd from "@/components/JsonLd";
 import { buildGeneratedRecipesJsonLd } from "@/lib/seo";
+import { track } from "@/lib/analytics";
 import Link from "next/link";
 import {
   SparklesIcon,
@@ -65,6 +66,7 @@ export default function GenerateClient() {
     setError("");
     setLoading(true);
     setResult(null);
+    track("generate_recipe", { query: query.trim() || undefined, ingredients: ingredients.length, language });
 
     const fallback = hi ? "Kuch galat ho gaya — dobara try karo." : "Something went wrong. Try again.";
     const ctrl = new AbortController();

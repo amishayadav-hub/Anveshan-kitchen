@@ -1,12 +1,16 @@
 "use client";
 
 import { useCart } from "./CartProvider";
+import { track } from "@/lib/analytics";
 
 export default function CartButton() {
   const { count, open } = useCart();
   return (
     <button
-      onClick={open}
+      onClick={() => {
+        track("open_cart", { source: "header", count });
+        open();
+      }}
       className="relative flex h-11 w-11 items-center justify-center text-anv-green hover:text-anv-green-dark transition-colors"
       aria-label={`Open cart${count ? `, ${count} items` : ""}`}
     >

@@ -4,6 +4,7 @@ import { memo } from "react";
 import { Recipe, AnveshanProduct } from "@/types";
 import { getCategoryLabel, getSubLabel } from "@/lib/categories";
 import BuyRecipeButton from "@/components/ui/BuyRecipeButton";
+import { track } from "@/lib/analytics";
 
 interface Props {
   recipe: Recipe;
@@ -25,6 +26,7 @@ function RecipeCard({ recipe, productMap = {}, priority = false }: Props) {
   return (
     <Link
       href={`/recipes/${recipe.slug}`}
+      onClick={() => track("select_recipe", { slug: recipe.slug, name: recipe.name, category: recipe.category })}
       className="group flex h-full flex-col bg-white border border-anv-green/40 hover:border-anv-green/60 hover:shadow-md transition-all duration-200 rounded-xl overflow-hidden [content-visibility:auto] [contain-intrinsic-size:auto_280px]"
     >
       {/* Image — compact, recipes are supporting content */}

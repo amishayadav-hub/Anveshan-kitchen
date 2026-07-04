@@ -3,6 +3,7 @@
 import { useState, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { useLikes } from "@/components/likes/LikesProvider";
+import { track } from "@/lib/analytics";
 
 interface Props {
   name: string;
@@ -23,7 +24,9 @@ export default function RecipeActions({ name, slug, image, className }: Props) {
 
   async function share() {
     const url = window.location.href;
-    if (navigator.share) {
+    const canNativeShare = typeof navigator.share === "function";
+    track("share", { content_type: "recipe", item_id: slug, method: canNativeShare ? "native" : "copy" });
+    if (canNativeShare) {
       try {
         await navigator.share({ title: name, url });
       } catch {}
@@ -39,11 +42,13 @@ export default function RecipeActions({ name, slug, image, className }: Props) {
   async function like() {
     // Liking requires an account — send guests to sign in first.
     if (!signedIn) {
+      track("like_recipe", { item_id: slug, signed_in: false });
       router.push("/account");
       return;
     }
     if (busy) return;
     setBusy(true);
+    track("like_recipe", { item_id: slug, liked: !liked, signed_in: true });
     try {
       await toggle({ slug, name, image });
     } finally {
