@@ -93,6 +93,7 @@ export default function CartDrawer() {
                                 <button
                                   key={v.variantId}
                                   onClick={() => {
+                                    track("cart_variant_swap", { source: v.label });
                                     changeVariant(l.variantId, v);
                                     setEditing(null);
                                   }}
@@ -118,7 +119,10 @@ export default function CartDrawer() {
                     <div className="flex items-center justify-between gap-3 mt-2">
                       <div className="flex items-center border border-gray-200 rounded-full overflow-hidden shrink-0">
                         <button
-                          onClick={() => setQty(l.variantId, l.quantity - 1)}
+                          onClick={() => {
+                            track("cart_qty_change", { source: "decrease" });
+                            setQty(l.variantId, l.quantity - 1);
+                          }}
                           className="w-7 h-7 text-gray-600 hover:bg-gray-50"
                           aria-label="Decrease quantity"
                         >
@@ -126,7 +130,10 @@ export default function CartDrawer() {
                         </button>
                         <span className="w-6 text-center text-xs">{l.quantity}</span>
                         <button
-                          onClick={() => setQty(l.variantId, l.quantity + 1)}
+                          onClick={() => {
+                            track("cart_qty_change", { source: "increase" });
+                            setQty(l.variantId, l.quantity + 1);
+                          }}
                           className="w-7 h-7 text-gray-600 hover:bg-gray-50"
                           aria-label="Increase quantity"
                         >
@@ -134,7 +141,10 @@ export default function CartDrawer() {
                         </button>
                       </div>
                       <button
-                        onClick={() => remove(l.variantId)}
+                        onClick={() => {
+                          track("cart_remove", { source: "cart" });
+                          remove(l.variantId);
+                        }}
                         aria-label="Remove item"
                         title="Remove"
                         className="p-2 text-gray-500 transition-colors hover:text-red-600"

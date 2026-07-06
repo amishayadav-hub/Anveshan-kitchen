@@ -8,6 +8,6 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
   const { id } = await params;
   const body = (await req.json().catch(() => ({}))) as { saved?: boolean };
   const saved = body.saved !== false;
-  const saves = savePost(id, saved);
+  const saves = await savePost(id, saved);
   return NextResponse.json({ ok: true, id, saved, saves });
 }

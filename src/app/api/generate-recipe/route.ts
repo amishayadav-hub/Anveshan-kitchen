@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { generateRecipes, Language, GeneratedRecipe, GroundingHit } from "@/lib/ai-providers";
 import { searchRecipes } from "@/lib/semantic-search";
 import { rateLimit, clientIp } from "@/lib/rate-limit";
+import { getGeneratorSettings } from "@/lib/settings";
 
 export const runtime = "nodejs";
 
@@ -14,9 +15,8 @@ function sanitize(s: string): string {
   return s.replace(/\p{Cc}/gu, " ").replace(/\s+/g, " ").trim();
 }
 
-// Cosine floor for a dataset row to be trusted enough to GROUND generation.
-// (We no longer serve rows raw above a threshold — we generate, grounded.)
-const GROUNDING_THRESHOLD = 0.5;
+// Cosine floor for a dataset row to be trusted enough to GROUND generation is
+// now admin-configurable via settings.groundingThreshold (see getGeneratorSettings).
 
 // Branded dataset ingredient → our internal productId (for the degraded fallback).
 const BRAND_TO_PID: Record<string, string> = {
@@ -59,7 +59,16 @@ function hitToDegradedRecipe(
 }
 
 export async function POST(req: NextRequest) {
-  const limit = rateLimit(`gen:${clientIp(req)}`, 15, 60_000);
+  // Admin-editable generator settings (enable/disable, rate limit, grounding).
+  const settings = await getGeneratorSettings();
+  if (!settings.enabled) {
+    return NextResponse.json(
+      { error: "The recipe generator is temporarily unavailable." },
+      { status: 503 }
+    );
+  }
+
+  const limit = rateLimit(`gen:${clientIp(req)}`, settings.rateLimitPerMin, 60_000);
   if (!limit.ok) {
     return NextResponse.json(
       { error: "Too many requests. Please wait a moment and try again." },
@@ -94,7 +103,7 @@ export async function POST(req: NextRequest) {
     try {
       const q = (dish || items.join(" ")).trim();
       topHits = await searchRecipes(q, 5);
-      if (topHits.length && topHits[0].score >= GROUNDING_THRESHOLD) {
+      if (topHits.length && topHits[0].score >= settings.groundingThreshold) {
         const h = topHits[0];
         grounding = { name: h.name, ingredients: h.ingredients, steps: h.steps, location: (h as { location?: string }).location };
       }

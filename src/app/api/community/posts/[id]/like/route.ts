@@ -9,6 +9,6 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
   const { id } = await params;
   const body = (await req.json().catch(() => ({}))) as { liked?: boolean };
   const liked = body.liked !== false;
-  const likes = likePost(id, liked);
+  const likes = await likePost(id, liked);
   return NextResponse.json({ ok: true, id, liked, likes });
 }

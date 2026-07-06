@@ -41,6 +41,7 @@ export default function Header() {
           <Link
             href="/recipes"
             aria-label="Anveshan Kitchen"
+            onClick={() => track("logo_click", { source: "header" })}
             className={`shrink-0 items-baseline gap-1 ${open ? "hidden" : "flex"}`}
           >
           {/* eslint-disable-next-line @next/next/no-img-element */}

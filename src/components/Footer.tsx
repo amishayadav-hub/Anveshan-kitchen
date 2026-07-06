@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { track } from "@/lib/analytics";
 
 // Replica of the live anveshan.farm footer (links point to the real store).
 const SERVICES = [
@@ -29,7 +30,13 @@ const SOCIAL = [
 
 function FootLink({ href, label }: { href: string; label: string }) {
   return (
-    <a href={href} target="_blank" rel="noopener noreferrer" className="flex items-center min-h-[44px] md:min-h-0 text-white/80 hover:text-white transition-colors">
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      onClick={() => track("footer_link", { source: label })}
+      className="flex items-center min-h-[44px] md:min-h-0 text-white/80 hover:text-white transition-colors"
+    >
       {label}
     </a>
   );
@@ -108,6 +115,7 @@ export default function Footer() {
               href="https://www.anveshan.farm"
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => track("footer_link", { source: "newsletter" })}
               className="flex items-center justify-between w-full max-w-sm rounded-md border border-white/30 px-4 py-3 text-sm text-white/70 hover:border-white/60 transition-colors"
             >
               Email
@@ -130,6 +138,7 @@ export default function Footer() {
               href="https://www.anveshan.farm/pages/contact-us"
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => track("footer_link", { source: "Contact Us (button)" })}
               className="inline-flex w-full max-w-[220px] min-h-[44px] items-center justify-center bg-anv-gold text-anv-green font-semibold rounded-full px-6 py-2.5 hover:brightness-105 transition"
             >
               Contact Us
@@ -143,6 +152,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={s.label}
+                  onClick={() => track("social_click", { source: s.label })}
                   className="w-11 h-11 rounded-full bg-anv-gold text-anv-green flex items-center justify-center hover:brightness-105 transition"
                 >
                   {s.icon}
@@ -190,6 +200,7 @@ function StoreBadge({
       href={href}
       target="_blank"
       rel="noopener noreferrer"
+      onClick={() => track("app_store_click", { source: bottom })}
       className="inline-flex items-center gap-2 bg-black rounded-lg px-3 py-2 hover:brightness-110 transition"
     >
       <span className="text-white">{icon}</span>

@@ -5,6 +5,7 @@ import {
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
   onAuthStateChanged,
+  signInAnonymously,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
@@ -14,7 +15,14 @@ import {
 import { auth } from "@/lib/firebase";
 
 interface AuthContextValue {
+  /** The signed-in, NON-anonymous user (null when only an anonymous session exists). */
   user: User | null;
+  /**
+   * Stable Firebase uid for the current visitor — present even for anonymous
+   * sessions. Used for per-user analytics (e.g. the recipe-generator funnel).
+   * Distinct from `user`, which stays null until a real sign-in.
+   */
+  uid: string | null;
   /** True until the first auth-state check resolves — avoids a login/dashboard flash. */
   loading: boolean;
   register: (name: string, email: string, password: string) => Promise<void>;
@@ -33,13 +41,29 @@ export function useAuth() {
 
 export default function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
+  const [uid, setUid] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   // Firebase restores any persisted session, then fires here. Keeps the user
-  // signed in across refreshes and syncs sign-out across tabs.
+  // signed in across refreshes and syncs sign-out across tabs. When there's no
+  // session at all, we create an ANONYMOUS one so every visitor has a stable
+  // uid for analytics — while `user` stays null (anonymous ≠ signed in), so all
+  // existing "is the user signed in?" checks behave exactly as before.
   useEffect(() => {
-    const unsub = onAuthStateChanged(auth, (u) => {
-      setUser(u);
+    const unsub = onAuthStateChanged(auth, async (u) => {
+      if (!u) {
+        try {
+          await signInAnonymously(auth); // refires this listener with the anon user
+          return;
+        } catch {
+          setUser(null);
+          setUid(null);
+          setLoading(false);
+          return;
+        }
+      }
+      setUid(u.uid);
+      setUser(u.isAnonymous ? null : u);
       setLoading(false);
     });
     return unsub;
@@ -51,6 +75,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
     if (displayName) await updateProfile(cred.user, { displayName });
     // updateProfile doesn't re-fire onAuthStateChanged, so push the fresh user.
     setUser({ ...cred.user });
+    setUid(cred.user.uid);
   }
 
   async function login(email: string, password: string) {
@@ -67,7 +92,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, register, login, loginWithGoogle, logout }}>
+    <AuthContext.Provider value={{ user, uid, loading, register, login, loginWithGoogle, logout }}>
       {children}
     </AuthContext.Provider>
   );

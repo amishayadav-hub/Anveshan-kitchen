@@ -7,6 +7,7 @@ import ReadMore from "@/components/recipes/ReadMore";
 import { useCart } from "@/components/cart/CartProvider";
 import { generatedShopLines } from "@/lib/generated-cart";
 import { highlightProductMentions } from "@/lib/product-highlight";
+import { track } from "@/lib/analytics";
 import { ClockIcon, FlameIcon, UsersIcon, UtensilsIcon, SparklesIcon } from "@/components/ui/icons";
 
 // How many ingredients / steps to show before the "See all" toggle.
@@ -18,7 +19,19 @@ function brandName(name: string): string {
   return /^anveshan\b/i.test(t) ? t : `Anveshan ${t}`;
 }
 
-export default function GeneratedRecipeCard({ recipe, index, total }: { recipe: GeneratedRecipe; index?: number; total?: number }) {
+export default function GeneratedRecipeCard({
+  recipe,
+  index,
+  total,
+  onEngage,
+}: {
+  recipe: GeneratedRecipe;
+  index?: number;
+  total?: number;
+  // Fired when the visitor engages this specific variation (e.g. adds it to
+  // cart) — powers the per-user generator funnel analytics.
+  onEngage?: (action: "add_to_cart") => void;
+}) {
   const providerLabel = /anveshan/i.test(recipe.provider) ? "Anveshan Collection" : "AI-crafted";
 
   const [showAllIngredients, setShowAllIngredients] = useState(false);
@@ -31,6 +44,8 @@ export default function GeneratedRecipeCard({ recipe, index, total }: { recipe: 
   const { lines: cartLines, total: cartTotal } = generatedShopLines(recipe.anveshanProducts || []);
 
   function handleAddToCart() {
+    onEngage?.("add_to_cart"); // funnel: which generated variation was chosen
+    track("add_to_cart", { source: "generated_recipe", items: cartLines.length, value: cartTotal });
     addLines(cartLines);
     open();
     setAdded(true);

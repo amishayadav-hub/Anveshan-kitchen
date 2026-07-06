@@ -7,6 +7,8 @@ import GeneratedRecipeCard from "@/components/recipes/GeneratedRecipeCard";
 import JsonLd from "@/components/JsonLd";
 import { buildGeneratedRecipesJsonLd } from "@/lib/seo";
 import { track } from "@/lib/analytics";
+import { useAuth } from "@/components/auth/AuthProvider";
+import { generatedShopLines } from "@/lib/generated-cart";
 import Link from "next/link";
 import {
   SparklesIcon,
@@ -50,6 +52,47 @@ export default function GenerateClient() {
   const canGenerate = query.trim().length > 0 || ingredients.length > 0;
   const resultsRef = useRef<HTMLDivElement | null>(null);
 
+  // Per-user funnel tracking: a stable visitor uid (anonymous or signed in) +
+  // a per-tab session id, linking the keyword searched to the variation clicked.
+  const { uid } = useAuth();
+  const sessionIdRef = useRef<string>("");
+  if (!sessionIdRef.current) {
+    sessionIdRef.current =
+      typeof crypto !== "undefined" && crypto.randomUUID
+        ? crypto.randomUUID()
+        : `s-${Math.random().toString(36).slice(2)}`;
+  }
+  const generateEventIdRef = useRef<string | null>(null);
+
+  function postEvent(payload: Record<string, unknown>) {
+    return fetch("/api/events", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ uid: uid ?? "anon", sessionId: sessionIdRef.current, ...payload }),
+      keepalive: true,
+    });
+  }
+
+  // Logs which generated variation the visitor engaged, linked to the generate
+  // event that produced it.
+  function logVariationClick(
+    v: GeneratedRecipeSet["variations"][number],
+    index: number,
+    action: "add_to_cart" | "expand"
+  ) {
+    const products = v.anveshanProducts ?? [];
+    const { total } = generatedShopLines(products);
+    postEvent({
+      type: "variation_click",
+      generateEventId: generateEventIdRef.current,
+      variationIndex: index,
+      variationName: v.name,
+      products,
+      subtotal: total,
+      action,
+    }).catch(() => {});
+  }
+
   // Slide to the generated recipes as soon as they arrive.
   useEffect(() => {
     if (result && result.variations.length > 0) {
@@ -82,6 +125,25 @@ export default function GenerateClient() {
       if (!res.ok || !data) throw new Error(data?.error || fallback);
       setResult(data);
       setDirty(false); // input now matches the on-screen result
+
+      // Log the funnel "generate" event (the keyword the visitor searched) and
+      // remember its id so variation clicks can link back to it.
+      generateEventIdRef.current = null;
+      try {
+        const evRes = await postEvent({
+          type: "generate",
+          query: query.trim(),
+          ingredients,
+          language,
+          variationsReturned: (data.variations ?? []).map(
+            (v: GeneratedRecipeSet["variations"][number]) => v.name
+          ),
+        });
+        const ev = await evRes.json().catch(() => null);
+        if (ev?.id) generateEventIdRef.current = ev.id;
+      } catch {
+        /* funnel logging is best-effort */
+      }
     } catch (e) {
       setError(e instanceof Error && e.message && e.name !== "AbortError" ? e.message : fallback);
     } finally {
@@ -343,7 +405,13 @@ export default function GenerateClient() {
           <div className="space-y-4 sm:space-y-8">
             {result.variations.map((v, i) => (
               <div key={`${v.name}-${i}`}>
-                <VariantBlock recipe={v} index={i} total={result.variations.length} first={i === 0} />
+                <VariantBlock
+                  recipe={v}
+                  index={i}
+                  total={result.variations.length}
+                  first={i === 0}
+                  onEngage={(action) => logVariationClick(v, i, action)}
+                />
               </div>
             ))}
           </div>
@@ -396,20 +464,36 @@ function VariantBlock({
   index,
   total,
   first,
+  onEngage,
 }: {
   recipe: GeneratedRecipeSet["variations"][number];
   index: number;
   total: number;
   first: boolean;
+  onEngage: (action: "add_to_cart" | "expand") => void;
 }) {
   const [open, setOpen] = useState(false);
-  if (first) return <GeneratedRecipeCard recipe={recipe} index={index} total={total} />;
+  if (first)
+    return (
+      <GeneratedRecipeCard
+        recipe={recipe}
+        index={index}
+        total={total}
+        onEngage={() => onEngage("add_to_cart")}
+      />
+    );
 
   return (
     <div>
       <button
         type="button"
-        onClick={() => setOpen((o) => !o)}
+        onClick={() =>
+          setOpen((o) => {
+            const next = !o;
+            if (next) onEngage("expand"); // opening a variation is engagement
+            return next;
+          })
+        }
         aria-expanded={open}
         className="sm:hidden w-full flex items-center justify-between gap-3 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm text-left"
       >
@@ -420,7 +504,12 @@ function VariantBlock({
         <ChevronDownIcon className={`shrink-0 h-5 w-5 text-anv-green transition-transform ${open ? "rotate-180" : ""}`} />
       </button>
       <div className={`${open ? "block mt-4" : "hidden"} sm:block sm:mt-0`}>
-        <GeneratedRecipeCard recipe={recipe} index={index} total={total} />
+        <GeneratedRecipeCard
+          recipe={recipe}
+          index={index}
+          total={total}
+          onEngage={() => onEngage("add_to_cart")}
+        />
       </div>
     </div>
   );

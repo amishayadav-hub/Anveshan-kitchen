@@ -81,6 +81,31 @@ function ArrowRight() {
   );
 }
 
+// ── Social icons (footer) ────────────────────────────────────────────────────
+const XIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.66l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+  </svg>
+);
+const FacebookIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.68.24 2.68.24v2.97h-1.51c-1.49 0-1.96.93-1.96 1.89v2.25h3.33l-.53 3.49h-2.8V24C19.61 23.1 24 18.1 24 12.07z" />
+  </svg>
+);
+const InstagramIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <rect x="2" y="2" width="20" height="20" rx="5" />
+    <circle cx="12" cy="12" r="4" />
+    <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+  </svg>
+);
+const MailIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <rect x="2" y="4" width="20" height="16" rx="2" />
+    <path d="m22 6-10 7L2 6" />
+  </svg>
+);
+
 // ── Menu data ────────────────────────────────────────────────────────────────
 interface Chip {
   label: string;
@@ -349,6 +374,43 @@ export default function HamburgerMenu() {
                   ))}
                 </ul>
               </nav>
+
+              {/* Footer: account, Anveshan Farm store, and social links */}
+              <div className="mt-auto border-t border-gray-100 bg-gray-50/60 px-4 py-3">
+                <Link
+                  href="/account"
+                  onClick={() => {
+                    track("menu_click", { item: "Log in", type: "page" });
+                    close();
+                  }}
+                  className="block py-1.5 text-sm font-medium text-gray-700 hover:text-anv-green"
+                >
+                  Log in
+                </Link>
+                <a
+                  href={STORE}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => track("menu_click", { item: "Anveshan Farm", type: "external" })}
+                  className="block py-1.5 text-sm font-medium text-gray-700 hover:text-anv-green"
+                >
+                  Anveshan Farm website ↗
+                </a>
+                <div className="mt-2 flex items-center gap-4 text-gray-700">
+                  <a href="https://x.com/anveshan_farm" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)" onClick={() => track("social_click", { source: "x" })} className="transition-colors hover:text-anv-green">
+                    <XIcon />
+                  </a>
+                  <a href="https://www.facebook.com/anveshanfarm" target="_blank" rel="noopener noreferrer" aria-label="Facebook" onClick={() => track("social_click", { source: "facebook" })} className="transition-colors hover:text-anv-green">
+                    <FacebookIcon />
+                  </a>
+                  <a href="https://www.instagram.com/anveshan.farm" target="_blank" rel="noopener noreferrer" aria-label="Instagram" onClick={() => track("social_click", { source: "instagram" })} className="transition-colors hover:text-anv-green">
+                    <InstagramIcon />
+                  </a>
+                  <a href="mailto:support@anveshan.farm" aria-label="Email" onClick={() => track("social_click", { source: "email" })} className="transition-colors hover:text-anv-green">
+                    <MailIcon />
+                  </a>
+                </div>
+              </div>
             </aside>
           </>,
           document.body

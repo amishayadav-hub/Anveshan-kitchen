@@ -12,12 +12,11 @@ const nextConfig: NextConfig = {
   },
   images: {
     formats: ["image/avif", "image/webp"],
-    remotePatterns: [
-      { protocol: "https", hostname: "upload.wikimedia.org" },
-      { protocol: "https", hostname: "images.unsplash.com" },
-      { protocol: "https", hostname: "cdn.shopify.com" },
-      { protocol: "https", hostname: "www.anveshan.farm" },
-    ],
+    // Admins can paste any hosted CDN URL for recipe/product/community images
+    // and it renders live (the "**" pattern allows any HTTPS host). This keeps
+    // next/image optimization. To tighten security later, replace "**" with an
+    // explicit allowlist of approved CDNs (requires a redeploy per new host).
+    remotePatterns: [{ protocol: "https", hostname: "**" }],
   },
 };
 
