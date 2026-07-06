@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
+import { bustCache } from "@/lib/community-store";
 
 export const runtime = "nodejs";
 
@@ -28,6 +29,10 @@ export async function POST(req: NextRequest) {
     // Literal paths (e.g. /recipes/besan-ladoo) need no type argument.
     revalidatePath(path);
   }
+
+  // Also clear the community feed's in-memory cache so Real Peeps edits made in
+  // the admin dashboard show up immediately instead of after the 30s TTL.
+  bustCache();
 
   return NextResponse.json({ revalidated: paths });
 }

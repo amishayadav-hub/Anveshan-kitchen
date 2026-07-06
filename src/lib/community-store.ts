@@ -168,3 +168,6 @@ export async function sharePost(id: string): Promise<number> {
   shareCounts.set(key, n);
   return n;
 }
+
+export function bustCache() { cache = null; }
+
