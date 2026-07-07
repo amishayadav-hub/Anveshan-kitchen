@@ -1,12 +1,12 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Keep Transformers.js + its native onnxruntime, and firebase-admin (gRPC /
-  // native @google-cloud deps) out of the bundler; load them as real Node modules
-  // at runtime. Bundling firebase-admin under Turbopack breaks its dynamic
-  // requires and 500s the /api/track, /api/events, /api/revalidate + community
-  // routes that use the Admin SDK.
-  serverExternalPackages: ["@huggingface/transformers", "firebase-admin", "@google-cloud/firestore"],
+  // Keep Transformers.js + its native onnxruntime out of the bundler; load it as
+  // a real Node module at runtime in the /api/search route.
+  // NOTE: firebase-admin is pinned to v12 (see package.json) — v13/14 pull
+  // jose@6 (ESM-only) which crashes the externalized serverless runtime with
+  // ERR_REQUIRE_ESM. v12 uses jose@4 (CJS). Don't upgrade without checking that.
+  serverExternalPackages: ["@huggingface/transformers"],
   // Ensure the recipe dataset + embeddings index are bundled into the serverless
   // functions that read them at runtime (Next won't trace process.cwd() reads).
   outputFileTracingIncludes: {
