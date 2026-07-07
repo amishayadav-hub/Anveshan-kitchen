@@ -42,7 +42,7 @@ export default function Header() {
             href="/recipes"
             aria-label="Anveshan Kitchen"
             onClick={() => track("logo_click", { source: "header" })}
-            className={`shrink-0 items-baseline gap-1 ${open ? "hidden" : "flex"}`}
+            className={`shrink-0 items-end gap-[3px] ${open ? "hidden" : "flex"}`}
           >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
@@ -52,7 +52,13 @@ export default function Header() {
             height={28}
             className="h-4 w-auto"
           />
-            <span className="text-anv-green font-medium text-sm lowercase tracking-tight">kitchen</span>
+            {/* "kitchen" rendered in the brand font to match the "anveshan" wordmark */}
+            <span
+              className="relative -top-px text-[15px] font-semibold leading-none tracking-tight text-[#235A49]"
+              style={{ fontFamily: "var(--font-brand), system-ui, sans-serif" }}
+            >
+              kitchen
+            </span>
           </Link>
         </div>
 

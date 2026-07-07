@@ -59,6 +59,15 @@ export default function ReelPost({ post, active, liked, likeCount, onLike, onSha
     <article className="relative h-full w-full snap-start overflow-hidden bg-black text-white">
       <ImageCarousel images={post.images} alt={post.title} mount={active} />
 
+      {/* When the recipe caption is expanded ("more"), blur + dim the photo so
+          the recipe text reads clearly. Sits above the image, below the content. */}
+      <div
+        className={`pointer-events-none absolute inset-0 z-[5] transition-all duration-300 ${
+          expanded ? "bg-black/40 backdrop-blur-md" : "bg-transparent backdrop-blur-0"
+        }`}
+        aria-hidden="true"
+      />
+
       {/* Scrims for legibility */}
       <div className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/50 to-transparent" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-3/4 bg-gradient-to-t from-black/85 via-black/45 to-transparent" />

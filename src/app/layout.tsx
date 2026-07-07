@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Roboto_Slab, Figtree } from "next/font/google";
+import { Geist, Geist_Mono, Roboto_Slab, Figtree, Quicksand } from "next/font/google";
 import "./globals.css";
 import { SITE_URL, SITE_NAME, buildSiteJsonLd } from "@/lib/seo";
 import JsonLd from "@/components/JsonLd";
@@ -32,6 +32,15 @@ const robotoSlab = Roboto_Slab({
   variable: "--font-roboto-slab",
   subsets: ["latin"],
   weight: ["400", "600"],
+});
+
+// Brand wordmark font — closest match to the "anveshan" logo (rounded geometric,
+// single-story a). Used to render "kitchen" so it matches the logo image.
+// If a font-matcher (WhatTheFont / Matcherator) IDs a different face, swap this.
+const brand = Quicksand({
+  variable: "--font-brand",
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
 });
 
 const figtree = Figtree({
@@ -77,7 +86,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${robotoSlab.variable} ${figtree.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${robotoSlab.variable} ${figtree.variable} ${brand.variable} h-full antialiased`}
     >
       {/* pb on mobile so page content/footer clears the fixed bottom tab bar */}
       <body className="min-h-full flex flex-col pb-[56px] md:pb-0">

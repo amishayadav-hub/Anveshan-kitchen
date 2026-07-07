@@ -281,14 +281,19 @@ export default function HamburgerMenu() {
               }`}
             >
               <div className="flex items-center justify-between border-b border-gray-100 px-4 py-3">
-                <span className="flex items-baseline gap-1">
+                <span className="flex items-end gap-[3px]">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src="https://cdn.shopify.com/s/files/1/0270/3346/9006/files/anveshan-logo-updates-register-mark.png?v=1728463199"
                     alt="Anveshan"
                     className="h-4 w-auto"
                   />
-                  <span className="text-anv-green font-medium text-sm lowercase tracking-tight">kitchen</span>
+                  <span
+                    className="relative -top-px text-[15px] font-semibold leading-none tracking-tight text-[#235A49]"
+                    style={{ fontFamily: "var(--font-brand), system-ui, sans-serif" }}
+                  >
+                    kitchen
+                  </span>
                 </span>
                 <button
                   type="button"
