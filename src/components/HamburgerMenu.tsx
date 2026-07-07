@@ -6,6 +6,7 @@ import Link from "next/link";
 import { GHEE_VARIETY, ATTA_VARIETY } from "@/lib/product-highlight";
 import { PRODUCT_CATALOG } from "@/data/product-catalog";
 import { track } from "@/lib/analytics";
+import { withUtm } from "@/lib/utm";
 
 const STORE = "https://www.anveshan.farm";
 
@@ -310,7 +311,7 @@ export default function HamburgerMenu() {
                   {PRODUCTS.map((item) => (
                     <li key={item.title}>
                       <a
-                        href={item.href}
+                        href={withUtm(item.href, "menu")}
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={() => {
@@ -328,7 +329,7 @@ export default function HamburgerMenu() {
                           {item.chips.map((c) => (
                             <a
                               key={c.label}
-                              href={c.href}
+                              href={withUtm(c.href, "menu")}
                               target="_blank"
                               rel="noopener noreferrer"
                               onClick={close}
@@ -388,7 +389,7 @@ export default function HamburgerMenu() {
                   Log in
                 </Link>
                 <a
-                  href={STORE}
+                  href={withUtm(STORE, "menu_footer")}
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => track("menu_click", { item: "Anveshan Farm", type: "external" })}

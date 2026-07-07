@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import type { GheeVariant } from "@/types";
+import { withUtm } from "./utm";
 
 const SHOPIFY_DOMAIN = process.env.NEXT_PUBLIC_SHOPIFY_DOMAIN || "anveshan.farm";
 
@@ -57,7 +58,7 @@ function escapeRe(s: string): string {
 }
 
 export function pdpUrl(handle: string): string {
-  return `https://${SHOPIFY_DOMAIN}/products/${handle}`;
+  return withUtm(`https://${SHOPIFY_DOMAIN}/products/${handle}`, "pdp");
 }
 
 /** PDP URL for an internal productId, or null when there's no live SKU. */

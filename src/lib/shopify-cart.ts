@@ -1,4 +1,5 @@
 import { CartItem } from "@/types";
+import { withUtm } from "./utm";
 
 const SHOPIFY_DOMAIN = process.env.NEXT_PUBLIC_SHOPIFY_DOMAIN || "anveshan.farm";
 
@@ -14,7 +15,7 @@ export function buildCartPermalink(items: CartItem[]): string {
     .filter((i) => i.shopifyVariantId)
     .map((i) => `${i.shopifyVariantId}:${i.quantity || 1}`)
     .join(",");
-  return `https://${SHOPIFY_DOMAIN}/cart/${parts}`;
+  return withUtm(`https://${SHOPIFY_DOMAIN}/cart/${parts}`, "cart");
 }
 
 /**
