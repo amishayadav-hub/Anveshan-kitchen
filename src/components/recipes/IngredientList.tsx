@@ -6,6 +6,7 @@ import { Ingredient, AnveshanProduct, GheeVariant } from "@/types";
 import GheeSelector from "@/components/ui/GheeSelector";
 import AttaSelector from "@/components/ui/AttaSelector";
 import ProductInfoCard from "@/components/recipes/ProductInfoCard";
+import OilSwapNote, { isOilProduct } from "@/components/recipes/OilSwapNote";
 import {
   pdpUrl,
   pdpUrlForProduct,
@@ -222,6 +223,9 @@ export default function IngredientList({ ingredients, products, selection, onSel
                   />
                 </div>
               )}
+
+              {/* Oils are interchangeable — light hint under the oil ingredient. */}
+              {pid && isOilProduct(pid) && <OilSwapNote productId={pid} variant="inline" />}
             </div>
           </li>
         );

@@ -13,6 +13,7 @@ import ReadMore from "@/components/recipes/ReadMore";
 import HScrollDots from "@/components/ui/HScrollDots";
 import RelatedRecipes from "@/components/recipes/RelatedRecipes";
 import ProductInfoCard from "@/components/recipes/ProductInfoCard";
+import OilSwapNote, { isOilProduct } from "@/components/recipes/OilSwapNote";
 import {
   highlightProductMentions,
   PRODUCT_HANDLES,
@@ -384,6 +385,9 @@ export default function RecipeView({ recipe, products, categoryLabel, related = 
                           onClose={() => setOpenProduct(null)}
                         />
                       )}
+
+                      {/* Oils are interchangeable — suggest the other Anveshan oils. */}
+                      {isOilProduct(p.id) && <OilSwapNote productId={p.id} />}
                     </div>
                   );
                 })}

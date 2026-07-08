@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useDeferredValue, useEffect, useRef } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Recipe, AnveshanProduct } from "@/types";
 import { CATEGORIES, getCategory } from "@/lib/categories";
 import RecipeCard from "@/components/recipes/RecipeCard";
@@ -16,15 +16,10 @@ const shortLabel = (label: string) => label.replace(/\s+Recipes$/i, "");
 interface Props {
   recipes: Recipe[];
   productMap: Record<string, AnveshanProduct>;
-  initialCategory?: string;
-  initialQuery?: string;
 }
 
-export default function RecipeBrowser({ recipes, productMap, initialCategory, initialQuery }: Props) {
-  // Honor ?category= from the header nav, if it's a real category.
-  const validCategory =
-    initialCategory && CATEGORIES.some((c) => c.key === initialCategory) ? initialCategory : "all";
-  const [category, setCategory] = useState<string>(validCategory);
+export default function RecipeBrowser({ recipes, productMap }: Props) {
+  const [category, setCategory] = useState<string>("all");
   const [sub, setSub] = useState<string>("all");
   // Veg / Non-Veg now live in the green stripe (shared via DietProvider).
   const { vegOnly, nonVegOnly, toggleVeg, toggleNonVeg } = useDiet();
@@ -34,16 +29,26 @@ export default function RecipeBrowser({ recipes, productMap, initialCategory, in
 
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
 
   // Controlled, live search box. `query` is the raw input; `q` drives filtering.
-  const [query, setQuery] = useState(initialQuery ?? "");
+  const [query, setQuery] = useState("");
   const q = query.trim().toLowerCase();
+
+  // Read ?category= / ?q= from the URL client-side on mount, so this page can be
+  // statically prerendered (no server `searchParams`) — which makes it
+  // prefetchable and the bottom-nav "Home" tap instant.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const c = params.get("category");
+    if (c && CATEGORIES.some((x) => x.key === c)) setCategory(c);
+    const qp = params.get("q");
+    if (qp) setQuery(qp);
+  }, []);
 
   // Keep ?q= in sync, debounced, preserving other params (category, diet).
   useEffect(() => {
     const t = setTimeout(() => {
-      const params = new URLSearchParams(searchParams.toString());
+      const params = new URLSearchParams(window.location.search);
       const trimmed = query.trim();
       if (trimmed) {
         params.set("q", trimmed);

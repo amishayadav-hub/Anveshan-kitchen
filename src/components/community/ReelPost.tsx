@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useCart } from "@/components/cart/CartProvider";
 import { generatedShopLines } from "@/lib/generated-cart";
 import type { CommunityPost } from "@/data/community-posts";
 import { track } from "@/lib/analytics";
+import { withShareUtm } from "@/lib/utm";
 import ImageCarousel from "./ImageCarousel";
 
 interface Props {
@@ -31,20 +32,72 @@ export default function ReelPost({ post, active, liked, likeCount, onLike, onSha
   const productTags = bundleLines.map((l) => l.name.replace(/^Anveshan\s+/, ""));
   const hashtags = [...post.tags, ...productTags.map((t) => t.replace(/\s+/g, ""))];
 
+  // Prefetch the cover image as a File while this post is on-screen, so share()
+  // can attach it synchronously (Web Share API) without losing the tap gesture.
+  const shareFileRef = useRef<File | null>(null);
+  useEffect(() => {
+    if (!active) return;
+    const src = post.images?.[0];
+    if (!src) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch(src, { mode: "cors" });
+        const blob = await res.blob();
+        if (!cancelled) {
+          shareFileRef.current = new File([blob], `${post.id}.jpg`, {
+            type: blob.type || "image/jpeg",
+          });
+        }
+      } catch {
+        shareFileRef.current = null; // cross-origin/network — share text + link only
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [active, post.id, post.images]);
+
+  // A clean, shareable caption: title, story, the Anveshan bundle (with prices)
+  // and a call-to-action + link.
+  function buildShareText(url: string): string {
+    const bundle = bundleLines.length
+      ? `\n\n🛒 Anveshan bundle — ${bundleLines.length} product${bundleLines.length !== 1 ? "s" : ""} (₹${bundleTotal}):\n${bundleLines
+          .map((l) => `• ${l.name} — ₹${l.price}`)
+          .join("\n")}`
+      : "";
+    return `🍴 ${post.title}\n\n${post.description}${bundle}\n\nCook it the Anveshan way 👇\n${url}`;
+  }
+
   async function share() {
     onShare();
     track("share", { content_type: "community_post", item_id: post.id });
-    const url = typeof window !== "undefined" ? window.location.href : "";
+    // Deep link to THIS post, UTM-tagged so return visits are attributed.
+    const base =
+      typeof window !== "undefined"
+        ? `${window.location.origin}/recipes/real-peeps?post=${post.id}`
+        : "";
+    const url = base ? withShareUtm(base, "real_peeps") : "";
+    const text = buildShareText(url);
+    const file = shareFileRef.current;
+
     if (typeof navigator !== "undefined" && navigator.share) {
+      const withFile = !!file && navigator.canShare?.({ files: [file] });
       try {
-        await navigator.share({ title: post.title, text: post.description, url });
-      } catch {}
-      return;
+        // navigator.share is the first async call → the tap gesture is preserved.
+        await navigator.share(
+          withFile ? { title: post.title, text, files: [file!] } : { title: post.title, text, url }
+        );
+        return;
+      } catch (err) {
+        if ((err as Error)?.name === "AbortError") return; // user dismissed the sheet
+        // otherwise fall through to the clipboard copy
+      }
     }
     try {
-      await navigator.clipboard.writeText(url);
+      await navigator.clipboard.writeText(text);
       setCopied(true);
-      setTimeout(() => setCopied(false), 1500);
+      setTimeout(() => setCopied(false), 1800);
     } catch {}
   }
 

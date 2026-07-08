@@ -4,6 +4,7 @@ import { useState, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { useLikes } from "@/components/likes/LikesProvider";
 import { track } from "@/lib/analytics";
+import { withShareUtm } from "@/lib/utm";
 
 interface Props {
   name: string;
@@ -23,7 +24,7 @@ export default function RecipeActions({ name, slug, image, className }: Props) {
   const [busy, setBusy] = useState(false);
 
   async function share() {
-    const url = window.location.href;
+    const url = withShareUtm(window.location.href, "recipe");
     const canNativeShare = typeof navigator.share === "function";
     track("share", { content_type: "recipe", item_id: slug, method: canNativeShare ? "native" : "copy" });
     if (canNativeShare) {

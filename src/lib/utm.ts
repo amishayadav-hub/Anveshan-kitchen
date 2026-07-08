@@ -23,3 +23,20 @@ export function withUtm(url: string, content?: string): string {
     return url; // malformed URL → leave it alone
   }
 }
+
+// UTM for links the user SHARES (recipe page / community post). Tags the shared
+// URL — which points back at THIS site — so GA4 attributes the visits that come
+// in from those shares (source=share, medium=social). Applies to any URL.
+// `content` marks what was shared (e.g. "recipe", "real_peeps").
+export function withShareUtm(url: string, content?: string): string {
+  try {
+    const u = new URL(url);
+    u.searchParams.set("utm_source", "share");
+    u.searchParams.set("utm_medium", "social");
+    u.searchParams.set("utm_campaign", "recipe_share");
+    if (content) u.searchParams.set("utm_content", content);
+    return u.toString();
+  } catch {
+    return url;
+  }
+}

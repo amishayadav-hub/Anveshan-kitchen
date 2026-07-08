@@ -34,15 +34,7 @@ export const metadata = {
   },
 };
 
-interface Props {
-  searchParams: Promise<{ category?: string; q?: string }>;
-}
-
-export default async function RecipesPage({ searchParams }: Props) {
-  const sp = await searchParams;
-  const initialCategory = typeof sp.category === "string" ? sp.category : "all";
-  const initialQuery = typeof sp.q === "string" ? sp.q : "";
-
+export default async function RecipesPage() {
   const [recipes, products] = await Promise.all([getAllRecipes(), getAllProducts()]);
 
   // productId -> product, so recipe cards can show image circles + build a cart link
@@ -61,14 +53,7 @@ export default async function RecipesPage({ searchParams }: Props) {
             <p className="text-lg">Recipes coming soon.</p>
           </div>
         ) : (
-          // key forces a fresh filter state when the nav switches ?category=
-          <RecipeBrowser
-            key={initialCategory}
-            recipes={recipes}
-            productMap={productMap}
-            initialCategory={initialCategory}
-            initialQuery={initialQuery}
-          />
+          <RecipeBrowser recipes={recipes} productMap={productMap} />
         )}
       </section>
     </main>

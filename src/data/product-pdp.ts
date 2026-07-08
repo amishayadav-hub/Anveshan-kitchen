@@ -45,10 +45,6 @@ export const PRODUCT_PDP: Record<string, ProductPdp> = {
         "desc": "Add a spoonful of ghee to a glass of warm milk in the morning for a healthier gut."
       },
       {
-        "title": "Cooking Versatility",
-        "desc": "Can be used for all types of cooking because of its high smoke point."
-      },
-      {
         "title": "Digestive Relief",
         "desc": "Consuming it at night after a meal also relieves constipation."
       },
@@ -91,18 +87,6 @@ export const PRODUCT_PDP: Record<string, ProductPdp> = {
   "wood-pressed-groundnut-oil": {
     "shelfLife": null,
     "benefits": [
-      {
-        "title": "Stir-frying",
-        "desc": "Use for stir-frying vegetables, adding a distinctive nutty flavour."
-      },
-      {
-        "title": "Deep-frying",
-        "desc": "Perfect for deep-frying snacks and appetizers, achieving a crispy texture with less oil absorption."
-      },
-      {
-        "title": "Tandoor & Roti",
-        "desc": "Spray on tandoors for making rotis."
-      },
       {
         "title": "Heart Health Support",
         "desc": "Rich in monounsaturated fats (MUFAs), antioxidants and Vitamin E."
@@ -192,10 +176,6 @@ export const PRODUCT_PDP: Record<string, ProductPdp> = {
   "wood-pressed-coconut-oil": {
     "shelfLife": null,
     "benefits": [
-      {
-        "title": "Versatile Cooking Oil",
-        "desc": "Adds a pleasant tropical flavour to a variety of dishes."
-      },
       {
         "title": "Natural Moisturizer",
         "desc": "Hydrates skin and hair, reducing dryness inside out."
@@ -302,10 +282,6 @@ export const PRODUCT_PDP: Record<string, ProductPdp> = {
     "shelfLife": null,
     "benefits": [
       {
-        "title": "Cooking & Pickling",
-        "desc": "Enhanced flavour for traditional Indian cooking and preservation."
-      },
-      {
         "title": "Massage",
         "desc": "Relieves muscle tension, promotes relaxation, and provides a comforting sensation."
       },
@@ -355,10 +331,6 @@ export const PRODUCT_PDP: Record<string, ProductPdp> = {
       {
         "title": "Reduces Cell Damage",
         "desc": "Helps reduce cell damage and aids digestion."
-      },
-      {
-        "title": "High Smoke Point",
-        "desc": "Suitable for high-heat cooking methods like deep frying."
       },
       {
         "title": "Digestive Support",
@@ -549,10 +521,6 @@ export const PRODUCT_PDP: Record<string, ProductPdp> = {
       {
         "title": "Immunity & Digestion Boost",
         "desc": "Improves immunity, mood, and digestion with rejuvenating properties that aid post-meal wellness."
-      },
-      {
-        "title": "Culinary Enhancement",
-        "desc": "Adds enticing flavour, aroma, and royalty to your food through its superior quality and deep red color."
       },
       {
         "title": "Skincare Application",
