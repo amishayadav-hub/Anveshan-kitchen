@@ -63,6 +63,34 @@ const ICONS: Record<string, ReactNode> = {
       <path d="M16.8 3.2 11.5 8.5" />
     </>
   ),
+  // Chutney — bowl of dip with a garnish sprig
+  chutney: (
+    <>
+      <path d="M4.5 12.5h15" />
+      <path d="M6 12.5a6 6 0 0 0 12 0" />
+      <path d="M12 12.5V9" />
+      <path d="M12 9c-.6-1-.4-2 .4-2.8M12 9c.6-.7 1.5-.8 2.3-.4" />
+    </>
+  ),
+  // Breakfast — sunrise over the horizon
+  breakfast: (
+    <>
+      <path d="M3 18h18" />
+      <path d="M7 18a5 5 0 0 1 10 0" />
+      <path d="M12 6v1.6" />
+      <path d="M5.4 8.4 6.6 9.6" />
+      <path d="M18.6 8.4 17.4 9.6" />
+    </>
+  ),
+  // Lunch — thali with katoris
+  lunch: (
+    <>
+      <circle cx="12" cy="12" r="8" />
+      <circle cx="12" cy="8.6" r="1.7" />
+      <circle cx="8.7" cy="14" r="1.7" />
+      <circle cx="15.3" cy="14" r="1.7" />
+    </>
+  ),
   // Sweet — laddu on a plate
   sweet: (
     <>

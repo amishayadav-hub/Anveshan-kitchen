@@ -6,6 +6,23 @@ import { getFirestore, doc, setDoc } from "firebase/firestore";
 import { SEO_CONTENT } from "./seo-content";
 import { STEP_FIXES } from "./step-fixes";
 import { SERVING_FIXES } from "./serving-fixes";
+import { chutneyRecipes } from "./chutney-recipes";
+import { rajasthaniRecipes } from "./regional/rajasthani";
+import { punjabiRecipes } from "./regional/punjabi";
+import { haryanviRecipes } from "./regional/haryanvi";
+import { bihariRecipes } from "./regional/bihari";
+import { maharashtrianRecipes } from "./regional/maharashtrian";
+import { moreRecipes } from "./more-recipes";
+
+// Regional recipe sets (Rajasthani, Punjabi, Haryanvi, Bihari, Maharashtrian).
+// Same shape as the entries in `recipes`; carry an extra `region` field.
+const regionalRecipes = [
+  ...rajasthaniRecipes,
+  ...punjabiRecipes,
+  ...haryanviRecipes,
+  ...bihariRecipes,
+  ...maharashtrianRecipes,
+];
 
 const app = initializeApp({
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -2990,7 +3007,7 @@ async function seed() {
   }
 
   console.log("Seeding recipes...");
-  for (const r of recipes) {
+  for (const r of [...recipes, ...chutneyRecipes, ...regionalRecipes, ...moreRecipes]) {
     // Merge SEO/AEO content (intro, faqs, tips, rewritten description) by recipe id.
     const seo = SEO_CONTENT[r.id];
     const stepFix = STEP_FIXES[r.id];
