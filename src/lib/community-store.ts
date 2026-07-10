@@ -1,13 +1,17 @@
 // Data access + engagement counters for the community "Real Peeps" feed APIs.
 //
-// Source of truth is the Firestore `communityPosts` collection (admin-editable),
-// with durable like/save/share counts on each doc. If the collection is empty or
-// the Admin SDK isn't configured yet, we transparently fall back to the original
-// hardcoded COMMUNITY_POSTS + in-memory counters, so the feed never breaks
-// before/without the migration (see admin_dashboard/scripts/seed-community.mjs).
+// Source of truth is the Firestore `communityPosts` collection (admin-editable).
+// The feed is READ via the CLIENT Firebase SDK (public NEXT_PUBLIC config — the
+// same path recipe images use, always available on Vercel) so admin-set images
+// show even when the server-only service account isn't configured. Durable
+// like/save/share counts are written via the Admin SDK when it IS configured;
+// otherwise we fall back to in-memory counters. If the collection is empty or
+// unreadable we fall back to the hardcoded COMMUNITY_POSTS.
 
 import { FieldValue } from "firebase-admin/firestore";
+import { collection as clientCollection, getDocs as clientGetDocs } from "firebase/firestore";
 import { getAdminDb, isAdminConfigured } from "./firebase-admin";
+import { db as clientDb } from "./firebase";
 import { COMMUNITY_POSTS, CommunityPost } from "@/data/community-posts";
 
 // Short cache so a busy feed doesn't read all posts from Firestore per request.
@@ -25,68 +29,30 @@ export function baseId(id: string): string {
   return id.replace(/-p\d+$/, "");
 }
 
-// Whether Firestore is currently backing the feed (configured + non-empty).
+// Whether Firestore is currently backing the feed (read succeeded, non-empty).
 let firestoreBacked = false;
-// Auto-sync runs once per warm instance (cheap id-only check when nothing's new).
-let synced = false;
-
-// Create any posts present in the code data file but missing from Firestore, so
-// adding a recipe to community-posts.ts shows up in the live feed AND the admin
-// dashboard automatically — no manual re-seed. Existing docs (and their edits /
-// like-save-share counts) are never touched.
-async function autoSyncMissing(col: FirebaseFirestore.CollectionReference, existingIds: Set<string>) {
-  const missing = COMMUNITY_POSTS.filter((p) => !existingIds.has(p.id));
-  if (missing.length === 0) return false;
-  const batch = getAdminDb().batch();
-  for (const p of missing) {
-    batch.set(col.doc(p.id), {
-      title: p.title,
-      description: p.description,
-      author: p.author,
-      handle: p.handle,
-      date: p.date,
-      images: p.images,
-      tags: p.tags,
-      products: p.products,
-      likes: p.likes,
-      saves: 0,
-      shares: 0,
-      order: COMMUNITY_POSTS.indexOf(p), // preserve the code order
-      createdAt: FieldValue.serverTimestamp(),
-    });
-  }
-  await batch.commit();
-  return true;
-}
 
 async function loadBasePosts(): Promise<CommunityPost[]> {
-  if (!isAdminConfigured()) {
-    firestoreBacked = false;
-    return COMMUNITY_POSTS;
-  }
   if (cache && Date.now() - cache.at < TTL_MS) return cache.posts;
   try {
-    const col = getAdminDb().collection("communityPosts");
-    let snap = await col.orderBy("order").get();
-
-    if (!synced) {
-      const created = await autoSyncMissing(col, new Set(snap.docs.map((d) => d.id)));
-      if (created) snap = await col.orderBy("order").get(); // re-read with new docs
-      synced = true;
+    // CLIENT SDK read — works with the public config regardless of whether the
+    // server-only Admin SDK / service account is configured. Sort by `order` in
+    // JS so any doc missing that field is still included (a Firestore orderBy
+    // would silently drop it).
+    const snap = await clientGetDocs(clientCollection(clientDb, "communityPosts"));
+    if (!snap.empty) {
+      const posts = snap.docs
+        .map((d) => ({ id: d.id, ...(d.data() as Record<string, unknown>) }) as CommunityPost & { order?: number })
+        .sort((a, b) => (a.order ?? Number.MAX_SAFE_INTEGER) - (b.order ?? Number.MAX_SAFE_INTEGER));
+      cache = { posts, at: Date.now() };
+      firestoreBacked = true;
+      return posts;
     }
-
-    if (snap.empty) {
-      firestoreBacked = false;
-      return COMMUNITY_POSTS;
-    }
-    const posts = snap.docs.map((d) => ({ id: d.id, ...d.data() } as CommunityPost));
-    cache = { posts, at: Date.now() };
-    firestoreBacked = true;
-    return posts;
   } catch {
-    firestoreBacked = false;
-    return COMMUNITY_POSTS;
+    // network/permission issue — fall back to the bundled posts below
   }
+  firestoreBacked = false;
+  return COMMUNITY_POSTS;
 }
 
 export async function findPost(id: string): Promise<CommunityPost | undefined> {

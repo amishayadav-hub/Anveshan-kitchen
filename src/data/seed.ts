@@ -2,7 +2,7 @@ import * as dotenv from "dotenv";
 dotenv.config({ path: ".env.local" });
 
 import { initializeApp } from "firebase/app";
-import { getFirestore, doc, setDoc } from "firebase/firestore";
+import { getFirestore, doc, setDoc, getDocs, collection } from "firebase/firestore";
 import { SEO_CONTENT } from "./seo-content";
 import { STEP_FIXES } from "./step-fixes";
 import { SERVING_FIXES } from "./serving-fixes";
@@ -3007,10 +3007,15 @@ async function seed() {
   }
 
   console.log("Seeding recipes...");
+  // Preserve admin-set images: read the current images first so a blank code
+  // image never overwrites a photo an admin pasted via the dashboard.
+  const liveSnap = await getDocs(collection(db, "recipes"));
+  const liveImage = new Map(liveSnap.docs.map((d) => [d.id, (d.data().image as string) || ""]));
   for (const r of [...recipes, ...chutneyRecipes, ...regionalRecipes, ...moreRecipes]) {
     // Merge SEO/AEO content (intro, faqs, tips, rewritten description) by recipe id.
     const seo = SEO_CONTENT[r.id];
     const stepFix = STEP_FIXES[r.id];
+    const codeImage = (r.image || "").trim();
     const merged = {
       ...r,
       ...(seo?.description ? { description: seo.description } : {}),
@@ -3019,6 +3024,8 @@ async function seed() {
       ...(seo?.tips ? { tips: seo.tips } : {}),
       ...(stepFix ? { steps: stepFix.steps } : {}), // corrected steps that use every Anveshan product
       ...(SERVING_FIXES[r.id] ? { servings: SERVING_FIXES[r.id] } : {}), // realistic yield for the amounts
+      // Keep an admin-set image when the code image is blank.
+      image: codeImage || liveImage.get(r.id) || "",
       isVeg: computeIsVeg(r),
     };
     await setDoc(doc(db, "recipes", r.id), merged);

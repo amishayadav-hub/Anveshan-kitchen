@@ -52,6 +52,8 @@ async function main() {
   const existingIds = new Set(existing.map((e) => e.id));
   const existingByNorm = new Map<string, string>();
   for (const e of existing) existingByNorm.set(norm(e.name || e.id), e.id);
+  // Preserve admin-set images: a blank code image must NOT overwrite a real one.
+  const existingImage = new Map(existing.map((e) => [e.id, (e.image as string) || ""]));
   console.log(`  ${existing.length} recipes in Firestore.`);
 
   let added = 0;
@@ -65,7 +67,8 @@ async function main() {
       continue;
     }
     const isNew = !existingIds.has(r.id);
-    await setDoc(doc(db, "recipes", r.id), { ...r, isVeg: true });
+    const image = r.image && r.image.trim() ? r.image : existingImage.get(r.id) || "";
+    await setDoc(doc(db, "recipes", r.id), { ...r, image, isVeg: true });
     console.log(`  ${isNew ? "✓ added" : "↑ updated"}: ${r.slug}  [${r.category}]`);
     if (isNew) added++;
     else updated++;

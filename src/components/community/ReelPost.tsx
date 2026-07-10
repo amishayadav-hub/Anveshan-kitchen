@@ -88,17 +88,19 @@ export default function ReelPost({ post, active, liked, likeCount, onLike, onSha
         await navigator.share(
           withFile ? { title: post.title, text, files: [file!] } : { title: post.title, text, url }
         );
-        return;
+        return; // native sheet handled it
       } catch (err) {
         if ((err as Error)?.name === "AbortError") return; // user dismissed the sheet
-        // otherwise fall through to the clipboard copy
+        // any other failure (unsupported file share, permission, etc.) → copy
       }
     }
-    try {
-      await navigator.clipboard.writeText(text);
+    // Fallback must ALWAYS give feedback — never leave the tap doing nothing.
+    if (await copyToClipboard(text)) {
       setCopied(true);
       setTimeout(() => setCopied(false), 1800);
-    } catch {}
+    } else if (typeof window !== "undefined") {
+      window.prompt("Copy this link to share:", url || text);
+    }
   }
 
   function addBundle() {
@@ -141,11 +143,12 @@ export default function ReelPost({ post, active, liked, likeCount, onLike, onSha
       {/* Right action rail — Like + Share */}
       <div className="absolute bottom-52 right-3 z-10 flex flex-col items-center gap-5">
         <button
+          type="button"
           onClick={() => {
             track("like_post", { item_id: post.id, liked: !liked });
             onLike();
           }}
-          className="flex flex-col items-center gap-1"
+          className="flex flex-col items-center gap-1 touch-manipulation select-none active:scale-95 transition-transform"
           aria-pressed={liked}
         >
           <span className={`flex h-11 w-11 items-center justify-center transition-colors drop-shadow-[0_1px_4px_rgba(0,0,0,0.55)] ${liked ? "text-red-500" : "text-white"}`}>
@@ -153,11 +156,16 @@ export default function ReelPost({ post, active, liked, likeCount, onLike, onSha
           </span>
           <span className="text-xs font-semibold drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)]">{likeCount}</span>
         </button>
-        <button onClick={share} className="flex flex-col items-center gap-1">
-          <span className="flex h-11 w-11 items-center justify-center rounded-full bg-black/30 text-white backdrop-blur">
+        <button
+          type="button"
+          onClick={share}
+          aria-label="Share this recipe"
+          className="flex flex-col items-center gap-1 touch-manipulation select-none active:scale-95 transition-transform"
+        >
+          <span className="flex h-11 w-11 items-center justify-center text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.55)]">
             <ShareIcon />
           </span>
-          <span className="text-xs font-medium">{copied ? "Copied" : "Share"}</span>
+          <span className="text-xs font-medium drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)]">{copied ? "Copied" : "Share"}</span>
         </button>
       </div>
 
@@ -186,27 +194,28 @@ export default function ReelPost({ post, active, liked, likeCount, onLike, onSha
           </button>
         </div>
 
-        {/* Products as ONE bundle → add all at once */}
+        {/* Products as ONE bundle → add all at once. Kept compact for the reel. */}
         {bundleLines.length > 0 && (
-          <div className="mt-3 flex items-center gap-3 rounded-2xl bg-white/95 p-2 text-gray-900 shadow-lg">
-            <div className="flex -space-x-2.5">
+          <div className="mt-2.5 flex max-w-xs items-center gap-2 rounded-xl bg-white/95 p-1.5 text-gray-900 shadow-lg">
+            <div className="flex -space-x-2">
               {bundleLines.slice(0, 3).map((l) =>
                 l.image ? (
                   /* eslint-disable-next-line @next/next/no-img-element */
-                  <img key={l.variantId} src={l.image} alt={l.name} loading="lazy" className="h-9 w-9 rounded-full bg-anv-cream/40 object-cover ring-2 ring-white" />
+                  <img key={l.variantId} src={l.image} alt={l.name} loading="lazy" className="h-7 w-7 rounded-full bg-anv-cream/40 object-cover ring-2 ring-white" />
                 ) : null
               )}
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-[12.5px] font-bold leading-tight">Anveshan bundle</p>
-              <p className="text-[11px] text-gray-500">
-                {bundleLines.length} Anveshan product{bundleLines.length !== 1 ? "s" : ""} · ₹{bundleTotal}
+              <p className="text-[11px] font-bold leading-tight">Anveshan bundle</p>
+              <p className="text-[10px] leading-tight text-gray-500">
+                {bundleLines.length} product{bundleLines.length !== 1 ? "s" : ""} · ₹{bundleTotal}
               </p>
             </div>
             <button
+              type="button"
               onClick={addBundle}
               aria-label="Add all products to cart"
-              className="flex shrink-0 items-center gap-1.5 rounded-full bg-anv-green px-3.5 py-2 text-xs font-semibold text-white transition-colors hover:bg-anv-green-dark"
+              className="flex shrink-0 items-center gap-1 rounded-full bg-anv-green px-3 py-1.5 text-[11px] font-semibold text-white transition-colors hover:bg-anv-green-dark touch-manipulation active:scale-95"
             >
               ADD <CartIcon />
             </button>
@@ -215,6 +224,35 @@ export default function ReelPost({ post, active, liked, likeCount, onLike, onSha
       </div>
     </article>
   );
+}
+
+// Robust copy: secure-context Clipboard API, then a hidden-textarea execCommand
+// fallback for http/LAN/older mobile browsers. Returns whether it succeeded.
+async function copyToClipboard(text: string): Promise<boolean> {
+  try {
+    if (typeof navigator !== "undefined" && navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(text);
+      return true;
+    }
+  } catch {
+    // fall through to execCommand
+  }
+  try {
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.setAttribute("readonly", "");
+    ta.style.position = "fixed";
+    ta.style.top = "0";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    const ok = document.execCommand("copy");
+    document.body.removeChild(ta);
+    return ok;
+  } catch {
+    return false;
+  }
 }
 
 function HeartIcon({ filled }: { filled: boolean }) {

@@ -46,6 +46,8 @@ async function main() {
   const snap = await getDocs(collection(db, "recipes"));
   const existing: Doc[] = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
   const existingIds = new Set(existing.map((e) => e.id));
+  // Preserve admin-set images: a blank code image must NOT overwrite a real one.
+  const existingImage = new Map(existing.map((e) => [e.id, (e.image as string) || ""]));
   console.log(`  ${existing.length} recipes in Firestore.`);
 
   // 1) DE-DUPE / MOVE — recategorise chutney-like recipes filed elsewhere.
@@ -67,7 +69,8 @@ async function main() {
   let updated = 0;
   for (const r of chutneyRecipes) {
     const isNew = !existingIds.has(r.id);
-    await setDoc(doc(db, "recipes", r.id), { ...r, isVeg: true });
+    const image = r.image && r.image.trim() ? r.image : existingImage.get(r.id) || "";
+    await setDoc(doc(db, "recipes", r.id), { ...r, image, isVeg: true });
     console.log(`  ${isNew ? "✓ added" : "↑ updated"}: ${r.slug}`);
     if (isNew) added++;
     else updated++;

@@ -74,6 +74,8 @@ async function main() {
   // name -> id, for detecting a same-name recipe stored under a different id.
   const existingByNorm = new Map<string, string>();
   for (const e of existing) existingByNorm.set(norm(e.name || e.id), e.id);
+  // Preserve admin-set images: a blank code image must NOT overwrite a real one.
+  const existingImage = new Map(existing.map((e) => [e.id, (e.image as string) || ""]));
   console.log(`  ${existing.length} recipes in Firestore.`);
 
   let added = 0;
@@ -91,7 +93,9 @@ async function main() {
     }
 
     const isNew = !existingIds.has(r.id);
-    await setDoc(doc(db, "recipes", r.id), { ...r, isVeg: true });
+    // Keep any admin-set image if the code image is blank.
+    const image = r.image && r.image.trim() ? r.image : existingImage.get(r.id) || "";
+    await setDoc(doc(db, "recipes", r.id), { ...r, image, isVeg: true });
     console.log(`  ${isNew ? "✓ added" : "↑ updated"}: ${r.slug}  [${r.region} · ${r.category}]`);
     if (isNew) added++;
     else updated++;

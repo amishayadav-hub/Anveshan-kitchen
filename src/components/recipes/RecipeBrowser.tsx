@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useMemo, useDeferredValue, useEffect, useRef } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { useState, useMemo, useDeferredValue, useEffect, useRef, Suspense } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Recipe, AnveshanProduct } from "@/types";
 import { CATEGORIES, getCategory } from "@/lib/categories";
 import RecipeCard from "@/components/recipes/RecipeCard";
@@ -12,6 +12,51 @@ import { track } from "@/lib/analytics";
 
 // Short label for the icon chips — drop the " Recipes" suffix.
 const shortLabel = (label: string) => label.replace(/\s+Recipes$/i, "");
+
+// ── Search helpers ───────────────────────────────────────────────────────────
+// Normalise text for matching: lowercase, strip accents/punctuation, collapse
+// whitespace. Used for both the recipe haystack and the query.
+function normalizeText(s: string): string {
+  return (s || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
+}
+
+// Bounded Levenshtein — good enough for short recipe words; returns early once
+// the distance provably exceeds `max` so it stays cheap.
+function editDistance(a: string, b: string, max: number): number {
+  const al = a.length;
+  const bl = b.length;
+  if (Math.abs(al - bl) > max) return max + 1;
+  let prev = Array.from({ length: bl + 1 }, (_, i) => i);
+  for (let i = 1; i <= al; i++) {
+    const curr = [i];
+    let rowMin = i;
+    for (let j = 1; j <= bl; j++) {
+      const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+      const v = Math.min(prev[j] + 1, curr[j - 1] + 1, prev[j - 1] + cost);
+      curr[j] = v;
+      if (v < rowMin) rowMin = v;
+    }
+    if (rowMin > max) return max + 1; // whole row already over budget
+    prev = curr;
+  }
+  return prev[bl];
+}
+
+// A query token "hits" a recipe if it's a substring of the haystack, or is a
+// near-match (typo/spelling variant like "baigan" → "baingan") to any word.
+function tokenHits(token: string, haystack: string, words: string[]): boolean {
+  if (haystack.includes(token)) return true;
+  // Allow a small typo budget, but keep it tight so short tokens don't collide
+  // with common words (e.g. "misal" must NOT fuzzy-match "masala").
+  const max = token.length >= 8 ? 2 : token.length >= 4 ? 1 : 0;
+  if (max === 0) return false;
+  return words.some((w) => editDistance(w, token, max) <= max);
+}
 
 interface Props {
   recipes: Recipe[];
@@ -30,36 +75,28 @@ export default function RecipeBrowser({ recipes, productMap }: Props) {
   const router = useRouter();
   const pathname = usePathname();
 
-  // Controlled, live search box. `query` is the raw input; `q` drives filtering.
+  // Search term. `query` is the raw value shown; `q` drives filtering. It starts
+  // empty so the server renders the full grid (good for LCP + SEO); the URL's
+  // ?q= (set by the header search) is synced into it on the client by the
+  // <SearchParamSync> child below — which keeps it reactive even when the user
+  // is already on this page (the previous mount-only read did not re-fire).
   const [query, setQuery] = useState("");
-  const q = query.trim().toLowerCase();
+  const rawQ = query;
+  const q = rawQ.trim().toLowerCase();
 
-  // Read ?category= / ?q= from the URL client-side on mount, so this page can be
-  // statically prerendered (no server `searchParams`) — which makes it
-  // prefetchable and the bottom-nav "Home" tap instant.
+  // Read ?category= from the URL on mount so category deep-links work. Category
+  // is otherwise driven by the chip buttons (local state), so a one-time read is
+  // correct here.
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const c = params.get("category");
+    const c = new URLSearchParams(window.location.search).get("category");
     if (c && CATEGORIES.some((x) => x.key === c)) setCategory(c);
-    const qp = params.get("q");
-    if (qp) setQuery(qp);
   }, []);
 
-  // Keep ?q= in sync, debounced, preserving other params (category, diet).
+  // Analytics: record a search whenever the term changes.
   useEffect(() => {
-    const t = setTimeout(() => {
-      const params = new URLSearchParams(window.location.search);
-      const trimmed = query.trim();
-      if (trimmed) {
-        params.set("q", trimmed);
-        track("search", { search_term: trimmed, source: "plp" });
-      } else params.delete("q");
-      const qs = params.toString();
-      router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
-    }, 300);
-    return () => clearTimeout(t);
+    if (q) track("search", { search_term: rawQ.trim(), source: "plp" });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query]);
+  }, [q]);
 
   // Defer the heavy 102-card re-filter so filter clicks stay responsive (INP).
   const dCategory = useDeferredValue(category);
@@ -67,30 +104,59 @@ export default function RecipeBrowser({ recipes, productMap }: Props) {
   const dVeg = useDeferredValue(vegOnly);
   const dNonVeg = useDeferredValue(nonVegOnly);
 
+  // Search index: one normalised haystack per recipe (name + tags + category +
+  // region + description) plus its word list, built once per recipe set.
+  const searchIndex = useMemo(() => {
+    const idx = new Map<string, { hay: string; words: string[] }>();
+    for (const r of recipes) {
+      const rec = r as Recipe & { region?: string };
+      const hay = normalizeText(
+        [r.name, (r.tags ?? []).join(" "), r.category, rec.region ?? "", r.description ?? ""].join(" ")
+      );
+      idx.set(r.id, { hay, words: hay.split(" ").filter(Boolean) });
+    }
+    return idx;
+  }, [recipes]);
+
+  // Query tokens (normalised). Every token must hit for a recipe to match — so
+  // "aloo baigan" finds "Aloo Baingan" (fuzzy) across name/tags/description.
+  const tokens = useMemo(() => normalizeText(q).split(" ").filter(Boolean), [q]);
+
   const filtered = useMemo(() => {
     return recipes.filter((r) => {
-      if (q && !r.name.toLowerCase().includes(q)) return false; // search by name
+      if (tokens.length) {
+        const entry = searchIndex.get(r.id);
+        if (!entry) return false;
+        if (!tokens.every((t) => tokenHits(t, entry.hay, entry.words))) return false;
+      }
       if (dVeg && r.isVeg === false) return false; // hide non-veg
       if (dNonVeg && r.isVeg !== false) return false; // hide veg
       if (dCategory !== "all" && r.category !== dCategory) return false;
       if (dSub !== "all" && r.subCategory !== dSub) return false;
       return true;
     });
-  }, [recipes, dCategory, dSub, dVeg, dNonVeg, q]);
+  }, [recipes, searchIndex, tokens, dCategory, dSub, dVeg, dNonVeg]);
 
   function selectCategory(key: string) {
     setCategory(key);
     setSub("all"); // reset sub whenever top-level changes
+    // Tapping a category is a "browse" intent — clear any active text search so
+    // the user isn't left staring at a stale zero-result list.
+    if (q) {
+      setQuery("");
+      router.replace(pathname, { scroll: false });
+    }
     track("filter_category", { category: key });
   }
 
   // Clear every filter (q + category + sub + diet) and wipe the URL params.
   function resetFilters() {
-    setQuery("");
     setCategory("all");
     setSub("all");
     if (vegOnly) toggleVeg(false);
     if (nonVegOnly) toggleNonVeg(false);
+    // Drop ?q= (and any other params) from the URL so the search term clears.
+    router.replace(pathname, { scroll: false });
   }
 
   // Infinite scroll: render in batches, grow as a sentinel scrolls into view.
@@ -116,6 +182,13 @@ export default function RecipeBrowser({ recipes, productMap }: Props) {
 
   return (
     <div>
+      {/* Reactively mirror the URL's ?q= into local state. Isolated in its own
+          Suspense boundary so the useSearchParams() call doesn't force the whole
+          grid out of static prerendering (the grid still SSRs with query=""). */}
+      <Suspense fallback={null}>
+        <SearchParamSync value={query} onChange={setQuery} />
+      </Suspense>
+
       {/* Top-level filter row — single scrollable row. Bleeds to the screen
           edge on mobile so it's clear it scrolls sideways. */}
       <div className="-mx-4 px-4 sm:mx-0 sm:px-0">
@@ -151,7 +224,7 @@ export default function RecipeBrowser({ recipes, productMap }: Props) {
         {filtered.length} {filtered.length === 1 ? "recipe" : "recipes"}
         {q && (
           <>
-            {" "}for &ldquo;<span className="text-anv-green font-medium">{query.trim()}</span>&rdquo;
+            {" "}for &ldquo;<span className="text-anv-green font-medium">{rawQ.trim()}</span>&rdquo;
           </>
         )}
       </p>
@@ -163,7 +236,7 @@ export default function RecipeBrowser({ recipes, productMap }: Props) {
             No recipes found
             {q && (
               <>
-                {" "}for &ldquo;<span className="font-medium text-anv-green">{query.trim()}</span>&rdquo;
+                {" "}for &ldquo;<span className="font-medium text-anv-green">{rawQ.trim()}</span>&rdquo;
               </>
             )}
             {" "}— try a different term or browse all recipes.
@@ -192,6 +265,19 @@ export default function RecipeBrowser({ recipes, productMap }: Props) {
       )}
     </div>
   );
+}
+
+// Mirrors the URL's ?q= param into the parent's search state. Renders nothing.
+// Kept separate so the useSearchParams() dependency is contained to a subtree
+// under a Suspense boundary, letting the recipe grid still prerender/SSR.
+function SearchParamSync({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  const searchParams = useSearchParams();
+  const urlQ = searchParams.get("q") ?? "";
+  useEffect(() => {
+    if (urlQ !== value) onChange(urlQ);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [urlQ]);
+  return null;
 }
 
 function FilterChip({
