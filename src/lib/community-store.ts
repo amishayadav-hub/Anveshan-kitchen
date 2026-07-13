@@ -9,15 +9,21 @@
 // unreadable we fall back to the hardcoded COMMUNITY_POSTS.
 
 import { FieldValue } from "firebase-admin/firestore";
-import { collection as clientCollection, getDocs as clientGetDocs } from "firebase/firestore";
+import {
+  collection as clientCollection,
+  getDocs as clientGetDocs,
+  doc as clientDoc,
+  getDoc as clientGetDoc,
+} from "firebase/firestore";
 import { getAdminDb, isAdminConfigured } from "./firebase-admin";
 import { db as clientDb } from "./firebase";
 import { COMMUNITY_POSTS, CommunityPost } from "@/data/community-posts";
 
-// Short cache so a busy feed doesn't read all posts from Firestore per request.
-// Busted on any write so counts stay reactive.
+// Cache the full post list so a busy feed doesn't re-read the collection on every
+// request/scroll. Read ONCE, serve every page from memory. Busted on any write
+// (and by /api/revalidate) so admin edits + counts stay reactive.
 let cache: { posts: CommunityPost[]; at: number } | null = null;
-const TTL_MS = 30_000;
+const TTL_MS = 5 * 60_000; // 5 min
 
 // In-memory fallback counters (only used when Firestore isn't the source).
 const likeDeltas = new Map<string, number>();
@@ -56,32 +62,32 @@ async function loadBasePosts(): Promise<CommunityPost[]> {
 }
 
 export async function findPost(id: string): Promise<CommunityPost | undefined> {
-  const base = await loadBasePosts();
-  return base.find((p) => p.id === baseId(id));
+  const key = baseId(id);
+  // Single-doc read (1 read) instead of scanning the whole collection.
+  try {
+    const snap = await clientGetDoc(clientDoc(clientDb, "communityPosts", key));
+    if (snap.exists()) return { id: snap.id, ...(snap.data() as Record<string, unknown>) } as CommunityPost;
+  } catch {
+    /* fall back to bundled data below */
+  }
+  return COMMUNITY_POSTS.find((p) => p.id === key);
 }
 
-// One looped page. With 17 source posts, page N reuses them with unique ids
-// (`<id>-p<N>`) so the client can paginate forever via a real API.
+// A finite page of the feed. Reads the collection ONCE (cached) and slices in
+// memory — no per-scroll re-reads and no infinite loop. `hasMore` is false once
+// every post has been served, so the client stops fetching.
 export async function getPage(
   cursor: number,
   limit: number
-): Promise<{ posts: CommunityPost[]; nextCursor: number }> {
+): Promise<{ posts: CommunityPost[]; nextCursor: number; hasMore: boolean }> {
   const base = await loadBasePosts();
-  const total = base.length || 1;
-  const posts: CommunityPost[] = [];
-  for (let i = 0; i < limit; i++) {
-    const abs = cursor + i;
-    const src = base[abs % total];
-    if (!src) break;
-    const page = Math.floor(abs / total);
-    const likes = firestoreBacked ? src.likes : src.likes + (likeDeltas.get(src.id) ?? 0);
-    posts.push({
-      ...src,
-      id: page === 0 ? src.id : `${src.id}-p${page}`,
-      likes,
-    });
-  }
-  return { posts, nextCursor: cursor + limit }; // always more → infinite feed
+  const start = Math.max(0, cursor);
+  const slice = base.slice(start, start + limit).map((src) => ({
+    ...src,
+    likes: firestoreBacked ? src.likes : src.likes + (likeDeltas.get(src.id) ?? 0),
+  }));
+  const nextCursor = start + slice.length;
+  return { posts: slice, nextCursor, hasMore: nextCursor < base.length };
 }
 
 // Increment/decrement a durable counter field on the post doc, returning the

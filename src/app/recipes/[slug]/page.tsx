@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getRecipeBySlug, getProductsByIds, getAllRecipes, getAllProducts } from "@/lib/recipes";
+import { getRecipeBySlug, getProductsByIds, getAllRecipes, getAllProducts, getRecipesByCategory } from "@/lib/recipes";
 import { getCategoryLabel, getSubLabel } from "@/lib/categories";
 import {
   buildRecipeJsonLd,
@@ -79,11 +79,8 @@ export default async function RecipeDetailPage({ params }: Props) {
   const categoryLabel =
     getSubLabel(recipe.category, recipe.subCategory) ?? getCategoryLabel(recipe.category);
 
-  // Related: up to 4 from the same category (fall back to any), excluding self.
-  const all = await getAllRecipes();
-  const others = all.filter((r) => r.slug !== recipe.slug);
-  const sameCat = others.filter((r) => r.category === recipe.category);
-  const related = (sameCat.length >= 4 ? sameCat : [...sameCat, ...others.filter((r) => r.category !== recipe.category)]).slice(0, 4);
+  // Related: up to 4 from the same category — a few reads, not the whole collection.
+  const related = await getRecipesByCategory(recipe.category, recipe.slug, 4);
 
   // Product map for the related cards' image circles / totals.
   const allProducts = await getAllProducts();

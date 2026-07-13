@@ -1,8 +1,13 @@
 import { cache } from "react";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, query, where, limit as fbLimit } from "firebase/firestore";
 import { db } from "./firebase";
 import { Recipe, AnveshanProduct } from "@/types";
 import { FEATURES } from "./features";
+
+// Whether a recipe is hidden by the non-veg freeze flag.
+function hiddenByFlag(r: Recipe): boolean {
+  return !FEATURES.nonVegRecipes && r.isVeg === false;
+}
 
 // Build-time memo: fetch each collection at most ONCE per build worker.
 // The recipe pages are statically prerendered, so building 100+ pages used to
@@ -46,10 +51,28 @@ export const getAllRecipes = cache(loadRecipes);
 // Client-safe variant (no react cache(), which is Server-Component only).
 export const getAllRecipesClient = loadRecipes;
 
+// Single-doc lookup by slug — ONE read via a where() query instead of scanning
+// the whole `recipes` collection.
 export const getRecipeBySlug = cache(async (slug: string): Promise<Recipe | null> => {
-  const recipes = await getAllRecipes();
-  return recipes.find((r) => r.slug === slug) ?? null;
+  const snap = await getDocs(query(collection(db, "recipes"), where("slug", "==", slug), fbLimit(1)));
+  if (snap.empty) return null;
+  const r = { id: snap.docs[0].id, ...snap.docs[0].data() } as Recipe;
+  return hiddenByFlag(r) ? null : r; // frozen non-veg recipes 404
 });
+
+// Related recipes for a detail page: read only a small slice of the same
+// category (a few reads) instead of the entire collection.
+export const getRecipesByCategory = cache(
+  async (category: string, excludeSlug: string, n: number): Promise<Recipe[]> => {
+    const snap = await getDocs(
+      query(collection(db, "recipes"), where("category", "==", category), fbLimit(n + 6))
+    );
+    return snap.docs
+      .map((d) => ({ id: d.id, ...d.data() } as Recipe))
+      .filter((r) => r.slug !== excludeSlug && !hiddenByFlag(r))
+      .slice(0, n);
+  }
+);
 
 function fetchProducts(): Promise<AnveshanProduct[]> {
   return getDocs(collection(db, "products")).then((snap) =>

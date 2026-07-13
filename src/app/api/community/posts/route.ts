@@ -7,7 +7,7 @@ export const runtime = "nodejs";
 export async function GET(req: NextRequest) {
   const sp = req.nextUrl.searchParams;
   const cursor = Math.max(0, parseInt(sp.get("cursor") ?? "0", 10) || 0);
-  const limit = Math.min(30, Math.max(1, parseInt(sp.get("limit") ?? "17", 10) || 17));
-  const { posts, nextCursor } = await getPage(cursor, limit);
-  return NextResponse.json({ posts, nextCursor, hasMore: true });
+  const limit = Math.min(30, Math.max(1, parseInt(sp.get("limit") ?? "10", 10) || 10));
+  const { posts, nextCursor, hasMore } = await getPage(cursor, limit);
+  return NextResponse.json({ posts, nextCursor, hasMore });
 }
