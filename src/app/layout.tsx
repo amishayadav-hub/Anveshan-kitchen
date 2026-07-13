@@ -11,6 +11,7 @@ import LikesProvider from "@/components/likes/LikesProvider";
 import CartProvider from "@/components/cart/CartProvider";
 import CartDrawer from "@/components/cart/CartDrawer";
 import MobileBottomNav from "@/components/MobileBottomNav";
+import CampaignTracker from "@/components/CampaignTracker";
 import { GoogleAnalytics } from "@next/third-parties/google";
 
 // GA4 loads on every page (root layout) only when a measurement ID is configured
@@ -103,6 +104,7 @@ export default function RootLayout({
             <MobileBottomNav />
           </LikesProvider>
         </AuthProvider>
+        <CampaignTracker />
         {GA_ID && <GoogleAnalytics gaId={GA_ID} />}
       </body>
     </html>

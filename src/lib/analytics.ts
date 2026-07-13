@@ -8,6 +8,8 @@
 // with a desktop vs mobile split. That beacon fires independently of GA — it
 // still records even when NEXT_PUBLIC_GA_ID is unset or GA is blocked.
 
+import { getStoredCampaign, sendCampaign } from "./campaign";
+
 type Value = string | number | boolean | undefined | null;
 export type TrackParams = Record<string, Value>;
 
@@ -61,6 +63,23 @@ export function track(event: string, params: TrackParams = {}): void {
 
   // First-party counter (independent of GA availability).
   countClick(event, params);
+
+  // Campaign attribution: when a visitor proceeds to checkout, credit the
+  // campaign that first brought them (once per session).
+  if (event === "begin_checkout") {
+    try {
+      const flag = "anv_campaign_conv";
+      if (!sessionStorage.getItem(flag)) {
+        const c = getStoredCampaign();
+        if (c) {
+          sessionStorage.setItem(flag, "1");
+          sendCampaign({ type: "conversion", ...c });
+        }
+      }
+    } catch {
+      /* non-fatal */
+    }
+  }
 
   const gtag = (window as unknown as { gtag?: (...args: unknown[]) => void }).gtag;
   if (typeof gtag !== "function") return;
