@@ -2,21 +2,17 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Recipes and products are publicly readable — no auth needed
-    match /recipes/{recipeId} {
-      allow read: if true;
-      allow write: if false;
-    }
+    // ── Public content ──────────────────────────────────────────────────────
+    // Read by the public site via the client SDK. ALL writes happen through the
+    // Admin SDK (server), which bypasses these rules — so client writes stay off.
+    match /recipes/{id}        { allow read: if true;  allow write: if false; }
+    match /products/{id}       { allow read: if true;  allow write: if false; }
+    match /communityPosts/{id} { allow read: if true;  allow write: if false; }
 
-    match /products/{productId} {
-      allow read: if true;
-      allow write: if false;
-    }
-
-    // Community recipe submissions — anyone can submit (create), but no one
-    // can read others' submissions or edit/delete. The Anveshan team reviews
-    // and features the best ones via the Firebase console / admin SDK.
-    match /submissions/{submissionId} {
+    // ── Community submissions ───────────────────────────────────────────────
+    // Anyone may submit (validated shape). No client read/edit/delete — the team
+    // moderates via the admin dashboard (Admin SDK).
+    match /submissions/{id} {
       allow create: if
         request.resource.data.name is string &&
         request.resource.data.name.size() > 0 &&
@@ -31,5 +27,24 @@ service cloud.firestore {
         request.resource.data.featured == false;
       allow read, update, delete: if false;
     }
+
+    // ── Server-only collections ─────────────────────────────────────────────
+    // Written exclusively via the Admin SDK (server routes). No client access at
+    // all — the Admin SDK ignores rules, so this fully locks them from the web.
+    match /clicks/{id}          { allow read, write: if false; }
+    match /generatorEvents/{id} { allow read, write: if false; }
+    match /settings/{id}        { allow read, write: if false; }
+
+    // ── Per-user data ───────────────────────────────────────────────────────
+    // Each signed-in user may read/write ONLY their own docs (likes, profile).
+    match /users/{uid} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+      match /{sub=**} {
+        allow read, write: if request.auth != null && request.auth.uid == uid;
+      }
+    }
+
+    // ── Default deny ────────────────────────────────────────────────────────
+    match /{document=**} { allow read, write: if false; }
   }
 }
