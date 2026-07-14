@@ -4,7 +4,9 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { CommunityPost } from "@/data/community-posts";
 
 const PAGE_SIZE = 10;
-const CACHE_KEY = "rp-feed-v1";
+// Bumped to v2 to discard any older cache that stored empty/0 like counts
+// (JSON.stringify drops undefined, so a bad snapshot could zero out baseLikes).
+const CACHE_KEY = "rp-feed-v2";
 
 interface FeedCache {
   posts: CommunityPost[];
@@ -57,7 +59,9 @@ export function useCommunityFeed() {
       });
       setBaseLikes((prev) => {
         mergedLikes = { ...prev };
-        for (const p of incoming) if (mergedLikes[p.id] === undefined) mergedLikes[p.id] = p.likes;
+        // Coerce to a number so a missing/undefined API value can never poison
+        // the cache (undefined would be dropped by JSON.stringify → shows 0).
+        for (const p of incoming) if (mergedLikes[p.id] === undefined) mergedLikes[p.id] = Number(p.likes) || 0;
         return mergedLikes;
       });
       persist({ posts: mergedPosts, cursor: cursorRef.current, hasMore: hasMoreRef.current, baseLikes: mergedLikes });
@@ -78,8 +82,14 @@ export function useCommunityFeed() {
       if (raw) {
         const c = JSON.parse(raw) as FeedCache;
         if (c.posts?.length) {
+          // Rebuild baseLikes from the cached posts themselves so a missing or
+          // partial stored map can't zero out the counts (self-healing).
+          const restoredLikes: Record<string, number> = { ...(c.baseLikes ?? {}) };
+          for (const p of c.posts) {
+            if (restoredLikes[p.id] === undefined) restoredLikes[p.id] = Number(p.likes) || 0;
+          }
           setPosts(c.posts);
-          setBaseLikes(c.baseLikes ?? {});
+          setBaseLikes(restoredLikes);
           cursorRef.current = c.cursor ?? c.posts.length;
           hasMoreRef.current = c.hasMore ?? false;
           return; // hydrated — no network read

@@ -9,54 +9,10 @@ import { CategoryIcon } from "@/components/recipes/CategoryIcon";
 import { useDiet } from "@/components/recipes/DietProvider";
 import HScrollDots from "@/components/ui/HScrollDots";
 import { track } from "@/lib/analytics";
+import { normalizeText, tokenHits } from "@/lib/recipe-search";
 
 // Short label for the icon chips — drop the " Recipes" suffix.
 const shortLabel = (label: string) => label.replace(/\s+Recipes$/i, "");
-
-// ── Search helpers ───────────────────────────────────────────────────────────
-// Normalise text for matching: lowercase, strip accents/punctuation, collapse
-// whitespace. Used for both the recipe haystack and the query.
-function normalizeText(s: string): string {
-  return (s || "")
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
-    .replace(/[^a-z0-9]+/g, " ")
-    .trim();
-}
-
-// Bounded Levenshtein — good enough for short recipe words; returns early once
-// the distance provably exceeds `max` so it stays cheap.
-function editDistance(a: string, b: string, max: number): number {
-  const al = a.length;
-  const bl = b.length;
-  if (Math.abs(al - bl) > max) return max + 1;
-  let prev = Array.from({ length: bl + 1 }, (_, i) => i);
-  for (let i = 1; i <= al; i++) {
-    const curr = [i];
-    let rowMin = i;
-    for (let j = 1; j <= bl; j++) {
-      const cost = a[i - 1] === b[j - 1] ? 0 : 1;
-      const v = Math.min(prev[j] + 1, curr[j - 1] + 1, prev[j - 1] + cost);
-      curr[j] = v;
-      if (v < rowMin) rowMin = v;
-    }
-    if (rowMin > max) return max + 1; // whole row already over budget
-    prev = curr;
-  }
-  return prev[bl];
-}
-
-// A query token "hits" a recipe if it's a substring of the haystack, or is a
-// near-match (typo/spelling variant like "baigan" → "baingan") to any word.
-function tokenHits(token: string, haystack: string, words: string[]): boolean {
-  if (haystack.includes(token)) return true;
-  // Allow a small typo budget, but keep it tight so short tokens don't collide
-  // with common words (e.g. "misal" must NOT fuzzy-match "masala").
-  const max = token.length >= 8 ? 2 : token.length >= 4 ? 1 : 0;
-  if (max === 0) return false;
-  return words.some((w) => editDistance(w, token, max) <= max);
-}
 
 interface Props {
   recipes: Recipe[];

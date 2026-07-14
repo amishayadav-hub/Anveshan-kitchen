@@ -39,7 +39,7 @@ export default function CartDrawer() {
         inert={!isOpen}
       >
         <header className="flex items-center justify-between pl-5 pr-2 h-14 border-b border-gray-100 shrink-0">
-          <h2 className="font-bold text-gray-900">Your Cart{count > 0 ? ` (${count})` : ""}</h2>
+          <h2 id="cart-fly-target" className="font-bold text-gray-900">Your Cart{count > 0 ? ` (${count})` : ""}</h2>
           <button onClick={close} aria-label="Close cart" className="w-10 h-10 flex items-center justify-center text-gray-400 hover:text-gray-700 text-2xl leading-none">
             ×
           </button>
