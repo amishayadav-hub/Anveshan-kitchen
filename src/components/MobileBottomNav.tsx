@@ -105,7 +105,16 @@ export default function MobileBottomNav() {
             <li key={t.href} className="relative flex-1 text-center" style={{ flex: "1 1 0" }}>
               <Link
                 href={t.href}
-                onClick={() => track("bottom_nav_click", { tab: t.label })}
+                onClick={(e) => {
+                  track("bottom_nav_click", { tab: t.label });
+                  // Already on this page (e.g. Home while scrolled down through
+                  // recipes) → tapping the tab scrolls back to top instead of a
+                  // no-op navigation.
+                  if (active) {
+                    e.preventDefault();
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }
+                }}
                 aria-current={active ? "page" : undefined}
                 className="flex min-h-[56px] flex-col items-center justify-center gap-1 py-1.5"
               >

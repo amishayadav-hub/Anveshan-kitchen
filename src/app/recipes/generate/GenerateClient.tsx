@@ -93,12 +93,24 @@ export default function GenerateClient() {
     }).catch(() => {});
   }
 
-  // Slide to the generated recipes as soon as they arrive.
+  // Slide to the generated recipes once they're on screen.
+  //
+  // IMPORTANT: gate on `!loading`. `setResult(data)` runs while `loading` is
+  // still true (setLoading(false) only fires after two awaits of funnel logging
+  // in `finally`), so for a moment BOTH the tall loading skeleton and the
+  // results are mounted — the results section then sits far down the page and
+  // scrolling to it lands on the FOOTER. Waiting for the skeleton to unmount
+  // (loading === false) means the section is at its final position first.
   useEffect(() => {
-    if (result && result.variations.length > 0) {
-      resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-  }, [result]);
+    if (loading || !result || result.variations.length === 0) return;
+    const section = resultsRef.current;
+    if (!section) return;
+    // Scroll on the frame after the skeleton-removal paint so geometry is final.
+    const raf = requestAnimationFrame(() =>
+      requestAnimationFrame(() => section.scrollIntoView({ behavior: "smooth", block: "start" }))
+    );
+    return () => cancelAnimationFrame(raf);
+  }, [result, loading]);
 
   async function handleGenerate() {
     if (loading) return; // guard against double-submit / repeated Regenerate
@@ -415,6 +427,11 @@ export default function GenerateClient() {
               </div>
             ))}
           </div>
+          <h6 className="mt-8 text-center text-xs font-normal tracking-wide text-gray-400">
+            {hi
+              ? "AI galtiyan kar sakta hai — pakane se pehle details cross-check zaroor karein."
+              : "AI can make mistakes — please cross-check the details before cooking."}
+          </h6>
         </section>
       )}
 
