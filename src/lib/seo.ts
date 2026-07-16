@@ -53,6 +53,20 @@ export function recipeUrl(slug: string): string {
  * recipe page. Drives Google recipe rich results, AI Overviews and answer
  * engines (they parse this to answer "how do I make X").
  */
+// Google recommends supplying a recipe image in several aspect ratios (16:9,
+// 4:3, 1:1) for rich results. Cloudinary-hosted images can be cropped on the fly
+// via URL transforms; images on other hosts fall back to the single original.
+export function recipeImageSet(url?: string): string[] | undefined {
+  if (!url) return undefined;
+  const marker = "/image/upload/";
+  const i = url.indexOf(marker);
+  if (i === -1) return [url]; // not a Cloudinary delivery URL — use as-is
+  const head = url.slice(0, i + marker.length);
+  const tail = url.slice(i + marker.length);
+  const crop = (ar: string) => `${head}c_fill,ar_${ar},w_1200,q_auto/${tail}`;
+  return [crop("16:9"), crop("4:3"), crop("1:1")];
+}
+
 export function buildRecipeJsonLd(recipe: Recipe, products: AnveshanProduct[]) {
   const ingredientLines = recipe.ingredients.map((i) =>
     [i.quantity, i.unit, i.name].filter(Boolean).join(" ").trim()
@@ -69,7 +83,7 @@ export function buildRecipeJsonLd(recipe: Recipe, products: AnveshanProduct[]) {
     "@type": "Recipe",
     name: recipe.name,
     description: recipe.description,
-    image: recipe.image ? [recipe.image] : undefined,
+    image: recipeImageSet(recipe.image),
     author: { "@type": "Organization", name: SITE_NAME, url: BRAND_URL },
     publisher: {
       "@type": "Organization",

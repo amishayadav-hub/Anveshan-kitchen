@@ -77,6 +77,10 @@ export const metadata: Metadata = {
   },
   twitter: { card: "summary_large_image" },
   robots: { index: true, follow: true },
+  // Google Search Console ownership verification (URL-prefix property for the
+  // Vercel deployment). Emits <meta name="google-site-verification" …> in <head>.
+  // Keep this — removing it un-verifies the property in GSC.
+  verification: { google: "vV6aWyOA9ZqQ2Dx3HagYuoQA9uLLAgvrvNDD29XSiRc" },
 };
 
 export default function RootLayout({
@@ -91,6 +95,12 @@ export default function RootLayout({
     >
       {/* pb on mobile so page content/footer clears the fixed bottom tab bar */}
       <body className="min-h-full flex flex-col pb-[56px] md:pb-0">
+        {/* Warm up the image CDNs early (TLS handshake) so recipe/product images
+            paint faster → better LCP. React hoists these into <head>. */}
+        <link rel="preconnect" href="https://res.cloudinary.com" crossOrigin="" />
+        <link rel="preconnect" href="https://cdn.shopify.com" crossOrigin="" />
+        <link rel="dns-prefetch" href="https://res.cloudinary.com" />
+        <link rel="dns-prefetch" href="https://cdn.shopify.com" />
         <AuthProvider>
           <LikesProvider>
             <CartProvider>
