@@ -1,740 +1,3262 @@
 [
-  {"name":"Palak Paneer","note":"paneer cubes in a smooth spinach gravy"},
-  {"name":"Matar Paneer","note":"paneer and green peas in onion-tomato gravy"},
-  {"name":"Shahi Paneer","note":"paneer in a rich cashew-cream mildly sweet gravy"},
-  {"name":"Paneer Bhurji","note":"scrambled crumbled paneer with onion, tomato, spices"},
-  {"name":"Chilli Paneer","note":"indo-chinese crisp paneer in soy-chilli sauce"},
-  {"name":"Paneer Tikka Masala","note":"grilled paneer tikka in spiced gravy"},
-  {"name":"Paneer Lababdar","note":"paneer in a tomato-cashew buttery gravy"},
-  {"name":"Paneer Do Pyaza","note":"paneer with double onions, semi-dry"},
-  {"name":"Palak Corn","note":"sweet corn in creamy spinach gravy"},
-  {"name":"Corn Capsicum Sabzi","note":"sweet corn and capsicum dry sabzi"},
-  {"name":"Aloo Baingan","note":"potato and brinjal dry sabzi"},
-  {"name":"Aloo Methi","note":"potato with fresh fenugreek leaves, dry"},
-  {"name":"Aloo Palak","note":"potato in spinach, semi-dry"},
-  {"name":"Aloo Shimla Mirch","note":"potato and capsicum stir-fry"},
-  {"name":"Jeera Aloo","note":"cumin-tempered dry potatoes"},
-  {"name":"Dahi Aloo","note":"baby potatoes in a yogurt gravy"},
-  {"name":"Aloo Beans","note":"potato and french beans dry sabzi"},
-  {"name":"Beans Poriyal","note":"south indian french beans with coconut"},
-  {"name":"Cabbage Poriyal","note":"south indian cabbage stir-fry with coconut"},
-  {"name":"Beans Thoran","note":"kerala french beans with grated coconut"},
-  {"name":"Cabbage Thoran","note":"kerala cabbage with coconut and curry leaves"},
-  {"name":"Avial","note":"kerala mixed vegetables in coconut-yogurt"},
-  {"name":"Olan","note":"kerala ash gourd and cowpeas in coconut milk"},
-  {"name":"Kootu","note":"south indian lentil and vegetable stew"},
-  {"name":"Vegetable Stew","note":"kerala veg stew in coconut milk"},
-  {"name":"Erissery","note":"kerala pumpkin and bean curry with coconut"},
-  {"name":"Sambar","note":"south indian lentil and vegetable stew with tamarind"},
-  {"name":"Tomato Rasam","note":"tangy south indian tomato-tamarind soup"},
-  {"name":"Pepper Rasam","note":"peppery south indian rasam"},
-  {"name":"Lemon Rasam","note":"lemon-tempered rasam"},
-  {"name":"Mysore Rasam","note":"rasam with roasted coconut-spice paste"},
-  {"name":"Mor Kuzhambu","note":"south indian yogurt-coconut curry"},
-  {"name":"Vatha Kuzhambu","note":"tangy tamarind gravy with sun-dried veg"},
-  {"name":"Kara Kuzhambu","note":"spicy tamarind vegetable gravy"},
-  {"name":"Kadala Curry","note":"kerala black chickpea coconut curry"},
-  {"name":"Idli","note":"steamed fermented rice-lentil cakes"},
-  {"name":"Rava Idli","note":"instant semolina steamed idli"},
-  {"name":"Plain Dosa","note":"crisp fermented rice-lentil crepe"},
-  {"name":"Ragi Dosa","note":"finger-millet dosa"},
-  {"name":"Oats Dosa","note":"instant oats crepe"},
-  {"name":"Neer Dosa","note":"soft lacy rice-batter dosa"},
-  {"name":"Set Dosa","note":"soft spongy small dosas in a set"},
-  {"name":"Pesarattu","note":"andhra whole green gram dosa"},
-  {"name":"Medu Vada","note":"crisp fried urad dal doughnuts"},
-  {"name":"Dahi Vada","note":"lentil dumplings in spiced yogurt"},
-  {"name":"Masala Vada","note":"chana dal crisp fritters"},
-  {"name":"Ven Pongal","note":"savory rice-moong dal with pepper and ghee"},
-  {"name":"Sweet Pongal","note":"jaggery rice-moong dal sweet"},
-  {"name":"Bisi Bele Bath","note":"karnataka spiced rice-lentil-veg one-pot"},
-  {"name":"Tamarind Rice","note":"south indian tangy tempered rice"},
-  {"name":"Puliyodarai","note":"temple-style tamarind rice"},
-  {"name":"Vegetable Upma","note":"semolina with vegetables and tempering"},
-  {"name":"Rava Upma","note":"classic semolina upma"},
-  {"name":"Vermicelli Upma","note":"seviyan upma with vegetables"},
-  {"name":"Kesari Bath","note":"karnataka semolina sweet with saffron"},
-  {"name":"Appam","note":"kerala fermented rice hoppers"},
-  {"name":"Idiyappam","note":"steamed rice string hoppers"},
-  {"name":"Puttu","note":"kerala steamed rice-coconut cylinders"},
-  {"name":"Akki Roti","note":"karnataka rice-flour flatbread"},
-  {"name":"Ragi Mudde","note":"karnataka finger-millet balls"},
-  {"name":"Pav Bhaji","note":"mashed spiced vegetables with buttered pav"},
-  {"name":"Vada Pav","note":"mumbai potato fritter in a bun"},
-  {"name":"Misal Pav","note":"maharashtrian sprouted-bean curry with pav"},
-  {"name":"Dabeli","note":"kutchi spiced potato bun with chutneys"},
-  {"name":"Ragda Pattice","note":"potato patties over white pea curry"},
-  {"name":"Pani Puri","note":"crisp puris with spiced tangy water"},
-  {"name":"Bhel Puri","note":"puffed rice chaat with chutneys"},
-  {"name":"Sev Puri","note":"flat puris topped with potato, sev, chutneys"},
-  {"name":"Dahi Puri","note":"puris filled with yogurt and chutneys"},
-  {"name":"Aloo Chaat","note":"fried potato cubes with chaat spices"},
-  {"name":"Papdi Chaat","note":"crisp papdi with yogurt and chutneys"},
-  {"name":"Samosa Chaat","note":"crushed samosa with chole and chutneys"},
-  {"name":"Dahi Bhalla","note":"soft urad vadas in sweet yogurt"},
-  {"name":"Raj Kachori","note":"large crisp kachori filled with chaat"},
-  {"name":"Samosa","note":"fried pastry with spiced potato-pea filling"},
-  {"name":"Pyaaz Kachori","note":"jodhpuri flaky onion-filled kachori"},
-  {"name":"Dal Kachori","note":"crisp kachori with spiced moong filling"},
-  {"name":"Khaman Dhokla","note":"soft steamed gram-flour savory cake"},
-  {"name":"Khandvi","note":"gram-flour rolls tempered with mustard"},
-  {"name":"Patra","note":"colocasia leaf rolls, steamed and tempered"},
-  {"name":"Muthia","note":"steamed bottle-gourd gram-flour dumplings"},
-  {"name":"Handvo","note":"gujarati savory lentil-rice cake"},
-  {"name":"Sev Tameta Nu Shaak","note":"gujarati tomato curry topped with sev"},
-  {"name":"Batata Nu Shaak","note":"gujarati spiced potato curry"},
-  {"name":"Ringan No Olo","note":"gujarati smoked brinjal mash"},
-  {"name":"Undhiyu","note":"gujarati mixed winter vegetable casserole"},
-  {"name":"Dudhi Muthia","note":"steamed bottle gourd fenugreek dumplings"},
-  {"name":"Lilva Kachori","note":"gujarati tuvar-lilva filled kachori"},
-  {"name":"Dal Dhokli","note":"gujarati wheat strips simmered in dal"},
-  {"name":"Sarson Ka Saag","note":"punjabi mustard greens mash"},
-  {"name":"Kadhi Pakora","note":"yogurt-gram flour curry with fritters"},
-  {"name":"Punjabi Kadhi","note":"thick yogurt-besan curry with pakoras"},
-  {"name":"Gujarati Kadhi","note":"thin sweet-sour yogurt kadhi"},
-  {"name":"Sindhi Kadhi","note":"tamarind-vegetable besan curry"},
-  {"name":"Gatte Ki Sabzi","note":"rajasthani gram-flour dumplings in yogurt gravy"},
-  {"name":"Ker Sangri","note":"rajasthani desert bean-berry dry sabzi"},
-  {"name":"Panchmel Dal","note":"rajasthani five-lentil dal"},
-  {"name":"Dal Baati","note":"rajasthani baked wheat balls with dal"},
-  {"name":"Papad Ki Sabzi","note":"rajasthani papad in yogurt gravy"},
-  {"name":"Mangodi Ki Sabzi","note":"rajasthani moong dal dumplings curry"},
-  {"name":"Besan Gatta Curry","note":"gram flour rolls in spiced gravy"},
-  {"name":"Lobia Curry","note":"black-eyed peas curry"},
-  {"name":"Kala Chana Curry","note":"black chickpea dry-spiced curry"},
-  {"name":"Kabuli Chana Masala","note":"white chickpea masala"},
-  {"name":"Mixed Sprouts Curry","note":"mixed bean sprouts curry"},
-  {"name":"Moth Beans Curry","note":"matki usal curry"},
-  {"name":"Green Peas Masala","note":"green peas curry"},
-  {"name":"Veg Kolhapuri","note":"spicy maharashtrian mixed veg"},
-  {"name":"Veg Jalfrezi","note":"stir-fried veg in tangy sauce"},
-  {"name":"Veg Makhanwala","note":"mixed veg in buttery tomato gravy"},
-  {"name":"Navratan Korma","note":"nine-jewel veg-fruit-nut korma"},
-  {"name":"Malai Chaap","note":"soy chaap in creamy gravy"},
-  {"name":"Aloo Gobi Matar","note":"potato-cauliflower-peas dry sabzi"},
-  {"name":"Gobi Matar","note":"cauliflower and peas dry sabzi"},
-  {"name":"Gobi Manchurian","note":"indo-chinese fried cauliflower in sauce"},
-  {"name":"Chilli Potato","note":"crisp potato in soy-chilli sauce"},
-  {"name":"Veg Manchurian","note":"fried veg balls in manchurian gravy"},
-  {"name":"Hakka Noodles","note":"stir-fried indo-chinese noodles"},
-  {"name":"Veg Fried Rice","note":"indo-chinese stir-fried rice"},
-  {"name":"Schezwan Fried Rice","note":"spicy schezwan stir-fried rice"},
-  {"name":"Veg Biryani","note":"layered spiced rice with vegetables"},
-  {"name":"Hyderabadi Veg Biryani","note":"dum-style veg biryani"},
-  {"name":"Kashmiri Pulao","note":"mildly sweet fruit-nut pulao"},
-  {"name":"Yakhni Pulao","note":"yogurt-stock spiced pulao"},
-  {"name":"Kabuli Pulao","note":"chickpea and carrot pulao"},
-  {"name":"Bagara Rice","note":"hyderabadi tempered plain rice"},
-  {"name":"Sabudana Khichdi","note":"tapioca pearls with peanuts, fasting dish"},
-  {"name":"Poha","note":"flattened rice with onion and peanuts"},
-  {"name":"Indori Poha","note":"indore-style poha with jeeravan"},
-  {"name":"Aloo Poha","note":"poha with potatoes"},
-  {"name":"Dalia Khichdi","note":"broken wheat savory porridge with veg"},
-  {"name":"Sweet Dalia","note":"broken wheat milk-jaggery porridge"},
-  {"name":"Oats Chilla","note":"savory oats pancake"},
-  {"name":"Masala Oats","note":"spiced vegetable oats"},
-  {"name":"Ragi Porridge","note":"finger-millet malt porridge"},
-  {"name":"Bread Pakora","note":"potato-stuffed batter-fried bread"},
-  {"name":"Paneer Pakora","note":"batter-fried paneer fritters"},
-  {"name":"Palak Pakora","note":"spinach leaf fritters"},
-  {"name":"Batata Vada","note":"maharashtrian spiced potato fritters"},
-  {"name":"Mirchi Vada","note":"stuffed chilli fritters"},
-  {"name":"Aloo Bonda","note":"south indian potato-ball fritters"},
-  {"name":"Sabudana Thalipeeth","note":"tapioca-potato griddle cake"},
-  {"name":"Thalipeeth","note":"maharashtrian multigrain spiced flatbread"},
-  {"name":"Veg Spring Roll","note":"crisp rolls with vegetable filling"},
-  {"name":"Veg Frankie","note":"wrapped roll with spiced veg filling"},
-  {"name":"Naan","note":"leavened tandoor-style flatbread"},
-  {"name":"Butter Naan","note":"soft naan brushed with butter"},
-  {"name":"Garlic Naan","note":"garlic-topped naan"},
-  {"name":"Amritsari Kulcha","note":"stuffed crisp punjabi kulcha"},
-  {"name":"Bhatura","note":"puffy fried leavened bread for chole"},
-  {"name":"Puri","note":"puffed deep-fried wheat bread"},
-  {"name":"Bedmi Puri","note":"spiced urad-stuffed puri"},
-  {"name":"Luchi","note":"bengali white-flour fried bread"},
-  {"name":"Methi Thepla","note":"gujarati fenugreek flatbread"},
-  {"name":"Jowar Bhakri","note":"sorghum flatbread"},
-  {"name":"Bajra Roti","note":"pearl-millet flatbread"},
-  {"name":"Makki Ki Roti","note":"cornmeal punjabi flatbread"},
-  {"name":"Missi Roti","note":"gram-flour spiced flatbread"},
-  {"name":"Rumali Roti","note":"thin handkerchief flatbread"},
-  {"name":"Tandoori Roti","note":"tandoor-style wheat flatbread"},
-  {"name":"Malabar Parotta","note":"flaky layered kerala flatbread"},
-  {"name":"Puran Poli","note":"sweet chana-jaggery stuffed flatbread"},
-  {"name":"Shukto","note":"bengali mixed-veg bitter medley"},
-  {"name":"Aloo Posto","note":"bengali potatoes in poppy-seed paste"},
-  {"name":"Cholar Dal","note":"bengali sweetish chana dal with coconut"},
-  {"name":"Dhokar Dalna","note":"bengali lentil-cake curry"},
-  {"name":"Begun Bhaja","note":"bengali fried brinjal slices"},
-  {"name":"Labra","note":"bengali mixed vegetable medley"},
-  {"name":"Chorchori","note":"bengali mixed vegetable dry curry"},
-  {"name":"Phulkopir Dalna","note":"bengali cauliflower-potato curry"},
-  {"name":"Aloo Dum Bengali","note":"bengali spiced baby potato curry"},
-  {"name":"Mochar Ghonto","note":"bengali banana-blossom dry curry"},
-  {"name":"Bharwa Bhindi","note":"stuffed okra with spice masala"},
-  {"name":"Bharwa Karela","note":"stuffed bitter gourd"},
-  {"name":"Bharwa Baingan","note":"stuffed small brinjals"},
-  {"name":"Bharwa Shimla Mirch","note":"stuffed capsicum"},
-  {"name":"Bharwa Tinda","note":"stuffed apple-gourd"},
-  {"name":"Bagara Baingan","note":"hyderabadi brinjal in peanut-sesame gravy"},
-  {"name":"Baingan Ka Bharta Punjabi","note":"smoked mashed brinjal punjabi style"},
-  {"name":"Ringna Bateta Nu Shaak","note":"gujarati brinjal-potato sabzi"},
-  {"name":"Turai Ki Sabzi","note":"ridge gourd dry sabzi"},
-  {"name":"Parwal Ki Sabzi","note":"pointed gourd dry sabzi"},
-  {"name":"Kathal Ki Sabzi","note":"raw jackfruit spiced curry"},
-  {"name":"Suran Ki Sabzi","note":"yam dry spiced sabzi"},
-  {"name":"Arbi Masala","note":"colocasia in spiced masala"},
-  {"name":"Kaddu Ki Sabzi","note":"pumpkin sweet-sour sabzi"},
-  {"name":"Petha Sabzi","note":"ash gourd curry"},
-  {"name":"Sem Ki Phali","note":"broad beans dry sabzi"},
-  {"name":"Gawar Phali","note":"cluster beans dry sabzi"},
-  {"name":"Tindora Fry","note":"ivy gourd stir-fry"},
-  {"name":"Kachri Ki Sabzi","note":"rajasthani wild cucumber sabzi"},
-  {"name":"Methi Aloo","note":"fenugreek and potato dry sabzi"},
-  {"name":"Methi Malai Mushroom","note":"mushroom in fenugreek-cream gravy"},
-  {"name":"Mushroom Masala","note":"mushrooms in onion-tomato gravy"},
-  {"name":"Chana Saag","note":"chickpeas cooked with greens"},
-  {"name":"Lauki Kofta","note":"bottle-gourd dumplings in gravy"},
-  {"name":"Cabbage Sabzi","note":"spiced dry cabbage with peas"},
-  {"name":"Beetroot Sabzi","note":"spiced beetroot stir-fry"},
-  {"name":"Carrot Beans Poriyal","note":"carrot-beans south stir-fry"},
-  {"name":"Mixed Veg Curry","note":"assorted vegetables in gravy"},
-  {"name":"Veg Handi","note":"mixed veg in clay-pot gravy"},
-  {"name":"Dum Ki Arbi","note":"slow-cooked spiced colocasia"},
-  {"name":"Rajma Chawal","note":"kidney bean curry served with rice"},
-  {"name":"Kadhi Chawal","note":"yogurt curry with steamed rice"},
-  {"name":"Gulab Jamun","note":"fried milk-solid balls in sugar syrup"},
-  {"name":"Rasgulla","note":"spongy chhena balls in light syrup"},
-  {"name":"Rasmalai","note":"chhena discs in saffron-cardamom milk"},
-  {"name":"Cham Cham","note":"bengali oblong chhena sweet"},
-  {"name":"Sandesh","note":"bengali chhena fudge"},
-  {"name":"Mishti Doi","note":"bengali sweet caramelized yogurt"},
-  {"name":"Rice Kheer","note":"rice pudding with milk and cardamom"},
-  {"name":"Sabudana Kheer","note":"tapioca pudding"},
-  {"name":"Phirni","note":"ground-rice creamy pudding"},
-  {"name":"Seviyan Kheer","note":"vermicelli milk pudding"},
-  {"name":"Rabri","note":"reduced thickened sweet milk"},
-  {"name":"Basundi","note":"gujarati reduced sweet milk"},
-  {"name":"Shrikhand","note":"strained sweet saffron yogurt"},
-  {"name":"Mango Shrikhand","note":"mango-flavored strained yogurt sweet"},
-  {"name":"Jalebi","note":"crisp fried spirals in sugar syrup"},
-  {"name":"Imarti","note":"urad-dal flower-shaped syrup sweet"},
-  {"name":"Malpua","note":"fried sweet pancakes in syrup"},
-  {"name":"Ghevar","note":"rajasthani disc-shaped honeycomb sweet"},
-  {"name":"Gujiya","note":"fried pastry with khoya-nut filling"},
-  {"name":"Mysore Pak","note":"gram-flour ghee fudge"},
-  {"name":"Kaju Katli","note":"cashew fudge diamonds"},
-  {"name":"Badam Barfi","note":"almond fudge"},
-  {"name":"Milk Barfi","note":"khoya milk fudge"},
-  {"name":"Kalakand","note":"grainy milk-cardamom fudge"},
-  {"name":"Sohan Papdi","note":"flaky gram-flour ghee sweet"},
-  {"name":"Balushahi","note":"glazed flaky fried sweet"},
-  {"name":"Modak","note":"steamed rice-coconut-jaggery dumplings"},
-  {"name":"Anarsa","note":"rice-jaggery fried sweet"},
-  {"name":"Shakkarpara","note":"crisp sweet fried diamonds"},
-  {"name":"Sooji Halwa","note":"semolina ghee halwa"},
-  {"name":"Aate Ka Halwa","note":"whole-wheat ghee halwa"},
-  {"name":"Lauki Halwa","note":"bottle-gourd milk halwa"},
-  {"name":"Badam Halwa","note":"almond ghee halwa"},
-  {"name":"Besan Halwa","note":"gram-flour ghee halwa"},
-  {"name":"Aloo Halwa","note":"potato ghee halwa"},
-  {"name":"Chana Dal Halwa","note":"chana dal ghee halwa"},
-  {"name":"Singhare Ka Halwa","note":"water-chestnut flour fasting halwa"},
-  {"name":"Kaju Barfi","note":"cashew milk barfi"},
-  {"name":"Pinni","note":"punjabi wheat-jaggery-ghee winter sweet"},
-  {"name":"Gond Ke Ladoo","note":"edible-gum wheat winter ladoo"},
-  {"name":"Rava Ladoo","note":"semolina-coconut ladoo"},
-  {"name":"Churma Ladoo","note":"rajasthani wheat-ghee-jaggery ladoo"},
-  {"name":"Motichoor Ladoo","note":"tiny boondi ladoo"},
-  {"name":"Boondi Ladoo","note":"gram-flour pearl ladoo"},
-  {"name":"Til Gud Ladoo","note":"sesame-jaggery winter ladoo"},
-  {"name":"Rajgira Ladoo","note":"amaranth-jaggery fasting ladoo"},
-  {"name":"Murmura Ladoo","note":"puffed-rice jaggery ladoo"},
-  {"name":"Sweet Boondi","note":"sugar-syrup gram-flour pearls"},
-  {"name":"Til Chikki","note":"sesame-jaggery brittle"},
-  {"name":"Dry Fruit Chikki","note":"mixed-nut jaggery brittle"},
-  {"name":"Gajak","note":"sesame-jaggery winter brittle"},
-  {"name":"Rewri","note":"sesame-coated jaggery discs"},
-  {"name":"Coconut Barfi","note":"coconut-milk fudge"},
-  {"name":"Sweet Lassi","note":"sweet blended yogurt drink"},
-  {"name":"Mango Lassi","note":"mango-yogurt blended drink"},
-  {"name":"Salted Lassi","note":"savory spiced yogurt drink"},
-  {"name":"Masala Chaas","note":"spiced buttermilk"},
-  {"name":"Thandai","note":"spiced nut-milk festive drink"},
-  {"name":"Badam Milk","note":"almond-saffron milk"},
-  {"name":"Haldi Doodh","note":"turmeric golden milk"},
-  {"name":"Masala Chai","note":"spiced milk tea"},
-  {"name":"Sattu Sharbat","note":"roasted-gram cooling drink"},
-  {"name":"Aam Panna","note":"raw-mango cooling drink"},
-  {"name":"Jaljeera","note":"cumin-mint tangy drink"},
-  {"name":"Kokum Sharbat","note":"kokum cooling drink"},
-  {"name":"Ragi Malt","note":"finger-millet malt drink"},
-  {"name":"Sol Kadhi","note":"konkani kokum-coconut drink"},
-  {"name":"Dry Fruit Milkshake","note":"nut-blended milkshake"},
-  {"name":"Rose Milk","note":"rose-flavored chilled milk"},
-  {"name":"Kesar Pista Milk","note":"saffron-pistachio milk"},
-  {"name":"Filter Coffee","note":"south indian frothy coffee"},
-  {"name":"Mango Chutney","note":"sweet-spiced raw mango relish"},
-  {"name":"Coriander Chutney","note":"green coriander chutney"},
-  {"name":"Mint Chutney","note":"pudina green chutney"},
-  {"name":"Coconut Chutney","note":"south indian coconut chutney"},
-  {"name":"Tomato Chutney","note":"south indian tomato chutney"},
-  {"name":"Peanut Chutney","note":"roasted-peanut chutney"},
-  {"name":"Tamarind Chutney","note":"sweet-sour date-tamarind chutney"},
-  {"name":"Garlic Chutney","note":"dry red-garlic chutney"},
-  {"name":"Onion Tomato Chutney","note":"south onion-tomato chutney"},
-  {"name":"Gongura Pachadi","note":"andhra sorrel-leaf chutney"},
-  {"name":"Mango Pickle","note":"spiced raw-mango oil pickle"},
-  {"name":"Lemon Pickle","note":"tangy lemon pickle"},
-  {"name":"Green Chilli Pickle","note":"spiced chilli pickle"},
-  {"name":"Mixed Veg Pickle","note":"assorted vegetable pickle"},
-  {"name":"Amla Pickle","note":"gooseberry pickle"},
-  {"name":"Garlic Pickle","note":"spiced garlic pickle"},
-  {"name":"Sarson Saag Makki","note":"mustard greens with cornmeal"},
-  {"name":"Kashmiri Rajma","note":"kashmiri kidney beans curry"},
-  {"name":"Rongi","note":"cowpea curry"},
-  {"name":"Pindi Chana","note":"dry dark rawalpindi chickpeas"},
-  {"name":"Amritsari Chole","note":"dark tangy amritsar chickpeas"},
-  {"name":"Chana Masala Punjabi","note":"punjabi chickpea masala"},
-  {"name":"Dhaba Dal Fry","note":"restaurant-style tempered dal"},
-  {"name":"Langarwali Dal","note":"gurudwara-style dal"},
-  {"name":"Dal Tadka Restaurant","note":"restaurant tempered toor-chana dal"},
-  {"name":"Sindhi Sai Bhaji","note":"sindhi spinach-lentil-veg medley"},
-  {"name":"Kootu Curry","note":"kerala mixed veg-lentil curry"},
-  {"name":"Poricha Kuzhambu","note":"south lentil vegetable stew"},
-  {"name":"More Kuzhambu","note":"seasoned yogurt curry"},
-  {"name":"Keerai Masiyal","note":"south mashed greens"},
-  {"name":"Cabbage Foogath","note":"goan cabbage with coconut"},
-  {"name":"Beans Foogath","note":"goan beans with coconut"},
-  {"name":"Mushroom Xacuti","note":"goan coconut-spice mushroom"},
-  {"name":"Veg Xacuti","note":"goan coconut-spice mixed veg"},
-  {"name":"Alsande Tonak","note":"goan cowpea curry"},
-  {"name":"Batata Bhaji","note":"maharashtrian turmeric potato bhaji"},
-  {"name":"Zunka","note":"maharashtrian dry gram-flour"},
-  {"name":"Pithla","note":"maharashtrian gram-flour curry"},
-  {"name":"Bharli Vangi","note":"maharashtrian stuffed brinjal"},
-  {"name":"Matki Usal","note":"sprouted moth-bean curry"},
-  {"name":"Vaingya Chi Bhaji","note":"maharashtrian brinjal sabzi"},
-  {"name":"Kotimbir Vadi","note":"maharashtrian coriander fritters"},
-  {"name":"Sabudana Vada Maharashtrian","note":"crisp fasting tapioca vada"},
-  {"name":"Aluchi Patal Bhaji","note":"maharashtrian colocasia-leaf curry"},
-  {"name":"Amti","note":"maharashtrian tangy toor dal"},
-  {"name":"Katachi Amti","note":"spicy lentil-water amti"},
-  {"name":"Masale Bhat","note":"maharashtrian spiced vegetable rice"},
-  {"name":"Vangi Bath","note":"karnataka brinjal rice"},
-  {"name":"Puliyogare","note":"karnataka tamarind rice"},
-  {"name":"Chitranna","note":"karnataka lemon rice"},
-  {"name":"Bisi Bele Huli Anna","note":"karnataka spicy lentil rice"},
-  {"name":"Ragi Rotti","note":"finger-millet flatbread"},
-  {"name":"Jolada Rotti","note":"karnataka sorghum flatbread"},
-  {"name":"Ennegayi","note":"karnataka stuffed brinjal"},
-  {"name":"Majjige Huli","note":"karnataka yogurt curry"},
-  {"name":"Kosambari","note":"south lentil salad"},
-  {"name":"Gojju","note":"karnataka sweet-sour gravy"},
-  {"name":"Pulikachal","note":"tamarind rice paste"},
-  {"name":"Paruppu Usili","note":"tamil lentil-crumble beans"},
-  {"name":"Poriyal Carrot","note":"tamil carrot stir-fry"},
-  {"name":"Kara Kozhambu","note":"tamil spicy tamarind gravy"},
-  {"name":"Milagu Kuzhambu","note":"tamil pepper gravy"},
-  {"name":"Ellu Sadam","note":"tamil sesame rice"},
-  {"name":"Coconut Sadam","note":"tamil coconut rice"},
-  {"name":"Curd Semiya","note":"yogurt vermicelli"},
-  {"name":"Semiya Upma","note":"vermicelli upma"},
-  {"name":"Arisi Upma","note":"tamil rice upma"},
-  {"name":"Kuzhi Paniyaram","note":"tamil savory rice-lentil balls"},
-  {"name":"Sweet Paniyaram","note":"jaggery rice-lentil balls"},
-  {"name":"Adhirasam","note":"tamil rice-jaggery fried sweet"},
-  {"name":"Sakkarai Pongal","note":"tamil jaggery rice pongal"},
-  {"name":"Payasam","note":"south indian milk-jaggery pudding"},
-  {"name":"Semiya Payasam","note":"vermicelli payasam"},
-  {"name":"Paruppu Payasam","note":"moong dal jaggery payasam"},
-  {"name":"Ada Pradhaman","note":"kerala rice-flake jaggery payasam"},
-  {"name":"Palada Payasam","note":"kerala rice-ada milk payasam"},
-  {"name":"Unniyappam","note":"kerala banana-rice sweet fritters"},
-  {"name":"Neyyappam","note":"kerala ghee-rice jaggery fritters"},
-  {"name":"Ela Ada","note":"kerala steamed rice-coconut parcels"},
-  {"name":"Kozhukattai","note":"tamil steamed rice dumplings"},
-  {"name":"Sundal","note":"south tempered legume snack"},
-  {"name":"Thattai","note":"crisp south rice crackers"},
-  {"name":"Murukku","note":"crisp spiral rice-lentil snack"},
-  {"name":"Ribbon Pakoda","note":"crisp ribbon gram snack"},
-  {"name":"Mixture","note":"south savory snack mix"},
-  {"name":"Nippattu","note":"karnataka crisp rice crackers"},
-  {"name":"Chakli","note":"crisp spiral savory snack"},
-  {"name":"Chivda","note":"savory flattened-rice snack mix"},
-  {"name":"Bhakarwadi","note":"spiral spiced fried snack"},
-  {"name":"Farsi Puri","note":"crisp savory gujarati puri"},
-  {"name":"Mathri","note":"crisp flaky savory disc"},
-  {"name":"Namak Para","note":"crisp savory fried strips"},
-  {"name":"Khakhra","note":"thin roasted crisp flatbread"},
-  {"name":"Fafda","note":"gujarati crisp gram-flour strips"},
-  {"name":"Gathiya","note":"soft gram-flour fried snack"},
-  {"name":"Sev","note":"crisp gram-flour noodles"},
-  {"name":"Aloo Bhujia","note":"crisp potato-gram noodles"},
-  {"name":"Dhokla Sandwich","note":"layered white-green dhokla"},
-  {"name":"Tri Color Dhokla","note":"three-layer steamed dhokla"},
-  {"name":"Rava Dhokla","note":"instant semolina dhokla"},
-  {"name":"Khaman","note":"soft yellow gram-flour steamed cake"},
-  {"name":"Khatta Dhokla","note":"fermented rice-lentil white dhokla"},
-  {"name":"Dahi Wada Punjabi","note":"urad vadas in spiced yogurt"},
-  {"name":"Raj Kachori Chaat","note":"loaded large crisp kachori"},
-  {"name":"Aloo Tikki Chaat","note":"potato patty with chutneys and yogurt"},
-  {"name":"Kachori Chaat","note":"crushed kachori chaat"},
-  {"name":"Palak Patta Chaat","note":"crisp spinach-leaf chaat"},
-  {"name":"Corn Chaat","note":"spiced sweet-corn chaat"},
-  {"name":"Fruit Chaat","note":"mixed-fruit chaat with spices"},
-  {"name":"Chana Chaat","note":"boiled chickpea chaat"},
-  {"name":"Sprout Chaat","note":"mixed-sprout chaat"},
-  {"name":"Basket Chaat","note":"potato-basket loaded chaat"},
-  {"name":"Matar Kachori","note":"green-pea stuffed kachori"},
-  {"name":"Khasta Kachori","note":"flaky lentil kachori"},
-  {"name":"Bedai","note":"urad-stuffed puffed puri"},
-  {"name":"Litti Chokha","note":"bihari stuffed wheat balls with mash"},
-  {"name":"Sattu Litti","note":"bihari roasted-gram stuffed litti"},
-  {"name":"Sattu Paratha Bihari","note":"bihari roasted-gram stuffed paratha"},
-  {"name":"Ghugni","note":"eastern white-pea curry"},
-  {"name":"Chana Ghugni","note":"bengali chickpea ghugni"},
-  {"name":"Aloor Dom","note":"bengali spiced potato curry"},
-  {"name":"Bengali Khichuri","note":"bengali moong-rice khichuri"},
-  {"name":"Bhuni Khichdi","note":"roasted spiced khichdi"},
-  {"name":"Masoor Dal Bengali","note":"bengali red-lentil dal"},
-  {"name":"Sukto","note":"bengali bitter mixed-veg medley"},
-  {"name":"Chanar Dalna","note":"bengali paneer-ball curry"},
-  {"name":"Enchor Er Dalna","note":"bengali raw-jackfruit curry"},
-  {"name":"Dhonepata Bora","note":"bengali coriander fritters"},
-  {"name":"Beguni","note":"bengali batter-fried brinjal"},
-  {"name":"Peyaji","note":"bengali onion fritters"},
-  {"name":"Aloo Chop","note":"bengali potato croquettes"},
-  {"name":"Veg Chop","note":"bengali beetroot-veg croquettes"},
-  {"name":"Mughlai Paratha Veg","note":"bengali stuffed fried flatbread"},
-  {"name":"Assamese Khar","note":"assamese alkaline vegetable dish"},
-  {"name":"Aloo Pitika","note":"assamese mashed potato"},
-  {"name":"Poita Bhat","note":"assamese fermented rice"},
-  {"name":"Til Pitha","note":"assamese sesame rice cake"},
-  {"name":"Pitha","note":"eastern rice-jaggery cake"},
-  {"name":"Chakuli Pitha","note":"odia rice-lentil pancake"},
-  {"name":"Dalma","note":"odia lentil-vegetable dish"},
-  {"name":"Santula","note":"odia mixed-veg light stew"},
-  {"name":"Besara","note":"odia mustard-paste vegetable curry"},
-  {"name":"Ghanta Tarkari","note":"odia mixed-vegetable curry"},
-  {"name":"Kanika","note":"odia sweet ghee rice"},
-  {"name":"Khechudi","note":"odia rice-moong khichdi"},
-  {"name":"Chhena Poda","note":"odia baked cottage-cheese sweet"},
-  {"name":"Rasabali","note":"odia fried chhena in rabri"},
-  {"name":"Gaja","note":"odia sweet fried strips"},
-  {"name":"Chhena Jhili","note":"odia syrup-soaked chhena sweet"},
-  {"name":"Malpua Odia","note":"odia banana malpua"},
-  {"name":"Aloo Kurma","note":"south potato korma"},
-  {"name":"Veg Kurma","note":"south mixed-veg coconut korma"},
-  {"name":"Chana Kurma","note":"chickpea coconut korma"},
-  {"name":"Saagu","note":"karnataka mixed-veg coconut gravy"},
-  {"name":"Kadamba Sadam","note":"south mixed rice"},
-  {"name":"Bagara Baingan Hyderabadi","note":"hyderabadi peanut-sesame brinjal"},
-  {"name":"Mirchi Ka Salan","note":"hyderabadi chilli peanut curry"},
-  {"name":"Tomato Kut","note":"hyderabadi thick tomato curry"},
-  {"name":"Khatti Dal","note":"hyderabadi tangy dal"},
-  {"name":"Dalcha","note":"hyderabadi lentil-bottle-gourd curry"},
-  {"name":"Til Ki Chutney","note":"hyderabadi sesame chutney"},
-  {"name":"Double Ka Meetha","note":"hyderabadi bread pudding"},
-  {"name":"Qubani Ka Meetha","note":"hyderabadi apricot dessert"},
-  {"name":"Sheer Khurma","note":"vermicelli-date festive kheer"},
-  {"name":"Khubani Halwa","note":"apricot halwa"},
-  {"name":"Gil E Firdaus","note":"bottle-gourd creamy pudding"},
-  {"name":"Kaddu Ki Kheer","note":"pumpkin milk kheer"},
-  {"name":"Makhane Ki Kheer","note":"foxnut milk kheer"},
-  {"name":"Chawal Ki Kheer","note":"classic rice kheer"},
-  {"name":"Anjeer Halwa","note":"fig ghee halwa"},
-  {"name":"Dates Halwa","note":"date-nut halwa"},
-  {"name":"Beetroot Halwa","note":"beetroot milk halwa"},
-  {"name":"Kaju Halwa","note":"cashew ghee halwa"},
-  {"name":"Moong Dal Sheera","note":"moong dal ghee sweet"},
-  {"name":"Sheera","note":"maharashtrian semolina sweet"},
-  {"name":"Rava Sheera","note":"semolina banana sweet"},
-  {"name":"Sabudana Vada Snack","note":"crisp tapioca snack"},
-  {"name":"Farali Chevdo","note":"fasting savory mix"},
-  {"name":"Rajgira Chikki","note":"amaranth jaggery brittle"},
-  {"name":"Kuttu Ki Puri","note":"buckwheat fasting puri"},
-  {"name":"Kuttu Pakora","note":"buckwheat fasting fritters"},
-  {"name":"Samak Rice","note":"barnyard-millet fasting rice"},
-  {"name":"Samak Khichdi","note":"barnyard-millet fasting khichdi"},
-  {"name":"Vrat Ke Aloo","note":"fasting spiced potatoes"},
-  {"name":"Makhana Kheer","note":"foxnut kheer"},
-  {"name":"Roasted Makhana","note":"ghee-roasted foxnuts snack"},
-  {"name":"Aloo Jeera Vrat","note":"fasting cumin potatoes"},
-  {"name":"Lauki Kofta Curry","note":"bottle-gourd kofta in gravy"},
-  {"name":"Malai Kofta White","note":"paneer kofta in white gravy"},
-  {"name":"Nargisi Kofta","note":"egg-shaped veg kofta curry"},
-  {"name":"Cabbage Kofta","note":"cabbage dumpling curry"},
-  {"name":"Paneer Kofta","note":"paneer dumpling curry"},
-  {"name":"Veg Kofta Curry","note":"mixed-veg kofta gravy"},
-  {"name":"Dahi Ke Kabab","note":"hung-curd griddle kababs"},
-  {"name":"Rajma Galouti","note":"kidney-bean melt-in-mouth kabab"},
-  {"name":"Veg Seekh Kabab","note":"griddled veg seekh"},
-  {"name":"Soya Seekh Kabab","note":"soya griddled kabab"},
-  {"name":"Beetroot Tikki","note":"beetroot patty"},
-  {"name":"Rajma Tikki","note":"kidney-bean patty"},
-  {"name":"Sabudana Tikki","note":"tapioca patty"},
-  {"name":"Corn Palak Tikki","note":"corn-spinach patty"},
-  {"name":"Moong Dal Tikki","note":"moong-lentil patty"},
-  {"name":"Paneer Tikka","note":"grilled marinated paneer"},
-  {"name":"Malai Paneer Tikka","note":"creamy grilled paneer"},
-  {"name":"Hariyali Paneer Tikka","note":"green-marinade paneer tikka"},
-  {"name":"Achari Paneer Tikka","note":"pickle-spiced paneer tikka"},
-  {"name":"Mushroom Tikka","note":"grilled marinated mushrooms"},
-  {"name":"Soya Chaap Tikka","note":"grilled soy chaap"},
-  {"name":"Tandoori Aloo","note":"grilled stuffed potatoes"},
-  {"name":"Tandoori Gobi","note":"grilled marinated cauliflower"},
-  {"name":"Veg Galouti","note":"soft veg melt kabab"},
-  {"name":"Hara Bhara Kabab Snack","note":"spinach-pea patties"},
-  {"name":"Dal Ke Kabab","note":"lentil griddle kababs"},
-  {"name":"Kathal Kabab","note":"raw-jackfruit kabab"},
-  {"name":"Aloo Ki Kadhi","note":"potato yogurt curry"},
-  {"name":"Pakora Kadhi Punjabi","note":"punjabi fritter yogurt curry"},
-  {"name":"Boondi Kadhi","note":"gram-pearl yogurt curry"},
-  {"name":"Rajasthani Kadhi","note":"tangy besan kadhi"},
-  {"name":"Palak Kadhi","note":"spinach yogurt curry"},
-  {"name":"Methi Pakora Kadhi","note":"fenugreek-fritter kadhi"},
-  {"name":"Dahi Baingan","note":"brinjal in yogurt gravy"},
-  {"name":"Dahi Bhindi","note":"okra in yogurt gravy"},
-  {"name":"Dahi Wale Aloo","note":"potatoes in yogurt gravy"},
-  {"name":"Dahi Ki Sabzi","note":"yogurt-based curry"},
-  {"name":"Kadhi Vada","note":"vadas in yogurt curry"},
-  {"name":"Besan Ke Gatte","note":"gram-flour dumplings dry"},
-  {"name":"Govind Gatta","note":"stuffed rich gatta curry"},
-  {"name":"Ker Sangri Ki Sabzi","note":"desert bean-berry sabzi"},
-  {"name":"Bajre Ki Khichdi","note":"pearl-millet khichdi"},
-  {"name":"Bajre Ka Churma","note":"pearl-millet ghee-jaggery crumble"},
-  {"name":"Lapsi","note":"broken-wheat jaggery sweet"},
-  {"name":"Fada Ni Lapsi","note":"gujarati broken-wheat sweet"},
-  {"name":"Sukhdi","note":"gujarati wheat-jaggery-ghee sweet"},
-  {"name":"Gol Papdi","note":"gujarati jaggery wheat squares"},
-  {"name":"Mohanthal","note":"gujarati gram-flour fudge"},
-  {"name":"Magas","note":"gujarati gram-flour sweet"},
-  {"name":"Doodh Pak","note":"gujarati rice milk pudding"},
-  {"name":"Shrikhand Puri","note":"saffron yogurt sweet with puri"},
-  {"name":"Handvo Gujarati","note":"savory lentil-rice cake"},
-  {"name":"Dhokla Khatta","note":"tangy rice-lentil dhokla"},
-  {"name":"Khaman Nylon","note":"soft spongy gram dhokla"},
-  {"name":"Sev Khamani","note":"crumbled dhokla with sev"},
-  {"name":"Locho","note":"surti soft steamed savory"},
-  {"name":"Ponk Vada","note":"surti tender-jowar fritters"},
-  {"name":"Undhiyu Surti","note":"surti mixed-veg casserole"},
-  {"name":"Ringan Bateta","note":"brinjal-potato gujarati sabzi"},
-  {"name":"Bharela Marcha","note":"gujarati stuffed chillies"},
-  {"name":"Sev Tameta","note":"tomato curry with sev"},
-  {"name":"Vaal Nu Shaak","note":"gujarati field-bean curry"},
-  {"name":"Lilva Kachori Gujarati","note":"tuvar-pigeon-pea kachori"},
-  {"name":"Methi Thepla Gujarati","note":"fenugreek flatbread"},
-  {"name":"Dudhi Thepla","note":"bottle-gourd flatbread"},
-  {"name":"Bajra Thepla","note":"pearl-millet flatbread"},
-  {"name":"Rotlo","note":"gujarati pearl-millet thick roti"},
-  {"name":"Bajra Rotla","note":"kathiyawadi pearl-millet roti"},
-  {"name":"Ringna No Olo Gujarati","note":"smoked brinjal mash"},
-  {"name":"Sev Usal","note":"spicy pea curry with sev"},
-  {"name":"Dabeli Kutchi","note":"kutchi spiced-potato bun"},
-  {"name":"Khichu","note":"gujarati rice-flour steamed dough"},
-  {"name":"Panki","note":"gujarati leaf-steamed rice pancake"},
-  {"name":"Muthiya Dudhi","note":"steamed bottle-gourd dumplings"},
-  {"name":"Vagharela Bhaat","note":"gujarati tempered rice"},
-  {"name":"Khichdi Gujarati","note":"gujarati moong-rice khichdi"},
-  {"name":"Osaman","note":"gujarati thin lentil soup"},
-  {"name":"Kadhi Gujarati Sweet","note":"sweet-sour yogurt kadhi"},
-  {"name":"Bhinda Nu Shaak","note":"gujarati okra sabzi"},
-  {"name":"Tindora Nu Shaak","note":"ivy-gourd gujarati sabzi"},
-  {"name":"Papdi Nu Shaak","note":"field-bean gujarati sabzi"},
-  {"name":"Guvar Nu Shaak","note":"cluster-bean gujarati sabzi"},
-  {"name":"Kobi Nu Shaak","note":"cabbage-pea gujarati sabzi"},
-  {"name":"Batata Poha Gujarati","note":"potato poha"},
-  {"name":"Ganthiya Nu Shaak","note":"gram-strip curry"},
-  {"name":"Aloo Rasedar","note":"potatoes in thin tangy gravy"},
-  {"name":"Kaddu Rasedar","note":"pumpkin thin gravy"},
-  {"name":"Nimona","note":"awadhi green-pea curry"},
-  {"name":"Tehri","note":"awadhi turmeric veg rice"},
-  {"name":"Bathua Raita","note":"chenopodium yogurt side"},
-  {"name":"Boondi Raita","note":"gram-pearl yogurt side"},
-  {"name":"Vegetable Raita","note":"mixed-veg yogurt side"},
-  {"name":"Aloo Raita","note":"potato yogurt side"},
-  {"name":"Pineapple Raita","note":"sweet pineapple yogurt"},
-  {"name":"Palak Raita","note":"spinach yogurt side"},
-  {"name":"Lauki Raita","note":"bottle-gourd yogurt side"},
-  {"name":"Aloo Gosht Veg","note":"soya potato curry"},
-  {"name":"Soya Keema","note":"minced soya masala"},
-  {"name":"Soya Matar Keema","note":"soya-pea minced curry"},
-  {"name":"Veg Keema","note":"minced mixed-veg masala"},
-  {"name":"Keema Mutter Soya","note":"soya keema with peas"},
-  {"name":"Soya Biryani","note":"soya-chunk biryani"},
-  {"name":"Soya Pulao","note":"soya-chunk pulao"},
-  {"name":"Mushroom Biryani","note":"mushroom dum biryani"},
-  {"name":"Paneer Biryani","note":"paneer dum biryani"},
-  {"name":"Tawa Pulao","note":"mumbai spiced tawa rice"},
-  {"name":"Jeera Aloo Rice","note":"cumin-potato rice"},
-  {"name":"Curd Rice South","note":"tempered yogurt rice"},
-  {"name":"Bagara Khana","note":"hyderabadi tempered rice"},
-  {"name":"Methi Rice","note":"fenugreek pulao"},
-  {"name":"Palak Rice","note":"spinach pulao"},
-  {"name":"Beetroot Rice","note":"beetroot tempered rice"},
-  {"name":"Capsicum Rice","note":"capsicum masala rice"},
-  {"name":"Mint Rice","note":"pudina pulao"},
-  {"name":"Mushroom Pulao","note":"mushroom fragrant rice"},
-  {"name":"Soybean Pulao","note":"soya nutri pulao"},
-  {"name":"Rajma Pulao","note":"kidney-bean rice"},
-  {"name":"Chana Pulao","note":"chickpea pulao"},
-  {"name":"Kaju Pulao","note":"cashew ghee pulao"},
-  {"name":"Matar Mushroom","note":"peas-mushroom curry"},
-  {"name":"Aloo Mushroom","note":"potato-mushroom sabzi"},
-  {"name":"Mushroom Do Pyaza","note":"mushroom double-onion sabzi"},
-  {"name":"Chilli Mushroom","note":"indo-chinese chilli mushroom"},
-  {"name":"Mushroom Kadai","note":"mushroom in kadai masala"},
-  {"name":"Corn Methi Malai","note":"corn-fenugreek cream curry"},
-  {"name":"Makai Palak","note":"corn spinach curry"},
-  {"name":"Baby Corn Manchurian","note":"baby-corn in manchurian sauce"},
-  {"name":"Baby Corn Masala","note":"baby-corn curry"},
-  {"name":"Crispy Baby Corn","note":"fried baby-corn snack"},
-  {"name":"Honey Chilli Potato","note":"sweet-spicy crisp potato"},
-  {"name":"Crispy Corn","note":"fried spiced sweet-corn"},
-  {"name":"Chilli Baby Corn","note":"chilli baby-corn stir fry"},
-  {"name":"Veg Lollipop","note":"crisp veg-ball snack"},
-  {"name":"Paneer 65","note":"spicy fried paneer"},
-  {"name":"Gobi 65","note":"spicy fried cauliflower"},
-  {"name":"Mushroom 65","note":"spicy fried mushroom"},
-  {"name":"Baby Corn 65","note":"spicy fried baby-corn"},
-  {"name":"Veg 65","note":"spicy fried mixed veg"},
-  {"name":"Aloo 65","note":"spicy fried potato"},
-  {"name":"Chilli Gobi","note":"cauliflower in chilli sauce"},
-  {"name":"Crispy Veg","note":"crisp fried mixed veg"},
-  {"name":"Veg Cheese Balls","note":"fried cheese-veg balls"},
-  {"name":"Corn Cheese Balls","note":"fried corn-cheese balls"},
-  {"name":"Aloo Cheese Balls","note":"fried potato-cheese balls"},
-  {"name":"Bread Upma","note":"tempered bread cubes"},
-  {"name":"Bread Poha","note":"bread poha"},
-  {"name":"Sooji Toast","note":"semolina veg toast"},
-  {"name":"Veg Sandwich","note":"grilled masala veg sandwich"},
-  {"name":"Bombay Sandwich","note":"mumbai chutney veg sandwich"},
-  {"name":"Corn Sandwich","note":"creamy corn sandwich"},
-  {"name":"Paneer Sandwich","note":"spiced paneer sandwich"},
-  {"name":"Chutney Sandwich","note":"green-chutney sandwich"},
-  {"name":"Aloo Sandwich","note":"spiced-potato sandwich"},
-  {"name":"Veg Cutlet Bengali","note":"beetroot-veg croquette"},
-  {"name":"Rava Toast","note":"semolina griddle toast"},
-  {"name":"Uttapam Onion Tomato","note":"thick veg-topped dosa"},
-  {"name":"Podi Idli","note":"idli tossed in spice powder"},
-  {"name":"Ghee Roast Dosa","note":"crisp ghee-roasted dosa"},
-  {"name":"Onion Rava Dosa","note":"semolina onion crepe"},
-  {"name":"Mysore Masala Dosa","note":"chutney-smeared masala dosa"},
-  {"name":"Paper Dosa","note":"extra-thin crisp dosa"},
-  {"name":"Egg-free Uttapam","note":"veg mixed uttapam"},
-  {"name":"Idli Upma","note":"crumbled idli upma"},
-  {"name":"Kanchipuram Idli","note":"spiced steamed idli"},
-  {"name":"Thattu Idli","note":"soft plate idli"},
-  {"name":"Ragi Idli","note":"finger-millet idli"},
-  {"name":"Oats Idli","note":"instant oats idli"},
-  {"name":"Sabudana Idli","note":"tapioca steamed idli"},
-  {"name":"Moong Dal Idli","note":"green-gram idli"},
-  {"name":"Kambu Dosai","note":"pearl-millet dosa"},
-  {"name":"Adai Avial","note":"mixed-lentil dosa with avial"},
-  {"name":"Uttapam Podi","note":"spice-powder uttapam"},
-  {"name":"Wheat Dosa","note":"instant wheat crepe"},
-  {"name":"Moong Dal Dosa","note":"green-gram crepe"},
-  {"name":"Jowar Dosa","note":"sorghum crepe"},
-  {"name":"Quinoa Dosa","note":"quinoa crepe"},
-  {"name":"Godhuma Dosa","note":"broken-wheat crepe"},
-  {"name":"Aloo Kulcha","note":"potato-stuffed kulcha"},
-  {"name":"Paneer Kulcha","note":"paneer-stuffed kulcha"},
-  {"name":"Onion Kulcha","note":"onion-stuffed kulcha"},
-  {"name":"Matar Kulcha","note":"pea-stuffed kulcha"},
-  {"name":"Plain Kulcha","note":"soft leavened flatbread"},
-  {"name":"Aloo Naan","note":"potato-stuffed naan"},
-  {"name":"Paneer Naan","note":"paneer-stuffed naan"},
-  {"name":"Cheese Naan","note":"cheese-stuffed naan"},
-  {"name":"Lachha Paratha","note":"layered flaky paratha"},
-  {"name":"Malabar Paratha","note":"flaky layered kerala bread"},
-  {"name":"Ajwain Paratha","note":"carom-seed flatbread"},
-  {"name":"Pudina Paratha","note":"mint layered flatbread"},
-  {"name":"Laccha Pyaz Paratha","note":"layered onion flatbread"},
-  {"name":"Til Paratha","note":"sesame flatbread"},
-  {"name":"Besan Paratha","note":"gram-flour flatbread"},
-  {"name":"Missi Roti Rajasthani","note":"spiced gram-wheat flatbread"},
-  {"name":"Makhana Raita","note":"foxnut yogurt side"},
-  {"name":"Aamras","note":"sweet mango pulp"},
-  {"name":"Aamras Puri","note":"mango pulp with puri"},
-  {"name":"Fruit Custard","note":"chilled mixed-fruit custard"},
-  {"name":"Mango Kulfi","note":"mango frozen dessert"},
-  {"name":"Malai Kulfi","note":"reduced-milk frozen dessert"},
-  {"name":"Pista Kulfi","note":"pistachio kulfi"},
-  {"name":"Kesar Kulfi","note":"saffron kulfi"},
-  {"name":"Falooda","note":"rose-vermicelli milk dessert"},
-  {"name":"Kulfi Falooda","note":"kulfi with falooda"},
-  {"name":"Sitaphal Basundi","note":"custard-apple sweet milk"},
-  {"name":"Angoori Rasmalai","note":"tiny rasmalai balls"},
-  {"name":"Rajbhog","note":"large stuffed rasgulla"},
-  {"name":"Kesar Peda","note":"saffron milk peda"},
-  {"name":"Doodh Peda","note":"milk peda"},
-  {"name":"Mathura Peda","note":"grainy brown peda"},
-  {"name":"Malai Peda","note":"creamy milk peda"},
-  {"name":"Coconut Ladoo Instant","note":"quick coconut-milk ladoo"},
-  {"name":"Dry Fruit Barfi","note":"mixed-nut barfi"},
-  {"name":"Chocolate Barfi","note":"cocoa milk barfi"},
-  {"name":"Pista Barfi","note":"pistachio barfi"},
-  {"name":"Anjeer Barfi","note":"fig-nut barfi"},
-  {"name":"Khoya Barfi","note":"plain milk-solid barfi"},
-  {"name":"Nariyal Ladoo Khoya","note":"coconut-khoya ladoo"},
-  {"name":"Malai Ladoo","note":"soft paneer-milk ladoo"},
-  {"name":"Paneer Ladoo","note":"cottage-cheese ladoo"},
-  {"name":"Wheat Ladoo","note":"whole-wheat ghee ladoo"},
-  {"name":"Ragi Ladoo","note":"finger-millet jaggery ladoo"},
-  {"name":"Oats Ladoo","note":"oats-nut jaggery ladoo"},
-  {"name":"Peanut Ladoo","note":"groundnut-jaggery ladoo"},
-  {"name":"Flaxseed Ladoo","note":"alsi jaggery ladoo"},
-  {"name":"Methi Ladoo","note":"fenugreek winter ladoo"},
-  {"name":"Dink Ladoo","note":"edible-gum winter ladoo"},
-  {"name":"Coconut Jaggery Ladoo","note":"coconut-gud ladoo"},
-  {"name":"Til Ladoo Gud","note":"sesame-jaggery ladoo"},
-  {"name":"Rajgira Ladoo Fasting","note":"amaranth fasting ladoo"},
-  {"name":"Makhana Ladoo","note":"foxnut ghee ladoo"},
-  {"name":"Besan Ke Ladoo Bhuna","note":"roasted gram-flour ladoo"},
-  {"name":"Sattu Ladoo Bihari","note":"roasted-gram jaggery ladoo"},
-  {"name":"Nariyal Chikki","note":"coconut jaggery brittle"},
-  {"name":"Groundnut Chikki","note":"peanut jaggery brittle"},
-  {"name":"Rajgira Chikki Fasting","note":"amaranth brittle"},
-  {"name":"Poha Chivda","note":"flattened-rice snack mix"},
-  {"name":"Makhana Chivda","note":"foxnut snack mix"},
-  {"name":"Roasted Chana","note":"spiced roasted gram snack"},
-  {"name":"Masala Peanuts","note":"spiced coated peanuts"},
-  {"name":"Masala Kaju","note":"spiced roasted cashews"},
-  {"name":"Dahi Papdi","note":"papdi with yogurt"},
-  {"name":"Ragda Samosa","note":"samosa over white-pea curry"},
-  {"name":"Chole Tikki","note":"chickpea over potato patty"},
-  {"name":"Aloo Tikki Chole","note":"potato patty with chickpea gravy"},
-  {"name":"Matar Tikki","note":"green-pea patty"},
-  {"name":"Kachori Sabzi","note":"kachori with potato curry"},
-  {"name":"Aloo Sabzi Puri","note":"potato curry with puri"},
-  {"name":"Chole Bhature","note":"chickpea curry with fried bread"},
-  {"name":"Chana Samosa","note":"chickpea-filled samosa"},
-  {"name":"Corn Samosa","note":"cheese-corn samosa"},
-  {"name":"Paneer Samosa","note":"paneer-filled samosa"},
-  {"name":"Noodles Samosa","note":"noodle-filled samosa"},
-  {"name":"Pizza Samosa","note":"cheese-veg samosa"},
-  {"name":"Mini Samosa","note":"bite-size crisp samosa"},
-  {"name":"Onion Samosa","note":"south crisp onion samosa"},
-  {"name":"Punjabi Samosa","note":"large potato-pea samosa"},
-  {"name":"Veg Puff","note":"flaky spiced-veg pastry"},
-  {"name":"Paneer Puff","note":"paneer flaky pastry"},
-  {"name":"Aloo Puff","note":"potato flaky pastry"},
-  {"name":"Masala Bread","note":"spiced pan-tossed bread"},
-  {"name":"Bread Roll Potato","note":"potato-stuffed fried bread roll"},
-  {"name":"Veg Roll","note":"rolled spiced-veg wrap"},
-  {"name":"Paneer Roll","note":"paneer kathi roll"},
-  {"name":"Aloo Roll","note":"spiced-potato roll"},
-  {"name":"Noodle Roll","note":"noodle-filled roll"},
-  {"name":"Cheese Corn Balls","note":"fried cheese-corn balls"},
-  {"name":"Veg Manchow Soup","note":"indo-chinese spicy soup"},
-  {"name":"Hot And Sour Soup","note":"tangy veg soup"},
-  {"name":"Sweet Corn Soup","note":"creamy corn soup"},
-  {"name":"Tomato Soup","note":"spiced tomato soup"},
-  {"name":"Lemon Coriander Soup","note":"clear tangy soup"},
-  {"name":"Palak Soup","note":"spinach soup"},
-  {"name":"Mixed Veg Soup","note":"clear vegetable soup"},
-  {"name":"Dal Shorba","note":"spiced lentil soup"},
-  {"name":"Tomato Dhaniya Shorba","note":"tomato-coriander soup"},
-  {"name":"Beetroot Soup","note":"beetroot cream soup"}
+  {
+    "name": "Palak Paneer",
+    "note": "paneer cubes in a smooth spinach gravy"
+  },
+  {
+    "name": "Matar Paneer",
+    "note": "paneer and green peas in onion-tomato gravy"
+  },
+  {
+    "name": "Shahi Paneer",
+    "note": "paneer in a rich cashew-cream mildly sweet gravy"
+  },
+  {
+    "name": "Paneer Bhurji",
+    "note": "scrambled crumbled paneer with onion, tomato, spices"
+  },
+  {
+    "name": "Chilli Paneer",
+    "note": "indo-chinese crisp paneer in soy-chilli sauce"
+  },
+  {
+    "name": "Paneer Tikka Masala",
+    "note": "grilled paneer tikka in spiced gravy"
+  },
+  {
+    "name": "Paneer Lababdar",
+    "note": "paneer in a tomato-cashew buttery gravy"
+  },
+  {
+    "name": "Paneer Do Pyaza",
+    "note": "paneer with double onions, semi-dry"
+  },
+  {
+    "name": "Palak Corn",
+    "note": "sweet corn in creamy spinach gravy"
+  },
+  {
+    "name": "Corn Capsicum Sabzi",
+    "note": "sweet corn and capsicum dry sabzi"
+  },
+  {
+    "name": "Aloo Baingan",
+    "note": "potato and brinjal dry sabzi"
+  },
+  {
+    "name": "Aloo Methi",
+    "note": "potato with fresh fenugreek leaves, dry"
+  },
+  {
+    "name": "Aloo Palak",
+    "note": "potato in spinach, semi-dry"
+  },
+  {
+    "name": "Aloo Shimla Mirch",
+    "note": "potato and capsicum stir-fry"
+  },
+  {
+    "name": "Jeera Aloo",
+    "note": "cumin-tempered dry potatoes"
+  },
+  {
+    "name": "Dahi Aloo",
+    "note": "baby potatoes in a yogurt gravy"
+  },
+  {
+    "name": "Aloo Beans",
+    "note": "potato and french beans dry sabzi"
+  },
+  {
+    "name": "Beans Poriyal",
+    "note": "south indian french beans with coconut"
+  },
+  {
+    "name": "Cabbage Poriyal",
+    "note": "south indian cabbage stir-fry with coconut"
+  },
+  {
+    "name": "Beans Thoran",
+    "note": "kerala french beans with grated coconut"
+  },
+  {
+    "name": "Cabbage Thoran",
+    "note": "kerala cabbage with coconut and curry leaves"
+  },
+  {
+    "name": "Avial",
+    "note": "kerala mixed vegetables in coconut-yogurt"
+  },
+  {
+    "name": "Olan",
+    "note": "kerala ash gourd and cowpeas in coconut milk"
+  },
+  {
+    "name": "Kootu",
+    "note": "south indian lentil and vegetable stew"
+  },
+  {
+    "name": "Vegetable Stew",
+    "note": "kerala veg stew in coconut milk"
+  },
+  {
+    "name": "Erissery",
+    "note": "kerala pumpkin and bean curry with coconut"
+  },
+  {
+    "name": "Sambar",
+    "note": "south indian lentil and vegetable stew with tamarind"
+  },
+  {
+    "name": "Tomato Rasam",
+    "note": "tangy south indian tomato-tamarind soup"
+  },
+  {
+    "name": "Pepper Rasam",
+    "note": "peppery south indian rasam"
+  },
+  {
+    "name": "Lemon Rasam",
+    "note": "lemon-tempered rasam"
+  },
+  {
+    "name": "Mysore Rasam",
+    "note": "rasam with roasted coconut-spice paste"
+  },
+  {
+    "name": "Mor Kuzhambu",
+    "note": "south indian yogurt-coconut curry"
+  },
+  {
+    "name": "Vatha Kuzhambu",
+    "note": "tangy tamarind gravy with sun-dried veg"
+  },
+  {
+    "name": "Kara Kuzhambu",
+    "note": "spicy tamarind vegetable gravy"
+  },
+  {
+    "name": "Kadala Curry",
+    "note": "kerala black chickpea coconut curry"
+  },
+  {
+    "name": "Idli",
+    "note": "steamed fermented rice-lentil cakes"
+  },
+  {
+    "name": "Rava Idli",
+    "note": "instant semolina steamed idli"
+  },
+  {
+    "name": "Plain Dosa",
+    "note": "crisp fermented rice-lentil crepe"
+  },
+  {
+    "name": "Ragi Dosa",
+    "note": "finger-millet dosa"
+  },
+  {
+    "name": "Oats Dosa",
+    "note": "instant oats crepe"
+  },
+  {
+    "name": "Neer Dosa",
+    "note": "soft lacy rice-batter dosa"
+  },
+  {
+    "name": "Set Dosa",
+    "note": "soft spongy small dosas in a set"
+  },
+  {
+    "name": "Pesarattu",
+    "note": "andhra whole green gram dosa"
+  },
+  {
+    "name": "Medu Vada",
+    "note": "crisp fried urad dal doughnuts"
+  },
+  {
+    "name": "Dahi Vada",
+    "note": "lentil dumplings in spiced yogurt"
+  },
+  {
+    "name": "Masala Vada",
+    "note": "chana dal crisp fritters"
+  },
+  {
+    "name": "Ven Pongal",
+    "note": "savory rice-moong dal with pepper and ghee"
+  },
+  {
+    "name": "Sweet Pongal",
+    "note": "jaggery rice-moong dal sweet"
+  },
+  {
+    "name": "Bisi Bele Bath",
+    "note": "karnataka spiced rice-lentil-veg one-pot"
+  },
+  {
+    "name": "Tamarind Rice",
+    "note": "south indian tangy tempered rice"
+  },
+  {
+    "name": "Puliyodarai",
+    "note": "temple-style tamarind rice"
+  },
+  {
+    "name": "Vegetable Upma",
+    "note": "semolina with vegetables and tempering"
+  },
+  {
+    "name": "Rava Upma",
+    "note": "classic semolina upma"
+  },
+  {
+    "name": "Vermicelli Upma",
+    "note": "seviyan upma with vegetables"
+  },
+  {
+    "name": "Kesari Bath",
+    "note": "karnataka semolina sweet with saffron"
+  },
+  {
+    "name": "Appam",
+    "note": "kerala fermented rice hoppers"
+  },
+  {
+    "name": "Idiyappam",
+    "note": "steamed rice string hoppers"
+  },
+  {
+    "name": "Puttu",
+    "note": "kerala steamed rice-coconut cylinders"
+  },
+  {
+    "name": "Akki Roti",
+    "note": "karnataka rice-flour flatbread"
+  },
+  {
+    "name": "Ragi Mudde",
+    "note": "karnataka finger-millet balls"
+  },
+  {
+    "name": "Pav Bhaji",
+    "note": "mashed spiced vegetables with buttered pav"
+  },
+  {
+    "name": "Vada Pav",
+    "note": "mumbai potato fritter in a bun"
+  },
+  {
+    "name": "Misal Pav",
+    "note": "maharashtrian sprouted-bean curry with pav"
+  },
+  {
+    "name": "Dabeli",
+    "note": "kutchi spiced potato bun with chutneys"
+  },
+  {
+    "name": "Ragda Pattice",
+    "note": "potato patties over white pea curry"
+  },
+  {
+    "name": "Pani Puri",
+    "note": "crisp puris with spiced tangy water"
+  },
+  {
+    "name": "Bhel Puri",
+    "note": "puffed rice chaat with chutneys"
+  },
+  {
+    "name": "Sev Puri",
+    "note": "flat puris topped with potato, sev, chutneys"
+  },
+  {
+    "name": "Dahi Puri",
+    "note": "puris filled with yogurt and chutneys"
+  },
+  {
+    "name": "Aloo Chaat",
+    "note": "fried potato cubes with chaat spices"
+  },
+  {
+    "name": "Papdi Chaat",
+    "note": "crisp papdi with yogurt and chutneys"
+  },
+  {
+    "name": "Samosa Chaat",
+    "note": "crushed samosa with chole and chutneys"
+  },
+  {
+    "name": "Dahi Bhalla",
+    "note": "soft urad vadas in sweet yogurt"
+  },
+  {
+    "name": "Raj Kachori",
+    "note": "large crisp kachori filled with chaat"
+  },
+  {
+    "name": "Samosa",
+    "note": "fried pastry with spiced potato-pea filling"
+  },
+  {
+    "name": "Pyaaz Kachori",
+    "note": "jodhpuri flaky onion-filled kachori"
+  },
+  {
+    "name": "Dal Kachori",
+    "note": "crisp kachori with spiced moong filling"
+  },
+  {
+    "name": "Khaman Dhokla",
+    "note": "soft steamed gram-flour savory cake"
+  },
+  {
+    "name": "Khandvi",
+    "note": "gram-flour rolls tempered with mustard"
+  },
+  {
+    "name": "Patra",
+    "note": "colocasia leaf rolls, steamed and tempered"
+  },
+  {
+    "name": "Muthia",
+    "note": "steamed bottle-gourd gram-flour dumplings"
+  },
+  {
+    "name": "Handvo",
+    "note": "gujarati savory lentil-rice cake"
+  },
+  {
+    "name": "Sev Tameta Nu Shaak",
+    "note": "gujarati tomato curry topped with sev"
+  },
+  {
+    "name": "Batata Nu Shaak",
+    "note": "gujarati spiced potato curry"
+  },
+  {
+    "name": "Ringan No Olo",
+    "note": "gujarati smoked brinjal mash"
+  },
+  {
+    "name": "Undhiyu",
+    "note": "gujarati mixed winter vegetable casserole"
+  },
+  {
+    "name": "Dudhi Muthia",
+    "note": "steamed bottle gourd fenugreek dumplings"
+  },
+  {
+    "name": "Lilva Kachori",
+    "note": "gujarati tuvar-lilva filled kachori"
+  },
+  {
+    "name": "Dal Dhokli",
+    "note": "gujarati wheat strips simmered in dal"
+  },
+  {
+    "name": "Sarson Ka Saag",
+    "note": "punjabi mustard greens mash"
+  },
+  {
+    "name": "Kadhi Pakora",
+    "note": "yogurt-gram flour curry with fritters"
+  },
+  {
+    "name": "Punjabi Kadhi",
+    "note": "thick yogurt-besan curry with pakoras"
+  },
+  {
+    "name": "Gujarati Kadhi",
+    "note": "thin sweet-sour yogurt kadhi"
+  },
+  {
+    "name": "Sindhi Kadhi",
+    "note": "tamarind-vegetable besan curry"
+  },
+  {
+    "name": "Gatte Ki Sabzi",
+    "note": "rajasthani gram-flour dumplings in yogurt gravy"
+  },
+  {
+    "name": "Ker Sangri",
+    "note": "rajasthani desert bean-berry dry sabzi"
+  },
+  {
+    "name": "Panchmel Dal",
+    "note": "rajasthani five-lentil dal"
+  },
+  {
+    "name": "Dal Baati",
+    "note": "rajasthani baked wheat balls with dal"
+  },
+  {
+    "name": "Papad Ki Sabzi",
+    "note": "rajasthani papad in yogurt gravy"
+  },
+  {
+    "name": "Mangodi Ki Sabzi",
+    "note": "rajasthani moong dal dumplings curry"
+  },
+  {
+    "name": "Besan Gatta Curry",
+    "note": "gram flour rolls in spiced gravy"
+  },
+  {
+    "name": "Lobia Curry",
+    "note": "black-eyed peas curry"
+  },
+  {
+    "name": "Kala Chana Curry",
+    "note": "black chickpea dry-spiced curry"
+  },
+  {
+    "name": "Kabuli Chana Masala",
+    "note": "white chickpea masala"
+  },
+  {
+    "name": "Mixed Sprouts Curry",
+    "note": "mixed bean sprouts curry"
+  },
+  {
+    "name": "Moth Beans Curry",
+    "note": "matki usal curry"
+  },
+  {
+    "name": "Green Peas Masala",
+    "note": "green peas curry"
+  },
+  {
+    "name": "Veg Kolhapuri",
+    "note": "spicy maharashtrian mixed veg"
+  },
+  {
+    "name": "Veg Jalfrezi",
+    "note": "stir-fried veg in tangy sauce"
+  },
+  {
+    "name": "Veg Makhanwala",
+    "note": "mixed veg in buttery tomato gravy"
+  },
+  {
+    "name": "Navratan Korma",
+    "note": "nine-jewel veg-fruit-nut korma"
+  },
+  {
+    "name": "Malai Chaap",
+    "note": "soy chaap in creamy gravy"
+  },
+  {
+    "name": "Aloo Gobi Matar",
+    "note": "potato-cauliflower-peas dry sabzi"
+  },
+  {
+    "name": "Gobi Matar",
+    "note": "cauliflower and peas dry sabzi"
+  },
+  {
+    "name": "Gobi Manchurian",
+    "note": "indo-chinese fried cauliflower in sauce"
+  },
+  {
+    "name": "Chilli Potato",
+    "note": "crisp potato in soy-chilli sauce"
+  },
+  {
+    "name": "Veg Manchurian",
+    "note": "fried veg balls in manchurian gravy"
+  },
+  {
+    "name": "Hakka Noodles",
+    "note": "stir-fried indo-chinese noodles"
+  },
+  {
+    "name": "Veg Fried Rice",
+    "note": "indo-chinese stir-fried rice"
+  },
+  {
+    "name": "Schezwan Fried Rice",
+    "note": "spicy schezwan stir-fried rice"
+  },
+  {
+    "name": "Veg Biryani",
+    "note": "layered spiced rice with vegetables"
+  },
+  {
+    "name": "Hyderabadi Veg Biryani",
+    "note": "dum-style veg biryani"
+  },
+  {
+    "name": "Kashmiri Pulao",
+    "note": "mildly sweet fruit-nut pulao"
+  },
+  {
+    "name": "Yakhni Pulao",
+    "note": "yogurt-stock spiced pulao"
+  },
+  {
+    "name": "Kabuli Pulao",
+    "note": "chickpea and carrot pulao"
+  },
+  {
+    "name": "Bagara Rice",
+    "note": "hyderabadi tempered plain rice"
+  },
+  {
+    "name": "Sabudana Khichdi",
+    "note": "tapioca pearls with peanuts, fasting dish"
+  },
+  {
+    "name": "Poha",
+    "note": "flattened rice with onion and peanuts"
+  },
+  {
+    "name": "Indori Poha",
+    "note": "indore-style poha with jeeravan"
+  },
+  {
+    "name": "Aloo Poha",
+    "note": "poha with potatoes"
+  },
+  {
+    "name": "Dalia Khichdi",
+    "note": "broken wheat savory porridge with veg"
+  },
+  {
+    "name": "Sweet Dalia",
+    "note": "broken wheat milk-jaggery porridge"
+  },
+  {
+    "name": "Oats Chilla",
+    "note": "savory oats pancake"
+  },
+  {
+    "name": "Masala Oats",
+    "note": "spiced vegetable oats"
+  },
+  {
+    "name": "Ragi Porridge",
+    "note": "finger-millet malt porridge"
+  },
+  {
+    "name": "Bread Pakora",
+    "note": "potato-stuffed batter-fried bread"
+  },
+  {
+    "name": "Paneer Pakora",
+    "note": "batter-fried paneer fritters"
+  },
+  {
+    "name": "Palak Pakora",
+    "note": "spinach leaf fritters"
+  },
+  {
+    "name": "Batata Vada",
+    "note": "maharashtrian spiced potato fritters"
+  },
+  {
+    "name": "Mirchi Vada",
+    "note": "stuffed chilli fritters"
+  },
+  {
+    "name": "Aloo Bonda",
+    "note": "south indian potato-ball fritters"
+  },
+  {
+    "name": "Sabudana Thalipeeth",
+    "note": "tapioca-potato griddle cake"
+  },
+  {
+    "name": "Thalipeeth",
+    "note": "maharashtrian multigrain spiced flatbread"
+  },
+  {
+    "name": "Veg Spring Roll",
+    "note": "crisp rolls with vegetable filling"
+  },
+  {
+    "name": "Veg Frankie",
+    "note": "wrapped roll with spiced veg filling"
+  },
+  {
+    "name": "Naan",
+    "note": "leavened tandoor-style flatbread"
+  },
+  {
+    "name": "Butter Naan",
+    "note": "soft naan brushed with butter"
+  },
+  {
+    "name": "Garlic Naan",
+    "note": "garlic-topped naan"
+  },
+  {
+    "name": "Amritsari Kulcha",
+    "note": "stuffed crisp punjabi kulcha"
+  },
+  {
+    "name": "Bhatura",
+    "note": "puffy fried leavened bread for chole"
+  },
+  {
+    "name": "Puri",
+    "note": "puffed deep-fried wheat bread"
+  },
+  {
+    "name": "Bedmi Puri",
+    "note": "spiced urad-stuffed puri"
+  },
+  {
+    "name": "Luchi",
+    "note": "bengali white-flour fried bread"
+  },
+  {
+    "name": "Methi Thepla",
+    "note": "gujarati fenugreek flatbread"
+  },
+  {
+    "name": "Jowar Bhakri",
+    "note": "sorghum flatbread"
+  },
+  {
+    "name": "Bajra Roti",
+    "note": "pearl-millet flatbread"
+  },
+  {
+    "name": "Makki Ki Roti",
+    "note": "cornmeal punjabi flatbread"
+  },
+  {
+    "name": "Missi Roti",
+    "note": "gram-flour spiced flatbread"
+  },
+  {
+    "name": "Rumali Roti",
+    "note": "thin handkerchief flatbread"
+  },
+  {
+    "name": "Tandoori Roti",
+    "note": "tandoor-style wheat flatbread"
+  },
+  {
+    "name": "Malabar Parotta",
+    "note": "flaky layered kerala flatbread"
+  },
+  {
+    "name": "Puran Poli",
+    "note": "sweet chana-jaggery stuffed flatbread"
+  },
+  {
+    "name": "Shukto",
+    "note": "bengali mixed-veg bitter medley"
+  },
+  {
+    "name": "Aloo Posto",
+    "note": "bengali potatoes in poppy-seed paste"
+  },
+  {
+    "name": "Cholar Dal",
+    "note": "bengali sweetish chana dal with coconut"
+  },
+  {
+    "name": "Dhokar Dalna",
+    "note": "bengali lentil-cake curry"
+  },
+  {
+    "name": "Begun Bhaja",
+    "note": "bengali fried brinjal slices"
+  },
+  {
+    "name": "Labra",
+    "note": "bengali mixed vegetable medley"
+  },
+  {
+    "name": "Chorchori",
+    "note": "bengali mixed vegetable dry curry"
+  },
+  {
+    "name": "Phulkopir Dalna",
+    "note": "bengali cauliflower-potato curry"
+  },
+  {
+    "name": "Aloo Dum Bengali",
+    "note": "bengali spiced baby potato curry"
+  },
+  {
+    "name": "Mochar Ghonto",
+    "note": "bengali banana-blossom dry curry"
+  },
+  {
+    "name": "Bharwa Bhindi",
+    "note": "stuffed okra with spice masala"
+  },
+  {
+    "name": "Bharwa Karela",
+    "note": "stuffed bitter gourd"
+  },
+  {
+    "name": "Bharwa Baingan",
+    "note": "stuffed small brinjals"
+  },
+  {
+    "name": "Bharwa Shimla Mirch",
+    "note": "stuffed capsicum"
+  },
+  {
+    "name": "Bharwa Tinda",
+    "note": "stuffed apple-gourd"
+  },
+  {
+    "name": "Bagara Baingan",
+    "note": "hyderabadi brinjal in peanut-sesame gravy"
+  },
+  {
+    "name": "Baingan Ka Bharta Punjabi",
+    "note": "smoked mashed brinjal punjabi style"
+  },
+  {
+    "name": "Ringna Bateta Nu Shaak",
+    "note": "gujarati brinjal-potato sabzi"
+  },
+  {
+    "name": "Turai Ki Sabzi",
+    "note": "ridge gourd dry sabzi"
+  },
+  {
+    "name": "Parwal Ki Sabzi",
+    "note": "pointed gourd dry sabzi"
+  },
+  {
+    "name": "Kathal Ki Sabzi",
+    "note": "raw jackfruit spiced curry"
+  },
+  {
+    "name": "Suran Ki Sabzi",
+    "note": "yam dry spiced sabzi"
+  },
+  {
+    "name": "Arbi Masala",
+    "note": "colocasia in spiced masala"
+  },
+  {
+    "name": "Kaddu Ki Sabzi",
+    "note": "pumpkin sweet-sour sabzi"
+  },
+  {
+    "name": "Petha Sabzi",
+    "note": "ash gourd curry"
+  },
+  {
+    "name": "Sem Ki Phali",
+    "note": "broad beans dry sabzi"
+  },
+  {
+    "name": "Gawar Phali",
+    "note": "cluster beans dry sabzi"
+  },
+  {
+    "name": "Tindora Fry",
+    "note": "ivy gourd stir-fry"
+  },
+  {
+    "name": "Kachri Ki Sabzi",
+    "note": "rajasthani wild cucumber sabzi"
+  },
+  {
+    "name": "Methi Aloo",
+    "note": "fenugreek and potato dry sabzi"
+  },
+  {
+    "name": "Methi Malai Mushroom",
+    "note": "mushroom in fenugreek-cream gravy"
+  },
+  {
+    "name": "Mushroom Masala",
+    "note": "mushrooms in onion-tomato gravy"
+  },
+  {
+    "name": "Chana Saag",
+    "note": "chickpeas cooked with greens"
+  },
+  {
+    "name": "Lauki Kofta",
+    "note": "bottle-gourd dumplings in gravy"
+  },
+  {
+    "name": "Cabbage Sabzi",
+    "note": "spiced dry cabbage with peas"
+  },
+  {
+    "name": "Beetroot Sabzi",
+    "note": "spiced beetroot stir-fry"
+  },
+  {
+    "name": "Carrot Beans Poriyal",
+    "note": "carrot-beans south stir-fry"
+  },
+  {
+    "name": "Mixed Veg Curry",
+    "note": "assorted vegetables in gravy"
+  },
+  {
+    "name": "Veg Handi",
+    "note": "mixed veg in clay-pot gravy"
+  },
+  {
+    "name": "Dum Ki Arbi",
+    "note": "slow-cooked spiced colocasia"
+  },
+  {
+    "name": "Rajma Chawal",
+    "note": "kidney bean curry served with rice"
+  },
+  {
+    "name": "Kadhi Chawal",
+    "note": "yogurt curry with steamed rice"
+  },
+  {
+    "name": "Gulab Jamun",
+    "note": "fried milk-solid balls in sugar syrup"
+  },
+  {
+    "name": "Rasgulla",
+    "note": "spongy chhena balls in light syrup"
+  },
+  {
+    "name": "Rasmalai",
+    "note": "chhena discs in saffron-cardamom milk"
+  },
+  {
+    "name": "Cham Cham",
+    "note": "bengali oblong chhena sweet"
+  },
+  {
+    "name": "Sandesh",
+    "note": "bengali chhena fudge"
+  },
+  {
+    "name": "Mishti Doi",
+    "note": "bengali sweet caramelized yogurt"
+  },
+  {
+    "name": "Rice Kheer",
+    "note": "rice pudding with milk and cardamom"
+  },
+  {
+    "name": "Sabudana Kheer",
+    "note": "tapioca pudding"
+  },
+  {
+    "name": "Phirni",
+    "note": "ground-rice creamy pudding"
+  },
+  {
+    "name": "Seviyan Kheer",
+    "note": "vermicelli milk pudding"
+  },
+  {
+    "name": "Rabri",
+    "note": "reduced thickened sweet milk"
+  },
+  {
+    "name": "Basundi",
+    "note": "gujarati reduced sweet milk"
+  },
+  {
+    "name": "Shrikhand",
+    "note": "strained sweet saffron yogurt"
+  },
+  {
+    "name": "Mango Shrikhand",
+    "note": "mango-flavored strained yogurt sweet"
+  },
+  {
+    "name": "Jalebi",
+    "note": "crisp fried spirals in sugar syrup"
+  },
+  {
+    "name": "Imarti",
+    "note": "urad-dal flower-shaped syrup sweet"
+  },
+  {
+    "name": "Malpua",
+    "note": "fried sweet pancakes in syrup"
+  },
+  {
+    "name": "Ghevar",
+    "note": "rajasthani disc-shaped honeycomb sweet"
+  },
+  {
+    "name": "Gujiya",
+    "note": "fried pastry with khoya-nut filling"
+  },
+  {
+    "name": "Mysore Pak",
+    "note": "gram-flour ghee fudge"
+  },
+  {
+    "name": "Kaju Katli",
+    "note": "cashew fudge diamonds"
+  },
+  {
+    "name": "Badam Barfi",
+    "note": "almond fudge"
+  },
+  {
+    "name": "Milk Barfi",
+    "note": "khoya milk fudge"
+  },
+  {
+    "name": "Kalakand",
+    "note": "grainy milk-cardamom fudge"
+  },
+  {
+    "name": "Sohan Papdi",
+    "note": "flaky gram-flour ghee sweet"
+  },
+  {
+    "name": "Balushahi",
+    "note": "glazed flaky fried sweet"
+  },
+  {
+    "name": "Modak",
+    "note": "steamed rice-coconut-jaggery dumplings"
+  },
+  {
+    "name": "Anarsa",
+    "note": "rice-jaggery fried sweet"
+  },
+  {
+    "name": "Shakkarpara",
+    "note": "crisp sweet fried diamonds"
+  },
+  {
+    "name": "Sooji Halwa",
+    "note": "semolina ghee halwa"
+  },
+  {
+    "name": "Aate Ka Halwa",
+    "note": "whole-wheat ghee halwa"
+  },
+  {
+    "name": "Lauki Halwa",
+    "note": "bottle-gourd milk halwa"
+  },
+  {
+    "name": "Badam Halwa",
+    "note": "almond ghee halwa"
+  },
+  {
+    "name": "Besan Halwa",
+    "note": "gram-flour ghee halwa"
+  },
+  {
+    "name": "Aloo Halwa",
+    "note": "potato ghee halwa"
+  },
+  {
+    "name": "Chana Dal Halwa",
+    "note": "chana dal ghee halwa"
+  },
+  {
+    "name": "Singhare Ka Halwa",
+    "note": "water-chestnut flour fasting halwa"
+  },
+  {
+    "name": "Kaju Barfi",
+    "note": "cashew milk barfi"
+  },
+  {
+    "name": "Pinni",
+    "note": "punjabi wheat-jaggery-ghee winter sweet"
+  },
+  {
+    "name": "Gond Ke Ladoo",
+    "note": "edible-gum wheat winter ladoo"
+  },
+  {
+    "name": "Rava Ladoo",
+    "note": "semolina-coconut ladoo"
+  },
+  {
+    "name": "Churma Ladoo",
+    "note": "rajasthani wheat-ghee-jaggery ladoo"
+  },
+  {
+    "name": "Motichoor Ladoo",
+    "note": "tiny boondi ladoo"
+  },
+  {
+    "name": "Boondi Ladoo",
+    "note": "gram-flour pearl ladoo"
+  },
+  {
+    "name": "Til Gud Ladoo",
+    "note": "sesame-jaggery winter ladoo"
+  },
+  {
+    "name": "Rajgira Ladoo",
+    "note": "amaranth-jaggery fasting ladoo"
+  },
+  {
+    "name": "Murmura Ladoo",
+    "note": "puffed-rice jaggery ladoo"
+  },
+  {
+    "name": "Sweet Boondi",
+    "note": "sugar-syrup gram-flour pearls"
+  },
+  {
+    "name": "Til Chikki",
+    "note": "sesame-jaggery brittle"
+  },
+  {
+    "name": "Dry Fruit Chikki",
+    "note": "mixed-nut jaggery brittle"
+  },
+  {
+    "name": "Gajak",
+    "note": "sesame-jaggery winter brittle"
+  },
+  {
+    "name": "Rewri",
+    "note": "sesame-coated jaggery discs"
+  },
+  {
+    "name": "Coconut Barfi",
+    "note": "coconut-milk fudge"
+  },
+  {
+    "name": "Sweet Lassi",
+    "note": "sweet blended yogurt drink"
+  },
+  {
+    "name": "Mango Lassi",
+    "note": "mango-yogurt blended drink"
+  },
+  {
+    "name": "Salted Lassi",
+    "note": "savory spiced yogurt drink"
+  },
+  {
+    "name": "Masala Chaas",
+    "note": "spiced buttermilk"
+  },
+  {
+    "name": "Thandai",
+    "note": "spiced nut-milk festive drink"
+  },
+  {
+    "name": "Badam Milk",
+    "note": "almond-saffron milk"
+  },
+  {
+    "name": "Haldi Doodh",
+    "note": "turmeric golden milk"
+  },
+  {
+    "name": "Masala Chai",
+    "note": "spiced milk tea"
+  },
+  {
+    "name": "Sattu Sharbat",
+    "note": "roasted-gram cooling drink"
+  },
+  {
+    "name": "Aam Panna",
+    "note": "raw-mango cooling drink"
+  },
+  {
+    "name": "Jaljeera",
+    "note": "cumin-mint tangy drink"
+  },
+  {
+    "name": "Kokum Sharbat",
+    "note": "kokum cooling drink"
+  },
+  {
+    "name": "Ragi Malt",
+    "note": "finger-millet malt drink"
+  },
+  {
+    "name": "Sol Kadhi",
+    "note": "konkani kokum-coconut drink"
+  },
+  {
+    "name": "Dry Fruit Milkshake",
+    "note": "nut-blended milkshake"
+  },
+  {
+    "name": "Rose Milk",
+    "note": "rose-flavored chilled milk"
+  },
+  {
+    "name": "Kesar Pista Milk",
+    "note": "saffron-pistachio milk"
+  },
+  {
+    "name": "Filter Coffee",
+    "note": "south indian frothy coffee"
+  },
+  {
+    "name": "Mango Chutney",
+    "note": "sweet-spiced raw mango relish"
+  },
+  {
+    "name": "Coriander Chutney",
+    "note": "green coriander chutney"
+  },
+  {
+    "name": "Mint Chutney",
+    "note": "pudina green chutney"
+  },
+  {
+    "name": "Coconut Chutney",
+    "note": "south indian coconut chutney"
+  },
+  {
+    "name": "Tomato Chutney",
+    "note": "south indian tomato chutney"
+  },
+  {
+    "name": "Peanut Chutney",
+    "note": "roasted-peanut chutney"
+  },
+  {
+    "name": "Tamarind Chutney",
+    "note": "sweet-sour date-tamarind chutney"
+  },
+  {
+    "name": "Garlic Chutney",
+    "note": "dry red-garlic chutney"
+  },
+  {
+    "name": "Onion Tomato Chutney",
+    "note": "south onion-tomato chutney"
+  },
+  {
+    "name": "Gongura Pachadi",
+    "note": "andhra sorrel-leaf chutney"
+  },
+  {
+    "name": "Mango Pickle",
+    "note": "spiced raw-mango oil pickle"
+  },
+  {
+    "name": "Lemon Pickle",
+    "note": "tangy lemon pickle"
+  },
+  {
+    "name": "Green Chilli Pickle",
+    "note": "spiced chilli pickle"
+  },
+  {
+    "name": "Mixed Veg Pickle",
+    "note": "assorted vegetable pickle"
+  },
+  {
+    "name": "Amla Pickle",
+    "note": "gooseberry pickle"
+  },
+  {
+    "name": "Garlic Pickle",
+    "note": "spiced garlic pickle"
+  },
+  {
+    "name": "Sarson Saag Makki",
+    "note": "mustard greens with cornmeal"
+  },
+  {
+    "name": "Kashmiri Rajma",
+    "note": "kashmiri kidney beans curry"
+  },
+  {
+    "name": "Rongi",
+    "note": "cowpea curry"
+  },
+  {
+    "name": "Pindi Chana",
+    "note": "dry dark rawalpindi chickpeas"
+  },
+  {
+    "name": "Amritsari Chole",
+    "note": "dark tangy amritsar chickpeas"
+  },
+  {
+    "name": "Chana Masala Punjabi",
+    "note": "punjabi chickpea masala"
+  },
+  {
+    "name": "Dhaba Dal Fry",
+    "note": "restaurant-style tempered dal"
+  },
+  {
+    "name": "Langarwali Dal",
+    "note": "gurudwara-style dal"
+  },
+  {
+    "name": "Dal Tadka Restaurant",
+    "note": "restaurant tempered toor-chana dal"
+  },
+  {
+    "name": "Sindhi Sai Bhaji",
+    "note": "sindhi spinach-lentil-veg medley"
+  },
+  {
+    "name": "Kootu Curry",
+    "note": "kerala mixed veg-lentil curry"
+  },
+  {
+    "name": "Poricha Kuzhambu",
+    "note": "south lentil vegetable stew"
+  },
+  {
+    "name": "More Kuzhambu",
+    "note": "seasoned yogurt curry"
+  },
+  {
+    "name": "Keerai Masiyal",
+    "note": "south mashed greens"
+  },
+  {
+    "name": "Cabbage Foogath",
+    "note": "goan cabbage with coconut"
+  },
+  {
+    "name": "Beans Foogath",
+    "note": "goan beans with coconut"
+  },
+  {
+    "name": "Mushroom Xacuti",
+    "note": "goan coconut-spice mushroom"
+  },
+  {
+    "name": "Veg Xacuti",
+    "note": "goan coconut-spice mixed veg"
+  },
+  {
+    "name": "Alsande Tonak",
+    "note": "goan cowpea curry"
+  },
+  {
+    "name": "Batata Bhaji",
+    "note": "maharashtrian turmeric potato bhaji"
+  },
+  {
+    "name": "Zunka",
+    "note": "maharashtrian dry gram-flour"
+  },
+  {
+    "name": "Pithla",
+    "note": "maharashtrian gram-flour curry"
+  },
+  {
+    "name": "Bharli Vangi",
+    "note": "maharashtrian stuffed brinjal"
+  },
+  {
+    "name": "Matki Usal",
+    "note": "sprouted moth-bean curry"
+  },
+  {
+    "name": "Vaingya Chi Bhaji",
+    "note": "maharashtrian brinjal sabzi"
+  },
+  {
+    "name": "Kotimbir Vadi",
+    "note": "maharashtrian coriander fritters"
+  },
+  {
+    "name": "Sabudana Vada Maharashtrian",
+    "note": "crisp fasting tapioca vada"
+  },
+  {
+    "name": "Aluchi Patal Bhaji",
+    "note": "maharashtrian colocasia-leaf curry"
+  },
+  {
+    "name": "Amti",
+    "note": "maharashtrian tangy toor dal"
+  },
+  {
+    "name": "Katachi Amti",
+    "note": "spicy lentil-water amti"
+  },
+  {
+    "name": "Masale Bhat",
+    "note": "maharashtrian spiced vegetable rice"
+  },
+  {
+    "name": "Vangi Bath",
+    "note": "karnataka brinjal rice"
+  },
+  {
+    "name": "Puliyogare",
+    "note": "karnataka tamarind rice"
+  },
+  {
+    "name": "Chitranna",
+    "note": "karnataka lemon rice"
+  },
+  {
+    "name": "Bisi Bele Huli Anna",
+    "note": "karnataka spicy lentil rice"
+  },
+  {
+    "name": "Ragi Rotti",
+    "note": "finger-millet flatbread"
+  },
+  {
+    "name": "Jolada Rotti",
+    "note": "karnataka sorghum flatbread"
+  },
+  {
+    "name": "Ennegayi",
+    "note": "karnataka stuffed brinjal"
+  },
+  {
+    "name": "Majjige Huli",
+    "note": "karnataka yogurt curry"
+  },
+  {
+    "name": "Kosambari",
+    "note": "south lentil salad"
+  },
+  {
+    "name": "Gojju",
+    "note": "karnataka sweet-sour gravy"
+  },
+  {
+    "name": "Pulikachal",
+    "note": "tamarind rice paste"
+  },
+  {
+    "name": "Paruppu Usili",
+    "note": "tamil lentil-crumble beans"
+  },
+  {
+    "name": "Poriyal Carrot",
+    "note": "tamil carrot stir-fry"
+  },
+  {
+    "name": "Kara Kozhambu",
+    "note": "tamil spicy tamarind gravy"
+  },
+  {
+    "name": "Milagu Kuzhambu",
+    "note": "tamil pepper gravy"
+  },
+  {
+    "name": "Ellu Sadam",
+    "note": "tamil sesame rice"
+  },
+  {
+    "name": "Coconut Sadam",
+    "note": "tamil coconut rice"
+  },
+  {
+    "name": "Curd Semiya",
+    "note": "yogurt vermicelli"
+  },
+  {
+    "name": "Semiya Upma",
+    "note": "vermicelli upma"
+  },
+  {
+    "name": "Arisi Upma",
+    "note": "tamil rice upma"
+  },
+  {
+    "name": "Kuzhi Paniyaram",
+    "note": "tamil savory rice-lentil balls"
+  },
+  {
+    "name": "Sweet Paniyaram",
+    "note": "jaggery rice-lentil balls"
+  },
+  {
+    "name": "Adhirasam",
+    "note": "tamil rice-jaggery fried sweet"
+  },
+  {
+    "name": "Sakkarai Pongal",
+    "note": "tamil jaggery rice pongal"
+  },
+  {
+    "name": "Payasam",
+    "note": "south indian milk-jaggery pudding"
+  },
+  {
+    "name": "Semiya Payasam",
+    "note": "vermicelli payasam"
+  },
+  {
+    "name": "Paruppu Payasam",
+    "note": "moong dal jaggery payasam"
+  },
+  {
+    "name": "Ada Pradhaman",
+    "note": "kerala rice-flake jaggery payasam"
+  },
+  {
+    "name": "Palada Payasam",
+    "note": "kerala rice-ada milk payasam"
+  },
+  {
+    "name": "Unniyappam",
+    "note": "kerala banana-rice sweet fritters"
+  },
+  {
+    "name": "Neyyappam",
+    "note": "kerala ghee-rice jaggery fritters"
+  },
+  {
+    "name": "Ela Ada",
+    "note": "kerala steamed rice-coconut parcels"
+  },
+  {
+    "name": "Kozhukattai",
+    "note": "tamil steamed rice dumplings"
+  },
+  {
+    "name": "Sundal",
+    "note": "south tempered legume snack"
+  },
+  {
+    "name": "Thattai",
+    "note": "crisp south rice crackers"
+  },
+  {
+    "name": "Murukku",
+    "note": "crisp spiral rice-lentil snack"
+  },
+  {
+    "name": "Ribbon Pakoda",
+    "note": "crisp ribbon gram snack"
+  },
+  {
+    "name": "Mixture",
+    "note": "south savory snack mix"
+  },
+  {
+    "name": "Nippattu",
+    "note": "karnataka crisp rice crackers"
+  },
+  {
+    "name": "Chakli",
+    "note": "crisp spiral savory snack"
+  },
+  {
+    "name": "Chivda",
+    "note": "savory flattened-rice snack mix"
+  },
+  {
+    "name": "Bhakarwadi",
+    "note": "spiral spiced fried snack"
+  },
+  {
+    "name": "Farsi Puri",
+    "note": "crisp savory gujarati puri"
+  },
+  {
+    "name": "Mathri",
+    "note": "crisp flaky savory disc"
+  },
+  {
+    "name": "Namak Para",
+    "note": "crisp savory fried strips"
+  },
+  {
+    "name": "Khakhra",
+    "note": "thin roasted crisp flatbread"
+  },
+  {
+    "name": "Fafda",
+    "note": "gujarati crisp gram-flour strips"
+  },
+  {
+    "name": "Gathiya",
+    "note": "soft gram-flour fried snack"
+  },
+  {
+    "name": "Sev",
+    "note": "crisp gram-flour noodles"
+  },
+  {
+    "name": "Aloo Bhujia",
+    "note": "crisp potato-gram noodles"
+  },
+  {
+    "name": "Dhokla Sandwich",
+    "note": "layered white-green dhokla"
+  },
+  {
+    "name": "Tri Color Dhokla",
+    "note": "three-layer steamed dhokla"
+  },
+  {
+    "name": "Rava Dhokla",
+    "note": "instant semolina dhokla"
+  },
+  {
+    "name": "Khaman",
+    "note": "soft yellow gram-flour steamed cake"
+  },
+  {
+    "name": "Khatta Dhokla",
+    "note": "fermented rice-lentil white dhokla"
+  },
+  {
+    "name": "Dahi Wada Punjabi",
+    "note": "urad vadas in spiced yogurt"
+  },
+  {
+    "name": "Raj Kachori Chaat",
+    "note": "loaded large crisp kachori"
+  },
+  {
+    "name": "Aloo Tikki Chaat",
+    "note": "potato patty with chutneys and yogurt"
+  },
+  {
+    "name": "Kachori Chaat",
+    "note": "crushed kachori chaat"
+  },
+  {
+    "name": "Palak Patta Chaat",
+    "note": "crisp spinach-leaf chaat"
+  },
+  {
+    "name": "Corn Chaat",
+    "note": "spiced sweet-corn chaat"
+  },
+  {
+    "name": "Fruit Chaat",
+    "note": "mixed-fruit chaat with spices"
+  },
+  {
+    "name": "Chana Chaat",
+    "note": "boiled chickpea chaat"
+  },
+  {
+    "name": "Sprout Chaat",
+    "note": "mixed-sprout chaat"
+  },
+  {
+    "name": "Basket Chaat",
+    "note": "potato-basket loaded chaat"
+  },
+  {
+    "name": "Matar Kachori",
+    "note": "green-pea stuffed kachori"
+  },
+  {
+    "name": "Khasta Kachori",
+    "note": "flaky lentil kachori"
+  },
+  {
+    "name": "Bedai",
+    "note": "urad-stuffed puffed puri"
+  },
+  {
+    "name": "Litti Chokha",
+    "note": "bihari stuffed wheat balls with mash"
+  },
+  {
+    "name": "Sattu Litti",
+    "note": "bihari roasted-gram stuffed litti"
+  },
+  {
+    "name": "Sattu Paratha Bihari",
+    "note": "bihari roasted-gram stuffed paratha"
+  },
+  {
+    "name": "Ghugni",
+    "note": "eastern white-pea curry"
+  },
+  {
+    "name": "Chana Ghugni",
+    "note": "bengali chickpea ghugni"
+  },
+  {
+    "name": "Aloor Dom",
+    "note": "bengali spiced potato curry"
+  },
+  {
+    "name": "Bengali Khichuri",
+    "note": "bengali moong-rice khichuri"
+  },
+  {
+    "name": "Bhuni Khichdi",
+    "note": "roasted spiced khichdi"
+  },
+  {
+    "name": "Masoor Dal Bengali",
+    "note": "bengali red-lentil dal"
+  },
+  {
+    "name": "Sukto",
+    "note": "bengali bitter mixed-veg medley"
+  },
+  {
+    "name": "Chanar Dalna",
+    "note": "bengali paneer-ball curry"
+  },
+  {
+    "name": "Enchor Er Dalna",
+    "note": "bengali raw-jackfruit curry"
+  },
+  {
+    "name": "Dhonepata Bora",
+    "note": "bengali coriander fritters"
+  },
+  {
+    "name": "Beguni",
+    "note": "bengali batter-fried brinjal"
+  },
+  {
+    "name": "Peyaji",
+    "note": "bengali onion fritters"
+  },
+  {
+    "name": "Aloo Chop",
+    "note": "bengali potato croquettes"
+  },
+  {
+    "name": "Veg Chop",
+    "note": "bengali beetroot-veg croquettes"
+  },
+  {
+    "name": "Mughlai Paratha Veg",
+    "note": "bengali stuffed fried flatbread"
+  },
+  {
+    "name": "Assamese Khar",
+    "note": "assamese alkaline vegetable dish"
+  },
+  {
+    "name": "Aloo Pitika",
+    "note": "assamese mashed potato"
+  },
+  {
+    "name": "Poita Bhat",
+    "note": "assamese fermented rice"
+  },
+  {
+    "name": "Til Pitha",
+    "note": "assamese sesame rice cake"
+  },
+  {
+    "name": "Pitha",
+    "note": "eastern rice-jaggery cake"
+  },
+  {
+    "name": "Chakuli Pitha",
+    "note": "odia rice-lentil pancake"
+  },
+  {
+    "name": "Dalma",
+    "note": "odia lentil-vegetable dish"
+  },
+  {
+    "name": "Santula",
+    "note": "odia mixed-veg light stew"
+  },
+  {
+    "name": "Besara",
+    "note": "odia mustard-paste vegetable curry"
+  },
+  {
+    "name": "Ghanta Tarkari",
+    "note": "odia mixed-vegetable curry"
+  },
+  {
+    "name": "Kanika",
+    "note": "odia sweet ghee rice"
+  },
+  {
+    "name": "Khechudi",
+    "note": "odia rice-moong khichdi"
+  },
+  {
+    "name": "Chhena Poda",
+    "note": "odia baked cottage-cheese sweet"
+  },
+  {
+    "name": "Rasabali",
+    "note": "odia fried chhena in rabri"
+  },
+  {
+    "name": "Gaja",
+    "note": "odia sweet fried strips"
+  },
+  {
+    "name": "Chhena Jhili",
+    "note": "odia syrup-soaked chhena sweet"
+  },
+  {
+    "name": "Malpua Odia",
+    "note": "odia banana malpua"
+  },
+  {
+    "name": "Aloo Kurma",
+    "note": "south potato korma"
+  },
+  {
+    "name": "Veg Kurma",
+    "note": "south mixed-veg coconut korma"
+  },
+  {
+    "name": "Chana Kurma",
+    "note": "chickpea coconut korma"
+  },
+  {
+    "name": "Saagu",
+    "note": "karnataka mixed-veg coconut gravy"
+  },
+  {
+    "name": "Kadamba Sadam",
+    "note": "south mixed rice"
+  },
+  {
+    "name": "Bagara Baingan Hyderabadi",
+    "note": "hyderabadi peanut-sesame brinjal"
+  },
+  {
+    "name": "Mirchi Ka Salan",
+    "note": "hyderabadi chilli peanut curry"
+  },
+  {
+    "name": "Tomato Kut",
+    "note": "hyderabadi thick tomato curry"
+  },
+  {
+    "name": "Khatti Dal",
+    "note": "hyderabadi tangy dal"
+  },
+  {
+    "name": "Dalcha",
+    "note": "hyderabadi lentil-bottle-gourd curry"
+  },
+  {
+    "name": "Til Ki Chutney",
+    "note": "hyderabadi sesame chutney"
+  },
+  {
+    "name": "Double Ka Meetha",
+    "note": "hyderabadi bread pudding"
+  },
+  {
+    "name": "Qubani Ka Meetha",
+    "note": "hyderabadi apricot dessert"
+  },
+  {
+    "name": "Sheer Khurma",
+    "note": "vermicelli-date festive kheer"
+  },
+  {
+    "name": "Khubani Halwa",
+    "note": "apricot halwa"
+  },
+  {
+    "name": "Gil E Firdaus",
+    "note": "bottle-gourd creamy pudding"
+  },
+  {
+    "name": "Kaddu Ki Kheer",
+    "note": "pumpkin milk kheer"
+  },
+  {
+    "name": "Makhane Ki Kheer",
+    "note": "foxnut milk kheer"
+  },
+  {
+    "name": "Chawal Ki Kheer",
+    "note": "classic rice kheer"
+  },
+  {
+    "name": "Anjeer Halwa",
+    "note": "fig ghee halwa"
+  },
+  {
+    "name": "Dates Halwa",
+    "note": "date-nut halwa"
+  },
+  {
+    "name": "Beetroot Halwa",
+    "note": "beetroot milk halwa"
+  },
+  {
+    "name": "Kaju Halwa",
+    "note": "cashew ghee halwa"
+  },
+  {
+    "name": "Moong Dal Sheera",
+    "note": "moong dal ghee sweet"
+  },
+  {
+    "name": "Sheera",
+    "note": "maharashtrian semolina sweet"
+  },
+  {
+    "name": "Rava Sheera",
+    "note": "semolina banana sweet"
+  },
+  {
+    "name": "Sabudana Vada Snack",
+    "note": "crisp tapioca snack"
+  },
+  {
+    "name": "Farali Chevdo",
+    "note": "fasting savory mix"
+  },
+  {
+    "name": "Rajgira Chikki",
+    "note": "amaranth jaggery brittle"
+  },
+  {
+    "name": "Kuttu Ki Puri",
+    "note": "buckwheat fasting puri"
+  },
+  {
+    "name": "Kuttu Pakora",
+    "note": "buckwheat fasting fritters"
+  },
+  {
+    "name": "Samak Rice",
+    "note": "barnyard-millet fasting rice"
+  },
+  {
+    "name": "Samak Khichdi",
+    "note": "barnyard-millet fasting khichdi"
+  },
+  {
+    "name": "Vrat Ke Aloo",
+    "note": "fasting spiced potatoes"
+  },
+  {
+    "name": "Makhana Kheer",
+    "note": "foxnut kheer"
+  },
+  {
+    "name": "Roasted Makhana",
+    "note": "ghee-roasted foxnuts snack"
+  },
+  {
+    "name": "Aloo Jeera Vrat",
+    "note": "fasting cumin potatoes"
+  },
+  {
+    "name": "Lauki Kofta Curry",
+    "note": "bottle-gourd kofta in gravy"
+  },
+  {
+    "name": "Malai Kofta White",
+    "note": "paneer kofta in white gravy"
+  },
+  {
+    "name": "Nargisi Kofta",
+    "note": "egg-shaped veg kofta curry"
+  },
+  {
+    "name": "Cabbage Kofta",
+    "note": "cabbage dumpling curry"
+  },
+  {
+    "name": "Paneer Kofta",
+    "note": "paneer dumpling curry"
+  },
+  {
+    "name": "Veg Kofta Curry",
+    "note": "mixed-veg kofta gravy"
+  },
+  {
+    "name": "Dahi Ke Kabab",
+    "note": "hung-curd griddle kababs"
+  },
+  {
+    "name": "Rajma Galouti",
+    "note": "kidney-bean melt-in-mouth kabab"
+  },
+  {
+    "name": "Veg Seekh Kabab",
+    "note": "griddled veg seekh"
+  },
+  {
+    "name": "Soya Seekh Kabab",
+    "note": "soya griddled kabab"
+  },
+  {
+    "name": "Beetroot Tikki",
+    "note": "beetroot patty"
+  },
+  {
+    "name": "Rajma Tikki",
+    "note": "kidney-bean patty"
+  },
+  {
+    "name": "Sabudana Tikki",
+    "note": "tapioca patty"
+  },
+  {
+    "name": "Corn Palak Tikki",
+    "note": "corn-spinach patty"
+  },
+  {
+    "name": "Moong Dal Tikki",
+    "note": "moong-lentil patty"
+  },
+  {
+    "name": "Paneer Tikka",
+    "note": "grilled marinated paneer"
+  },
+  {
+    "name": "Malai Paneer Tikka",
+    "note": "creamy grilled paneer"
+  },
+  {
+    "name": "Hariyali Paneer Tikka",
+    "note": "green-marinade paneer tikka"
+  },
+  {
+    "name": "Achari Paneer Tikka",
+    "note": "pickle-spiced paneer tikka"
+  },
+  {
+    "name": "Mushroom Tikka",
+    "note": "grilled marinated mushrooms"
+  },
+  {
+    "name": "Soya Chaap Tikka",
+    "note": "grilled soy chaap"
+  },
+  {
+    "name": "Tandoori Aloo",
+    "note": "grilled stuffed potatoes"
+  },
+  {
+    "name": "Tandoori Gobi",
+    "note": "grilled marinated cauliflower"
+  },
+  {
+    "name": "Veg Galouti",
+    "note": "soft veg melt kabab"
+  },
+  {
+    "name": "Hara Bhara Kabab Snack",
+    "note": "spinach-pea patties"
+  },
+  {
+    "name": "Dal Ke Kabab",
+    "note": "lentil griddle kababs"
+  },
+  {
+    "name": "Kathal Kabab",
+    "note": "raw-jackfruit kabab"
+  },
+  {
+    "name": "Aloo Ki Kadhi",
+    "note": "potato yogurt curry"
+  },
+  {
+    "name": "Pakora Kadhi Punjabi",
+    "note": "punjabi fritter yogurt curry"
+  },
+  {
+    "name": "Boondi Kadhi",
+    "note": "gram-pearl yogurt curry"
+  },
+  {
+    "name": "Rajasthani Kadhi",
+    "note": "tangy besan kadhi"
+  },
+  {
+    "name": "Palak Kadhi",
+    "note": "spinach yogurt curry"
+  },
+  {
+    "name": "Methi Pakora Kadhi",
+    "note": "fenugreek-fritter kadhi"
+  },
+  {
+    "name": "Dahi Baingan",
+    "note": "brinjal in yogurt gravy"
+  },
+  {
+    "name": "Dahi Bhindi",
+    "note": "okra in yogurt gravy"
+  },
+  {
+    "name": "Dahi Wale Aloo",
+    "note": "potatoes in yogurt gravy"
+  },
+  {
+    "name": "Dahi Ki Sabzi",
+    "note": "yogurt-based curry"
+  },
+  {
+    "name": "Kadhi Vada",
+    "note": "vadas in yogurt curry"
+  },
+  {
+    "name": "Besan Ke Gatte",
+    "note": "gram-flour dumplings dry"
+  },
+  {
+    "name": "Govind Gatta",
+    "note": "stuffed rich gatta curry"
+  },
+  {
+    "name": "Ker Sangri Ki Sabzi",
+    "note": "desert bean-berry sabzi"
+  },
+  {
+    "name": "Bajre Ki Khichdi",
+    "note": "pearl-millet khichdi"
+  },
+  {
+    "name": "Bajre Ka Churma",
+    "note": "pearl-millet ghee-jaggery crumble"
+  },
+  {
+    "name": "Lapsi",
+    "note": "broken-wheat jaggery sweet"
+  },
+  {
+    "name": "Fada Ni Lapsi",
+    "note": "gujarati broken-wheat sweet"
+  },
+  {
+    "name": "Sukhdi",
+    "note": "gujarati wheat-jaggery-ghee sweet"
+  },
+  {
+    "name": "Gol Papdi",
+    "note": "gujarati jaggery wheat squares"
+  },
+  {
+    "name": "Mohanthal",
+    "note": "gujarati gram-flour fudge"
+  },
+  {
+    "name": "Magas",
+    "note": "gujarati gram-flour sweet"
+  },
+  {
+    "name": "Doodh Pak",
+    "note": "gujarati rice milk pudding"
+  },
+  {
+    "name": "Shrikhand Puri",
+    "note": "saffron yogurt sweet with puri"
+  },
+  {
+    "name": "Handvo Gujarati",
+    "note": "savory lentil-rice cake"
+  },
+  {
+    "name": "Dhokla Khatta",
+    "note": "tangy rice-lentil dhokla"
+  },
+  {
+    "name": "Khaman Nylon",
+    "note": "soft spongy gram dhokla"
+  },
+  {
+    "name": "Sev Khamani",
+    "note": "crumbled dhokla with sev"
+  },
+  {
+    "name": "Locho",
+    "note": "surti soft steamed savory"
+  },
+  {
+    "name": "Ponk Vada",
+    "note": "surti tender-jowar fritters"
+  },
+  {
+    "name": "Undhiyu Surti",
+    "note": "surti mixed-veg casserole"
+  },
+  {
+    "name": "Ringan Bateta",
+    "note": "brinjal-potato gujarati sabzi"
+  },
+  {
+    "name": "Bharela Marcha",
+    "note": "gujarati stuffed chillies"
+  },
+  {
+    "name": "Sev Tameta",
+    "note": "tomato curry with sev"
+  },
+  {
+    "name": "Vaal Nu Shaak",
+    "note": "gujarati field-bean curry"
+  },
+  {
+    "name": "Lilva Kachori Gujarati",
+    "note": "tuvar-pigeon-pea kachori"
+  },
+  {
+    "name": "Methi Thepla Gujarati",
+    "note": "fenugreek flatbread"
+  },
+  {
+    "name": "Dudhi Thepla",
+    "note": "bottle-gourd flatbread"
+  },
+  {
+    "name": "Bajra Thepla",
+    "note": "pearl-millet flatbread"
+  },
+  {
+    "name": "Rotlo",
+    "note": "gujarati pearl-millet thick roti"
+  },
+  {
+    "name": "Bajra Rotla",
+    "note": "kathiyawadi pearl-millet roti"
+  },
+  {
+    "name": "Ringna No Olo Gujarati",
+    "note": "smoked brinjal mash"
+  },
+  {
+    "name": "Sev Usal",
+    "note": "spicy pea curry with sev"
+  },
+  {
+    "name": "Dabeli Kutchi",
+    "note": "kutchi spiced-potato bun"
+  },
+  {
+    "name": "Khichu",
+    "note": "gujarati rice-flour steamed dough"
+  },
+  {
+    "name": "Panki",
+    "note": "gujarati leaf-steamed rice pancake"
+  },
+  {
+    "name": "Muthiya Dudhi",
+    "note": "steamed bottle-gourd dumplings"
+  },
+  {
+    "name": "Vagharela Bhaat",
+    "note": "gujarati tempered rice"
+  },
+  {
+    "name": "Khichdi Gujarati",
+    "note": "gujarati moong-rice khichdi"
+  },
+  {
+    "name": "Osaman",
+    "note": "gujarati thin lentil soup"
+  },
+  {
+    "name": "Kadhi Gujarati Sweet",
+    "note": "sweet-sour yogurt kadhi"
+  },
+  {
+    "name": "Bhinda Nu Shaak",
+    "note": "gujarati okra sabzi"
+  },
+  {
+    "name": "Tindora Nu Shaak",
+    "note": "ivy-gourd gujarati sabzi"
+  },
+  {
+    "name": "Papdi Nu Shaak",
+    "note": "field-bean gujarati sabzi"
+  },
+  {
+    "name": "Guvar Nu Shaak",
+    "note": "cluster-bean gujarati sabzi"
+  },
+  {
+    "name": "Kobi Nu Shaak",
+    "note": "cabbage-pea gujarati sabzi"
+  },
+  {
+    "name": "Batata Poha Gujarati",
+    "note": "potato poha"
+  },
+  {
+    "name": "Ganthiya Nu Shaak",
+    "note": "gram-strip curry"
+  },
+  {
+    "name": "Aloo Rasedar",
+    "note": "potatoes in thin tangy gravy"
+  },
+  {
+    "name": "Kaddu Rasedar",
+    "note": "pumpkin thin gravy"
+  },
+  {
+    "name": "Nimona",
+    "note": "awadhi green-pea curry"
+  },
+  {
+    "name": "Tehri",
+    "note": "awadhi turmeric veg rice"
+  },
+  {
+    "name": "Bathua Raita",
+    "note": "chenopodium yogurt side"
+  },
+  {
+    "name": "Boondi Raita",
+    "note": "gram-pearl yogurt side"
+  },
+  {
+    "name": "Vegetable Raita",
+    "note": "mixed-veg yogurt side"
+  },
+  {
+    "name": "Aloo Raita",
+    "note": "potato yogurt side"
+  },
+  {
+    "name": "Pineapple Raita",
+    "note": "sweet pineapple yogurt"
+  },
+  {
+    "name": "Palak Raita",
+    "note": "spinach yogurt side"
+  },
+  {
+    "name": "Lauki Raita",
+    "note": "bottle-gourd yogurt side"
+  },
+  {
+    "name": "Aloo Gosht Veg",
+    "note": "soya potato curry"
+  },
+  {
+    "name": "Soya Keema",
+    "note": "minced soya masala"
+  },
+  {
+    "name": "Soya Matar Keema",
+    "note": "soya-pea minced curry"
+  },
+  {
+    "name": "Veg Keema",
+    "note": "minced mixed-veg masala"
+  },
+  {
+    "name": "Keema Mutter Soya",
+    "note": "soya keema with peas"
+  },
+  {
+    "name": "Soya Biryani",
+    "note": "soya-chunk biryani"
+  },
+  {
+    "name": "Soya Pulao",
+    "note": "soya-chunk pulao"
+  },
+  {
+    "name": "Mushroom Biryani",
+    "note": "mushroom dum biryani"
+  },
+  {
+    "name": "Paneer Biryani",
+    "note": "paneer dum biryani"
+  },
+  {
+    "name": "Tawa Pulao",
+    "note": "mumbai spiced tawa rice"
+  },
+  {
+    "name": "Jeera Aloo Rice",
+    "note": "cumin-potato rice"
+  },
+  {
+    "name": "Curd Rice South",
+    "note": "tempered yogurt rice"
+  },
+  {
+    "name": "Bagara Khana",
+    "note": "hyderabadi tempered rice"
+  },
+  {
+    "name": "Methi Rice",
+    "note": "fenugreek pulao"
+  },
+  {
+    "name": "Palak Rice",
+    "note": "spinach pulao"
+  },
+  {
+    "name": "Beetroot Rice",
+    "note": "beetroot tempered rice"
+  },
+  {
+    "name": "Capsicum Rice",
+    "note": "capsicum masala rice"
+  },
+  {
+    "name": "Mint Rice",
+    "note": "pudina pulao"
+  },
+  {
+    "name": "Mushroom Pulao",
+    "note": "mushroom fragrant rice"
+  },
+  {
+    "name": "Soybean Pulao",
+    "note": "soya nutri pulao"
+  },
+  {
+    "name": "Rajma Pulao",
+    "note": "kidney-bean rice"
+  },
+  {
+    "name": "Chana Pulao",
+    "note": "chickpea pulao"
+  },
+  {
+    "name": "Kaju Pulao",
+    "note": "cashew ghee pulao"
+  },
+  {
+    "name": "Matar Mushroom",
+    "note": "peas-mushroom curry"
+  },
+  {
+    "name": "Aloo Mushroom",
+    "note": "potato-mushroom sabzi"
+  },
+  {
+    "name": "Mushroom Do Pyaza",
+    "note": "mushroom double-onion sabzi"
+  },
+  {
+    "name": "Chilli Mushroom",
+    "note": "indo-chinese chilli mushroom"
+  },
+  {
+    "name": "Mushroom Kadai",
+    "note": "mushroom in kadai masala"
+  },
+  {
+    "name": "Corn Methi Malai",
+    "note": "corn-fenugreek cream curry"
+  },
+  {
+    "name": "Makai Palak",
+    "note": "corn spinach curry"
+  },
+  {
+    "name": "Baby Corn Manchurian",
+    "note": "baby-corn in manchurian sauce"
+  },
+  {
+    "name": "Baby Corn Masala",
+    "note": "baby-corn curry"
+  },
+  {
+    "name": "Crispy Baby Corn",
+    "note": "fried baby-corn snack"
+  },
+  {
+    "name": "Honey Chilli Potato",
+    "note": "sweet-spicy crisp potato"
+  },
+  {
+    "name": "Crispy Corn",
+    "note": "fried spiced sweet-corn"
+  },
+  {
+    "name": "Chilli Baby Corn",
+    "note": "chilli baby-corn stir fry"
+  },
+  {
+    "name": "Veg Lollipop",
+    "note": "crisp veg-ball snack"
+  },
+  {
+    "name": "Paneer 65",
+    "note": "spicy fried paneer"
+  },
+  {
+    "name": "Gobi 65",
+    "note": "spicy fried cauliflower"
+  },
+  {
+    "name": "Mushroom 65",
+    "note": "spicy fried mushroom"
+  },
+  {
+    "name": "Baby Corn 65",
+    "note": "spicy fried baby-corn"
+  },
+  {
+    "name": "Veg 65",
+    "note": "spicy fried mixed veg"
+  },
+  {
+    "name": "Aloo 65",
+    "note": "spicy fried potato"
+  },
+  {
+    "name": "Chilli Gobi",
+    "note": "cauliflower in chilli sauce"
+  },
+  {
+    "name": "Crispy Veg",
+    "note": "crisp fried mixed veg"
+  },
+  {
+    "name": "Veg Cheese Balls",
+    "note": "fried cheese-veg balls"
+  },
+  {
+    "name": "Corn Cheese Balls",
+    "note": "fried corn-cheese balls"
+  },
+  {
+    "name": "Aloo Cheese Balls",
+    "note": "fried potato-cheese balls"
+  },
+  {
+    "name": "Bread Upma",
+    "note": "tempered bread cubes"
+  },
+  {
+    "name": "Bread Poha",
+    "note": "bread poha"
+  },
+  {
+    "name": "Sooji Toast",
+    "note": "semolina veg toast"
+  },
+  {
+    "name": "Veg Sandwich",
+    "note": "grilled masala veg sandwich"
+  },
+  {
+    "name": "Bombay Sandwich",
+    "note": "mumbai chutney veg sandwich"
+  },
+  {
+    "name": "Corn Sandwich",
+    "note": "creamy corn sandwich"
+  },
+  {
+    "name": "Paneer Sandwich",
+    "note": "spiced paneer sandwich"
+  },
+  {
+    "name": "Chutney Sandwich",
+    "note": "green-chutney sandwich"
+  },
+  {
+    "name": "Aloo Sandwich",
+    "note": "spiced-potato sandwich"
+  },
+  {
+    "name": "Veg Cutlet Bengali",
+    "note": "beetroot-veg croquette"
+  },
+  {
+    "name": "Rava Toast",
+    "note": "semolina griddle toast"
+  },
+  {
+    "name": "Uttapam Onion Tomato",
+    "note": "thick veg-topped dosa"
+  },
+  {
+    "name": "Podi Idli",
+    "note": "idli tossed in spice powder"
+  },
+  {
+    "name": "Ghee Roast Dosa",
+    "note": "crisp ghee-roasted dosa"
+  },
+  {
+    "name": "Onion Rava Dosa",
+    "note": "semolina onion crepe"
+  },
+  {
+    "name": "Mysore Masala Dosa",
+    "note": "chutney-smeared masala dosa"
+  },
+  {
+    "name": "Paper Dosa",
+    "note": "extra-thin crisp dosa"
+  },
+  {
+    "name": "Egg-free Uttapam",
+    "note": "veg mixed uttapam"
+  },
+  {
+    "name": "Idli Upma",
+    "note": "crumbled idli upma"
+  },
+  {
+    "name": "Kanchipuram Idli",
+    "note": "spiced steamed idli"
+  },
+  {
+    "name": "Thattu Idli",
+    "note": "soft plate idli"
+  },
+  {
+    "name": "Ragi Idli",
+    "note": "finger-millet idli"
+  },
+  {
+    "name": "Oats Idli",
+    "note": "instant oats idli"
+  },
+  {
+    "name": "Sabudana Idli",
+    "note": "tapioca steamed idli"
+  },
+  {
+    "name": "Moong Dal Idli",
+    "note": "green-gram idli"
+  },
+  {
+    "name": "Kambu Dosai",
+    "note": "pearl-millet dosa"
+  },
+  {
+    "name": "Adai Avial",
+    "note": "mixed-lentil dosa with avial"
+  },
+  {
+    "name": "Uttapam Podi",
+    "note": "spice-powder uttapam"
+  },
+  {
+    "name": "Wheat Dosa",
+    "note": "instant wheat crepe"
+  },
+  {
+    "name": "Moong Dal Dosa",
+    "note": "green-gram crepe"
+  },
+  {
+    "name": "Jowar Dosa",
+    "note": "sorghum crepe"
+  },
+  {
+    "name": "Quinoa Dosa",
+    "note": "quinoa crepe"
+  },
+  {
+    "name": "Godhuma Dosa",
+    "note": "broken-wheat crepe"
+  },
+  {
+    "name": "Aloo Kulcha",
+    "note": "potato-stuffed kulcha"
+  },
+  {
+    "name": "Paneer Kulcha",
+    "note": "paneer-stuffed kulcha"
+  },
+  {
+    "name": "Onion Kulcha",
+    "note": "onion-stuffed kulcha"
+  },
+  {
+    "name": "Matar Kulcha",
+    "note": "pea-stuffed kulcha"
+  },
+  {
+    "name": "Plain Kulcha",
+    "note": "soft leavened flatbread"
+  },
+  {
+    "name": "Aloo Naan",
+    "note": "potato-stuffed naan"
+  },
+  {
+    "name": "Paneer Naan",
+    "note": "paneer-stuffed naan"
+  },
+  {
+    "name": "Cheese Naan",
+    "note": "cheese-stuffed naan"
+  },
+  {
+    "name": "Lachha Paratha",
+    "note": "layered flaky paratha"
+  },
+  {
+    "name": "Malabar Paratha",
+    "note": "flaky layered kerala bread"
+  },
+  {
+    "name": "Ajwain Paratha",
+    "note": "carom-seed flatbread"
+  },
+  {
+    "name": "Pudina Paratha",
+    "note": "mint layered flatbread"
+  },
+  {
+    "name": "Laccha Pyaz Paratha",
+    "note": "layered onion flatbread"
+  },
+  {
+    "name": "Til Paratha",
+    "note": "sesame flatbread"
+  },
+  {
+    "name": "Besan Paratha",
+    "note": "gram-flour flatbread"
+  },
+  {
+    "name": "Missi Roti Rajasthani",
+    "note": "spiced gram-wheat flatbread"
+  },
+  {
+    "name": "Makhana Raita",
+    "note": "foxnut yogurt side"
+  },
+  {
+    "name": "Aamras",
+    "note": "sweet mango pulp"
+  },
+  {
+    "name": "Aamras Puri",
+    "note": "mango pulp with puri"
+  },
+  {
+    "name": "Fruit Custard",
+    "note": "chilled mixed-fruit custard"
+  },
+  {
+    "name": "Mango Kulfi",
+    "note": "mango frozen dessert"
+  },
+  {
+    "name": "Malai Kulfi",
+    "note": "reduced-milk frozen dessert"
+  },
+  {
+    "name": "Pista Kulfi",
+    "note": "pistachio kulfi"
+  },
+  {
+    "name": "Kesar Kulfi",
+    "note": "saffron kulfi"
+  },
+  {
+    "name": "Falooda",
+    "note": "rose-vermicelli milk dessert"
+  },
+  {
+    "name": "Kulfi Falooda",
+    "note": "kulfi with falooda"
+  },
+  {
+    "name": "Sitaphal Basundi",
+    "note": "custard-apple sweet milk"
+  },
+  {
+    "name": "Angoori Rasmalai",
+    "note": "tiny rasmalai balls"
+  },
+  {
+    "name": "Rajbhog",
+    "note": "large stuffed rasgulla"
+  },
+  {
+    "name": "Kesar Peda",
+    "note": "saffron milk peda"
+  },
+  {
+    "name": "Doodh Peda",
+    "note": "milk peda"
+  },
+  {
+    "name": "Mathura Peda",
+    "note": "grainy brown peda"
+  },
+  {
+    "name": "Malai Peda",
+    "note": "creamy milk peda"
+  },
+  {
+    "name": "Coconut Ladoo Instant",
+    "note": "quick coconut-milk ladoo"
+  },
+  {
+    "name": "Dry Fruit Barfi",
+    "note": "mixed-nut barfi"
+  },
+  {
+    "name": "Chocolate Barfi",
+    "note": "cocoa milk barfi"
+  },
+  {
+    "name": "Pista Barfi",
+    "note": "pistachio barfi"
+  },
+  {
+    "name": "Anjeer Barfi",
+    "note": "fig-nut barfi"
+  },
+  {
+    "name": "Khoya Barfi",
+    "note": "plain milk-solid barfi"
+  },
+  {
+    "name": "Nariyal Ladoo Khoya",
+    "note": "coconut-khoya ladoo"
+  },
+  {
+    "name": "Malai Ladoo",
+    "note": "soft paneer-milk ladoo"
+  },
+  {
+    "name": "Paneer Ladoo",
+    "note": "cottage-cheese ladoo"
+  },
+  {
+    "name": "Wheat Ladoo",
+    "note": "whole-wheat ghee ladoo"
+  },
+  {
+    "name": "Ragi Ladoo",
+    "note": "finger-millet jaggery ladoo"
+  },
+  {
+    "name": "Oats Ladoo",
+    "note": "oats-nut jaggery ladoo"
+  },
+  {
+    "name": "Peanut Ladoo",
+    "note": "groundnut-jaggery ladoo"
+  },
+  {
+    "name": "Flaxseed Ladoo",
+    "note": "alsi jaggery ladoo"
+  },
+  {
+    "name": "Methi Ladoo",
+    "note": "fenugreek winter ladoo"
+  },
+  {
+    "name": "Dink Ladoo",
+    "note": "edible-gum winter ladoo"
+  },
+  {
+    "name": "Coconut Jaggery Ladoo",
+    "note": "coconut-gud ladoo"
+  },
+  {
+    "name": "Til Ladoo Gud",
+    "note": "sesame-jaggery ladoo"
+  },
+  {
+    "name": "Rajgira Ladoo Fasting",
+    "note": "amaranth fasting ladoo"
+  },
+  {
+    "name": "Makhana Ladoo",
+    "note": "foxnut ghee ladoo"
+  },
+  {
+    "name": "Besan Ke Ladoo Bhuna",
+    "note": "roasted gram-flour ladoo"
+  },
+  {
+    "name": "Sattu Ladoo Bihari",
+    "note": "roasted-gram jaggery ladoo"
+  },
+  {
+    "name": "Nariyal Chikki",
+    "note": "coconut jaggery brittle"
+  },
+  {
+    "name": "Groundnut Chikki",
+    "note": "peanut jaggery brittle"
+  },
+  {
+    "name": "Rajgira Chikki Fasting",
+    "note": "amaranth brittle"
+  },
+  {
+    "name": "Poha Chivda",
+    "note": "flattened-rice snack mix"
+  },
+  {
+    "name": "Makhana Chivda",
+    "note": "foxnut snack mix"
+  },
+  {
+    "name": "Roasted Chana",
+    "note": "spiced roasted gram snack"
+  },
+  {
+    "name": "Masala Peanuts",
+    "note": "spiced coated peanuts"
+  },
+  {
+    "name": "Masala Kaju",
+    "note": "spiced roasted cashews"
+  },
+  {
+    "name": "Dahi Papdi",
+    "note": "papdi with yogurt"
+  },
+  {
+    "name": "Ragda Samosa",
+    "note": "samosa over white-pea curry"
+  },
+  {
+    "name": "Chole Tikki",
+    "note": "chickpea over potato patty"
+  },
+  {
+    "name": "Aloo Tikki Chole",
+    "note": "potato patty with chickpea gravy"
+  },
+  {
+    "name": "Matar Tikki",
+    "note": "green-pea patty"
+  },
+  {
+    "name": "Kachori Sabzi",
+    "note": "kachori with potato curry"
+  },
+  {
+    "name": "Aloo Sabzi Puri",
+    "note": "potato curry with puri"
+  },
+  {
+    "name": "Chole Bhature",
+    "note": "chickpea curry with fried bread"
+  },
+  {
+    "name": "Chana Samosa",
+    "note": "chickpea-filled samosa"
+  },
+  {
+    "name": "Corn Samosa",
+    "note": "cheese-corn samosa"
+  },
+  {
+    "name": "Paneer Samosa",
+    "note": "paneer-filled samosa"
+  },
+  {
+    "name": "Noodles Samosa",
+    "note": "noodle-filled samosa"
+  },
+  {
+    "name": "Pizza Samosa",
+    "note": "cheese-veg samosa"
+  },
+  {
+    "name": "Mini Samosa",
+    "note": "bite-size crisp samosa"
+  },
+  {
+    "name": "Onion Samosa",
+    "note": "south crisp onion samosa"
+  },
+  {
+    "name": "Punjabi Samosa",
+    "note": "large potato-pea samosa"
+  },
+  {
+    "name": "Veg Puff",
+    "note": "flaky spiced-veg pastry"
+  },
+  {
+    "name": "Paneer Puff",
+    "note": "paneer flaky pastry"
+  },
+  {
+    "name": "Aloo Puff",
+    "note": "potato flaky pastry"
+  },
+  {
+    "name": "Masala Bread",
+    "note": "spiced pan-tossed bread"
+  },
+  {
+    "name": "Bread Roll Potato",
+    "note": "potato-stuffed fried bread roll"
+  },
+  {
+    "name": "Veg Roll",
+    "note": "rolled spiced-veg wrap"
+  },
+  {
+    "name": "Paneer Roll",
+    "note": "paneer kathi roll"
+  },
+  {
+    "name": "Aloo Roll",
+    "note": "spiced-potato roll"
+  },
+  {
+    "name": "Noodle Roll",
+    "note": "noodle-filled roll"
+  },
+  {
+    "name": "Cheese Corn Balls",
+    "note": "fried cheese-corn balls"
+  },
+  {
+    "name": "Veg Manchow Soup",
+    "note": "indo-chinese spicy soup"
+  },
+  {
+    "name": "Hot And Sour Soup",
+    "note": "tangy veg soup"
+  },
+  {
+    "name": "Sweet Corn Soup",
+    "note": "creamy corn soup"
+  },
+  {
+    "name": "Tomato Soup",
+    "note": "spiced tomato soup"
+  },
+  {
+    "name": "Lemon Coriander Soup",
+    "note": "clear tangy soup"
+  },
+  {
+    "name": "Palak Soup",
+    "note": "spinach soup"
+  },
+  {
+    "name": "Mixed Veg Soup",
+    "note": "clear vegetable soup"
+  },
+  {
+    "name": "Dal Shorba",
+    "note": "spiced lentil soup"
+  },
+  {
+    "name": "Tomato Dhaniya Shorba",
+    "note": "tomato-coriander soup"
+  },
+  {
+    "name": "Beetroot Soup",
+    "note": "beetroot cream soup"
+  },
+  {
+    "name": "Roti",
+    "note": "everyday whole-wheat tawa flatbread (chapati)"
+  },
+  {
+    "name": "Chapati",
+    "note": "soft everyday whole-wheat flatbread"
+  },
+  {
+    "name": "Phulka",
+    "note": "puffed thin whole-wheat roti roasted on flame"
+  },
+  {
+    "name": "Tawa Roti",
+    "note": "griddle-cooked plain roti"
+  },
+  {
+    "name": "Ghee Roti",
+    "note": "roti smeared with ghee"
+  },
+  {
+    "name": "Steamed Rice",
+    "note": "plain boiled/steamed white rice"
+  },
+  {
+    "name": "Plain Rice",
+    "note": "everyday cooked rice"
+  },
+  {
+    "name": "Roasted Papad",
+    "note": "flame-roasted papad"
+  },
+  {
+    "name": "Fried Papad",
+    "note": "crisp deep-fried papad"
+  },
+  {
+    "name": "Masala Papad",
+    "note": "papad topped with onion-tomato-chaat masala"
+  },
+  {
+    "name": "Green Salad",
+    "note": "fresh cucumber-tomato-onion salad"
+  },
+  {
+    "name": "Kachumber Salad",
+    "note": "diced cucumber-onion-tomato-lemon salad"
+  },
+  {
+    "name": "Onion Salad",
+    "note": "sirka onion salad with lemon"
+  },
+  {
+    "name": "Sprouts Salad",
+    "note": "boiled mixed-sprout salad"
+  },
+  {
+    "name": "Plain Curd",
+    "note": "set homemade yogurt/dahi"
+  },
+  {
+    "name": "Adrak Chai",
+    "note": "ginger-spiced milk tea"
+  },
+  {
+    "name": "Elaichi Chai",
+    "note": "cardamom milk tea"
+  },
+  {
+    "name": "Cutting Chai",
+    "note": "strong small-serve milk tea"
+  },
+  {
+    "name": "Kadak Chai",
+    "note": "strong boiled milk tea"
+  },
+  {
+    "name": "Green Tea",
+    "note": "light steeped green tea"
+  },
+  {
+    "name": "Lemon Tea",
+    "note": "black tea with lemon"
+  },
+  {
+    "name": "Tulsi Tea",
+    "note": "holy-basil herbal tea"
+  },
+  {
+    "name": "Lemongrass Tea",
+    "note": "lemongrass herbal infusion"
+  },
+  {
+    "name": "Cold Coffee",
+    "note": "blended chilled milk coffee"
+  },
+  {
+    "name": "Hot Chocolate",
+    "note": "warm cocoa milk drink"
+  },
+  {
+    "name": "Malt Milk",
+    "note": "malted health-drink milk (bournvita-style)"
+  },
+  {
+    "name": "Nimbu Pani",
+    "note": "lemon-sugar-salt cooler"
+  },
+  {
+    "name": "Shikanji",
+    "note": "north-indian spiced lemonade"
+  },
+  {
+    "name": "Watermelon Juice",
+    "note": "fresh watermelon juice"
+  },
+  {
+    "name": "Orange Juice",
+    "note": "fresh orange juice"
+  },
+  {
+    "name": "Mosambi Juice",
+    "note": "sweet lime juice"
+  },
+  {
+    "name": "Sugarcane Juice",
+    "note": "ganne ka ras with lemon-ginger"
+  },
+  {
+    "name": "Pomegranate Juice",
+    "note": "anaar juice"
+  },
+  {
+    "name": "Masala Coconut Water",
+    "note": "spiced tender-coconut water"
+  },
+  {
+    "name": "Banana Shake",
+    "note": "banana milkshake"
+  },
+  {
+    "name": "Mango Shake",
+    "note": "mango milkshake"
+  },
+  {
+    "name": "Chocolate Shake",
+    "note": "chocolate milkshake"
+  },
+  {
+    "name": "Plain Chaas",
+    "note": "light salted buttermilk"
+  },
+  {
+    "name": "Mango Smoothie",
+    "note": "mango-yogurt smoothie"
+  },
+  {
+    "name": "Mixed Fruit Smoothie",
+    "note": "blended mixed-fruit smoothie"
+  },
+  {
+    "name": "Masala Maggi",
+    "note": "spiced vegetable instant noodles"
+  },
+  {
+    "name": "Veg Maggi",
+    "note": "instant noodles with vegetables"
+  },
+  {
+    "name": "Cheese Maggi",
+    "note": "cheesy instant noodles"
+  },
+  {
+    "name": "Red Sauce Pasta",
+    "note": "tomato-sauce penne pasta"
+  },
+  {
+    "name": "White Sauce Pasta",
+    "note": "creamy bechamel pasta"
+  },
+  {
+    "name": "Veg Cheese Pasta",
+    "note": "mixed veg cheese pasta"
+  },
+  {
+    "name": "Masala Pasta",
+    "note": "desi masala pasta"
+  },
+  {
+    "name": "Grilled Cheese Sandwich",
+    "note": "griddled cheese sandwich"
+  },
+  {
+    "name": "Garlic Bread",
+    "note": "toasted garlic-butter bread"
+  },
+  {
+    "name": "Cheese Garlic Bread",
+    "note": "cheesy garlic bread"
+  },
+  {
+    "name": "Veg Pizza",
+    "note": "vegetable cheese pizza"
+  },
+  {
+    "name": "Paneer Tikka Pizza",
+    "note": "tandoori paneer pizza"
+  },
+  {
+    "name": "French Fries",
+    "note": "crisp fried potato fries"
+  },
+  {
+    "name": "Peri Peri Fries",
+    "note": "spiced peri-peri fries"
+  },
+  {
+    "name": "Veg Momos",
+    "note": "steamed vegetable dumplings"
+  },
+  {
+    "name": "Paneer Momos",
+    "note": "steamed paneer dumplings"
+  },
+  {
+    "name": "Fried Momos",
+    "note": "crisp-fried momos"
+  },
+  {
+    "name": "Bun Maska",
+    "note": "buttered soft bun"
+  },
+  {
+    "name": "Cheese Toast",
+    "note": "grilled cheese-topped toast"
+  },
+  {
+    "name": "Chilli Cheese Toast",
+    "note": "spicy cheese-chilli toast"
+  },
+  {
+    "name": "Overnight Oats",
+    "note": "soaked oats-milk breakfast jar"
+  },
+  {
+    "name": "Oats Bowl",
+    "note": "cooked masala/sweet oats bowl"
+  },
+  {
+    "name": "Smoothie Bowl",
+    "note": "thick blended fruit bowl with toppings"
+  },
+  {
+    "name": "Chia Pudding",
+    "note": "soaked chia-milk pudding"
+  },
+  {
+    "name": "Peanut Butter Toast",
+    "note": "peanut-butter-banana toast"
+  },
+  {
+    "name": "Muesli Bowl",
+    "note": "muesli with milk/yogurt and fruit"
+  },
+  {
+    "name": "Fruit Bowl",
+    "note": "fresh cut-fruit chaat bowl"
+  },
+  {
+    "name": "Bhutta",
+    "note": "charcoal-roasted corn on the cob"
+  },
+  {
+    "name": "Butter Corn",
+    "note": "buttery sweet-corn cup"
+  },
+  {
+    "name": "Jhal Muri",
+    "note": "bengali spiced puffed-rice snack"
+  },
+  {
+    "name": "Churmura Bhel",
+    "note": "tempered puffed-rice churmura"
+  },
+  {
+    "name": "Aloo Chips",
+    "note": "crisp fried potato wafers"
+  },
+  {
+    "name": "Banana Chips",
+    "note": "kerala-style banana wafers"
+  },
+  {
+    "name": "Vanilla Ice Cream",
+    "note": "no-churn vanilla ice cream"
+  },
+  {
+    "name": "Shahi Tukda",
+    "note": "fried-bread rabri dessert"
+  },
+  {
+    "name": "Bread Halwa",
+    "note": "ghee-fried bread halwa"
+  },
+  {
+    "name": "Meetha Paan",
+    "note": "sweet betel-leaf mouth freshener"
+  }
 ]
