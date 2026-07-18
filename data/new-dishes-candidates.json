@@ -3954,5 +3954,505 @@
   {
     "name": "Sprouts Sabzi",
     "note": "dry mixed-sprouts sabzi"
+  },
+  {
+    "name": "Butter Chicken",
+    "note": "creamy tomato-butter chicken (murgh makhani)",
+    "nonveg": true
+  },
+  {
+    "name": "Chicken Curry",
+    "note": "home-style onion-tomato chicken curry",
+    "nonveg": true
+  },
+  {
+    "name": "Chicken Tikka Masala",
+    "note": "grilled chicken tikka in spiced gravy",
+    "nonveg": true
+  },
+  {
+    "name": "Kadai Chicken",
+    "note": "chicken with capsicum in kadai masala",
+    "nonveg": true
+  },
+  {
+    "name": "Chicken 65",
+    "note": "spicy South Indian fried chicken",
+    "nonveg": true
+  },
+  {
+    "name": "Chicken Biryani",
+    "note": "layered spiced chicken rice",
+    "nonveg": true
+  },
+  {
+    "name": "Hyderabadi Chicken Biryani",
+    "note": "dum chicken biryani",
+    "nonveg": true
+  },
+  {
+    "name": "Chicken Korma",
+    "note": "chicken in cashew-yogurt gravy",
+    "nonveg": true
+  },
+  {
+    "name": "Chicken Chettinad",
+    "note": "peppery Chettinad chicken",
+    "nonveg": true
+  },
+  {
+    "name": "Chicken Do Pyaza",
+    "note": "chicken with double onions",
+    "nonveg": true
+  },
+  {
+    "name": "Murg Musallam",
+    "note": "whole spiced Mughlai chicken",
+    "nonveg": true
+  },
+  {
+    "name": "Chicken Handi",
+    "note": "slow-cooked handi chicken",
+    "nonveg": true
+  },
+  {
+    "name": "Chicken Kolhapuri",
+    "note": "fiery Maharashtrian chicken",
+    "nonveg": true
+  },
+  {
+    "name": "Chicken Rogan Josh",
+    "note": "Kashmiri red chicken curry",
+    "nonveg": true
+  },
+  {
+    "name": "Chicken Vindaloo",
+    "note": "Goan tangy-spicy chicken",
+    "nonveg": true
+  },
+  {
+    "name": "Chilli Chicken",
+    "note": "indo-chinese chilli chicken",
+    "nonveg": true
+  },
+  {
+    "name": "Chicken Manchurian",
+    "note": "chicken in manchurian gravy",
+    "nonveg": true
+  },
+  {
+    "name": "Chicken Lollipop",
+    "note": "fried chicken winglets",
+    "nonveg": true
+  },
+  {
+    "name": "Tandoori Chicken",
+    "note": "yogurt-marinated roast chicken",
+    "nonveg": true
+  },
+  {
+    "name": "Chicken Tikka",
+    "note": "grilled marinated chicken chunks",
+    "nonveg": true
+  },
+  {
+    "name": "Malai Chicken Tikka",
+    "note": "creamy grilled chicken tikka",
+    "nonveg": true
+  },
+  {
+    "name": "Chicken Seekh Kebab",
+    "note": "minced chicken skewers",
+    "nonveg": true
+  },
+  {
+    "name": "Chicken Reshmi Kebab",
+    "note": "silky creamy chicken kebab",
+    "nonveg": true
+  },
+  {
+    "name": "Andhra Chicken Curry",
+    "note": "spicy Andhra chicken",
+    "nonveg": true
+  },
+  {
+    "name": "Chicken Ghee Roast",
+    "note": "Mangalore ghee-roast chicken",
+    "nonveg": true
+  },
+  {
+    "name": "Chicken Sukka",
+    "note": "dry coconut chicken",
+    "nonveg": true
+  },
+  {
+    "name": "Chicken Stew",
+    "note": "Kerala coconut-milk chicken stew",
+    "nonveg": true
+  },
+  {
+    "name": "Chicken Fried Rice",
+    "note": "indo-chinese chicken fried rice",
+    "nonveg": true
+  },
+  {
+    "name": "Chicken Hakka Noodles",
+    "note": "stir-fried chicken noodles",
+    "nonveg": true
+  },
+  {
+    "name": "Chicken Momos",
+    "note": "steamed chicken dumplings",
+    "nonveg": true
+  },
+  {
+    "name": "Chicken Roll",
+    "note": "chicken kathi roll",
+    "nonveg": true
+  },
+  {
+    "name": "Chicken Keema",
+    "note": "minced chicken masala",
+    "nonveg": true
+  },
+  {
+    "name": "Keema Matar",
+    "note": "minced meat with peas",
+    "nonveg": true
+  },
+  {
+    "name": "Chicken Pulao",
+    "note": "fragrant chicken rice",
+    "nonveg": true
+  },
+  {
+    "name": "Methi Chicken",
+    "note": "fenugreek chicken curry",
+    "nonveg": true
+  },
+  {
+    "name": "Palak Chicken",
+    "note": "spinach chicken curry",
+    "nonveg": true
+  },
+  {
+    "name": "Chicken Changezi",
+    "note": "rich Mughlai chicken",
+    "nonveg": true
+  },
+  {
+    "name": "Chicken Bharta",
+    "note": "shredded chicken in gravy",
+    "nonveg": true
+  },
+  {
+    "name": "Dhaba Chicken Curry",
+    "note": "rustic dhaba-style chicken",
+    "nonveg": true
+  },
+  {
+    "name": "Chicken Shorba",
+    "note": "spiced chicken soup",
+    "nonveg": true
+  },
+  {
+    "name": "Mutton Curry",
+    "note": "home-style mutton curry",
+    "nonveg": true
+  },
+  {
+    "name": "Mutton Rogan Josh",
+    "note": "Kashmiri aromatic mutton",
+    "nonveg": true
+  },
+  {
+    "name": "Mutton Biryani",
+    "note": "dum mutton biryani",
+    "nonveg": true
+  },
+  {
+    "name": "Mutton Korma",
+    "note": "mutton in nut-yogurt gravy",
+    "nonveg": true
+  },
+  {
+    "name": "Mutton Do Pyaza",
+    "note": "mutton with onions",
+    "nonveg": true
+  },
+  {
+    "name": "Mutton Keema",
+    "note": "minced mutton masala",
+    "nonveg": true
+  },
+  {
+    "name": "Keema Pav",
+    "note": "spiced mince with pav",
+    "nonveg": true
+  },
+  {
+    "name": "Mutton Rara",
+    "note": "mutton with keema gravy",
+    "nonveg": true
+  },
+  {
+    "name": "Laal Maas",
+    "note": "Rajasthani fiery red mutton",
+    "nonveg": true
+  },
+  {
+    "name": "Mutton Kolhapuri",
+    "note": "spicy Kolhapuri mutton",
+    "nonveg": true
+  },
+  {
+    "name": "Mutton Chettinad",
+    "note": "peppery Chettinad mutton",
+    "nonveg": true
+  },
+  {
+    "name": "Mutton Sukka",
+    "note": "dry roasted mutton",
+    "nonveg": true
+  },
+  {
+    "name": "Mutton Ghee Roast",
+    "note": "Mangalore mutton ghee roast",
+    "nonveg": true
+  },
+  {
+    "name": "Nihari",
+    "note": "slow-cooked spiced meat stew",
+    "nonveg": true
+  },
+  {
+    "name": "Paya Curry",
+    "note": "trotters curry",
+    "nonveg": true
+  },
+  {
+    "name": "Mutton Handi",
+    "note": "clay-pot mutton",
+    "nonveg": true
+  },
+  {
+    "name": "Bhuna Mutton",
+    "note": "dry-fried spiced mutton",
+    "nonveg": true
+  },
+  {
+    "name": "Mutton Seekh Kebab",
+    "note": "minced mutton skewers",
+    "nonveg": true
+  },
+  {
+    "name": "Galouti Kebab",
+    "note": "melt-in-mouth mutton kebab",
+    "nonveg": true
+  },
+  {
+    "name": "Shami Kebab",
+    "note": "lentil-mutton patty",
+    "nonveg": true
+  },
+  {
+    "name": "Mutton Chops",
+    "note": "fried mutton chops",
+    "nonveg": true
+  },
+  {
+    "name": "Mutton Stew",
+    "note": "coconut-milk mutton stew",
+    "nonveg": true
+  },
+  {
+    "name": "Mutton Pepper Fry",
+    "note": "black-pepper mutton fry",
+    "nonveg": true
+  },
+  {
+    "name": "Achari Mutton",
+    "note": "pickle-spiced mutton",
+    "nonveg": true
+  },
+  {
+    "name": "Fish Curry",
+    "note": "home-style fish curry",
+    "nonveg": true
+  },
+  {
+    "name": "Fish Fry",
+    "note": "spiced pan-fried fish",
+    "nonveg": true
+  },
+  {
+    "name": "Amritsari Fish",
+    "note": "batter-fried Amritsari fish",
+    "nonveg": true
+  },
+  {
+    "name": "Fish Tikka",
+    "note": "grilled marinated fish",
+    "nonveg": true
+  },
+  {
+    "name": "Bengali Fish Curry",
+    "note": "mustard fish curry",
+    "nonveg": true
+  },
+  {
+    "name": "Macher Jhol",
+    "note": "light Bengali fish stew",
+    "nonveg": true
+  },
+  {
+    "name": "Fish Molee",
+    "note": "Kerala coconut-milk fish",
+    "nonveg": true
+  },
+  {
+    "name": "Kerala Fish Curry",
+    "note": "tangy Kerala fish curry",
+    "nonveg": true
+  },
+  {
+    "name": "Goan Fish Curry",
+    "note": "coconut-tamarind fish curry",
+    "nonveg": true
+  },
+  {
+    "name": "Tandoori Fish",
+    "note": "yogurt-marinated grilled fish",
+    "nonveg": true
+  },
+  {
+    "name": "Fish 65",
+    "note": "spicy fried fish",
+    "nonveg": true
+  },
+  {
+    "name": "Chilli Fish",
+    "note": "indo-chinese chilli fish",
+    "nonveg": true
+  },
+  {
+    "name": "Rohu Fish Curry",
+    "note": "rohu in spiced gravy",
+    "nonveg": true
+  },
+  {
+    "name": "Pomfret Fry",
+    "note": "shallow-fried pomfret",
+    "nonveg": true
+  },
+  {
+    "name": "Surmai Fry",
+    "note": "kingfish rava fry",
+    "nonveg": true
+  },
+  {
+    "name": "Prawn Curry",
+    "note": "coconut prawn curry",
+    "nonveg": true
+  },
+  {
+    "name": "Prawn Masala",
+    "note": "spicy prawn masala",
+    "nonveg": true
+  },
+  {
+    "name": "Prawn Biryani",
+    "note": "layered prawn biryani",
+    "nonveg": true
+  },
+  {
+    "name": "Chilli Prawns",
+    "note": "indo-chinese chilli prawns",
+    "nonveg": true
+  },
+  {
+    "name": "Butter Garlic Prawns",
+    "note": "garlic-butter prawns",
+    "nonveg": true
+  },
+  {
+    "name": "Prawn Fry",
+    "note": "spiced fried prawns",
+    "nonveg": true
+  },
+  {
+    "name": "Crab Masala",
+    "note": "spicy crab curry",
+    "nonveg": true
+  },
+  {
+    "name": "Egg Curry",
+    "note": "boiled eggs in onion-tomato gravy",
+    "nonveg": true
+  },
+  {
+    "name": "Egg Bhurji",
+    "note": "spiced scrambled eggs",
+    "nonveg": true
+  },
+  {
+    "name": "Egg Masala",
+    "note": "eggs in thick masala",
+    "nonveg": true
+  },
+  {
+    "name": "Anda Curry",
+    "note": "dhaba-style egg curry",
+    "nonveg": true
+  },
+  {
+    "name": "Egg Biryani",
+    "note": "layered egg biryani",
+    "nonveg": true
+  },
+  {
+    "name": "Egg Fried Rice",
+    "note": "indo-chinese egg fried rice",
+    "nonveg": true
+  },
+  {
+    "name": "Egg Roll",
+    "note": "kolkata egg kathi roll",
+    "nonveg": true
+  },
+  {
+    "name": "Masala Omelette",
+    "note": "spiced Indian omelette",
+    "nonveg": true
+  },
+  {
+    "name": "Bread Omelette",
+    "note": "bread-folded omelette",
+    "nonveg": true
+  },
+  {
+    "name": "Egg Ghotala",
+    "note": "surti scrambled egg curry",
+    "nonveg": true
+  },
+  {
+    "name": "Egg Paratha",
+    "note": "egg-coated stuffed paratha",
+    "nonveg": true
+  },
+  {
+    "name": "Dim Er Dalna",
+    "note": "Bengali egg curry",
+    "nonveg": true
+  },
+  {
+    "name": "Egg Pakora",
+    "note": "batter-fried boiled egg",
+    "nonveg": true
+  },
+  {
+    "name": "Egg Kejriwal",
+    "note": "chilli-cheese egg toast",
+    "nonveg": true
   }
 ]

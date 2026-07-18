@@ -18,7 +18,7 @@ const ENRICHED = path.join(ROOT, "data", "indian-recipes-enriched.json");
 const CANDIDATES = path.join(ROOT, "data", "new-dishes-candidates.json");
 const CHUNK = 8;
 const ORIGINAL_FAMILIES = 520; // the templated catalog before new dishes
-const TARGET_NEW = 1000;       // total NEW dishes to add on top of the original
+const TARGET_NEW = 1200;       // total NEW dishes to add on top of the original
 
 // Fold Hindi/English synonyms to a single canonical token so "potato paratha"
 // and "aloo paratha" collapse to the same key.
