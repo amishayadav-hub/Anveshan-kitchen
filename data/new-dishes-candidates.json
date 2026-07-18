@@ -3258,5 +3258,701 @@
   {
     "name": "Meetha Paan",
     "note": "sweet betel-leaf mouth freshener"
+  },
+  {
+    "name": "Eggless Vanilla Cake",
+    "note": "soft eggless vanilla sponge cake"
+  },
+  {
+    "name": "Eggless Chocolate Cake",
+    "note": "moist eggless chocolate cake"
+  },
+  {
+    "name": "Eggless Sponge Cake",
+    "note": "basic eggless sponge"
+  },
+  {
+    "name": "Black Forest Cake",
+    "note": "eggless cherry-cream chocolate cake"
+  },
+  {
+    "name": "Pineapple Pastry",
+    "note": "eggless pineapple cream pastry"
+  },
+  {
+    "name": "Red Velvet Cake",
+    "note": "eggless red velvet with cream cheese"
+  },
+  {
+    "name": "Eggless Banana Bread",
+    "note": "moist banana loaf"
+  },
+  {
+    "name": "Eggless Brownie",
+    "note": "fudgy eggless brownie"
+  },
+  {
+    "name": "Chocolate Chip Cookies",
+    "note": "eggless choco-chip cookies"
+  },
+  {
+    "name": "Coconut Cookies",
+    "note": "eggless coconut biscuits"
+  },
+  {
+    "name": "Nankhatai",
+    "note": "indian eggless shortbread cookie"
+  },
+  {
+    "name": "Eggless Muffins",
+    "note": "basic eggless muffins"
+  },
+  {
+    "name": "Chocolate Muffins",
+    "note": "eggless chocolate muffins"
+  },
+  {
+    "name": "Banana Muffins",
+    "note": "eggless banana muffins"
+  },
+  {
+    "name": "Baked Cheesecake",
+    "note": "eggless baked cheesecake"
+  },
+  {
+    "name": "No-Bake Cheesecake",
+    "note": "chilled set cheesecake"
+  },
+  {
+    "name": "Eggless Doughnuts",
+    "note": "fried eggless doughnuts"
+  },
+  {
+    "name": "Eggless Cupcakes",
+    "note": "vanilla eggless cupcakes"
+  },
+  {
+    "name": "Chocolate Cupcakes",
+    "note": "eggless chocolate cupcakes"
+  },
+  {
+    "name": "Eggless Pancakes",
+    "note": "fluffy eggless pancakes"
+  },
+  {
+    "name": "Eggless Waffles",
+    "note": "crisp eggless waffles"
+  },
+  {
+    "name": "Chocolate Mug Cake",
+    "note": "microwave mug cake"
+  },
+  {
+    "name": "Eggless Tiramisu",
+    "note": "coffee-cocoa eggless tiramisu"
+  },
+  {
+    "name": "Marble Cake",
+    "note": "vanilla-chocolate marble cake"
+  },
+  {
+    "name": "Tutti Frutti Cake",
+    "note": "eggless tutti-frutti cake"
+  },
+  {
+    "name": "Fruit Cake",
+    "note": "eggless dry-fruit cake"
+  },
+  {
+    "name": "Rava Cake",
+    "note": "semolina eggless cake"
+  },
+  {
+    "name": "Atta Cake",
+    "note": "whole-wheat jaggery cake"
+  },
+  {
+    "name": "Chocolate Lava Cake",
+    "note": "eggless molten lava cake"
+  },
+  {
+    "name": "Caramel Custard",
+    "note": "eggless caramel pudding"
+  },
+  {
+    "name": "Bread Pudding",
+    "note": "baked bread-custard pudding"
+  },
+  {
+    "name": "Apple Pie",
+    "note": "cinnamon apple pie"
+  },
+  {
+    "name": "Eggless Cinnamon Rolls",
+    "note": "soft cinnamon swirl rolls"
+  },
+  {
+    "name": "Coconut Macaroons",
+    "note": "chewy coconut macaroons"
+  },
+  {
+    "name": "Peanut Butter Cookies",
+    "note": "eggless peanut-butter cookies"
+  },
+  {
+    "name": "Oatmeal Cookies",
+    "note": "eggless oats-raisin cookies"
+  },
+  {
+    "name": "Chocolate Truffle Cake",
+    "note": "rich ganache truffle cake"
+  },
+  {
+    "name": "Mango Mousse",
+    "note": "eggless mango mousse"
+  },
+  {
+    "name": "Chocolate Mousse",
+    "note": "eggless chocolate mousse"
+  },
+  {
+    "name": "Dates Cake",
+    "note": "eggless date-walnut cake"
+  },
+  {
+    "name": "Carrot Cake",
+    "note": "spiced eggless carrot cake"
+  },
+  {
+    "name": "Lemon Cake",
+    "note": "eggless lemon drizzle cake"
+  },
+  {
+    "name": "Ragi Cake",
+    "note": "finger-millet chocolate cake"
+  },
+  {
+    "name": "Wheat Jaggery Cake",
+    "note": "atta-jaggery tea cake"
+  },
+  {
+    "name": "Khari Biscuit",
+    "note": "flaky puff khari"
+  },
+  {
+    "name": "Rusk Toast",
+    "note": "twice-baked tea rusk"
+  },
+  {
+    "name": "Dilkhush",
+    "note": "coconut-stuffed bakery bun"
+  },
+  {
+    "name": "Fruit Bun",
+    "note": "eggless tutti-frutti bun"
+  },
+  {
+    "name": "Chocolate Cake Jar",
+    "note": "layered cake dessert jar"
+  },
+  {
+    "name": "Walnut Brownie",
+    "note": "fudgy walnut brownie"
+  },
+  {
+    "name": "Veg Burger",
+    "note": "grilled vegetable patty burger"
+  },
+  {
+    "name": "Aloo Tikki Burger",
+    "note": "spiced potato-patty burger"
+  },
+  {
+    "name": "Paneer Burger",
+    "note": "tandoori paneer burger"
+  },
+  {
+    "name": "Veg Wrap",
+    "note": "vegetable kathi wrap"
+  },
+  {
+    "name": "Paneer Wrap",
+    "note": "paneer tikka wrap"
+  },
+  {
+    "name": "Falafel Wrap",
+    "note": "chickpea falafel wrap"
+  },
+  {
+    "name": "Veg Taco",
+    "note": "mexican veg tacos"
+  },
+  {
+    "name": "Rajma Taco",
+    "note": "kidney-bean tacos"
+  },
+  {
+    "name": "Veg Quesadilla",
+    "note": "cheesy veg quesadilla"
+  },
+  {
+    "name": "Veg Burrito",
+    "note": "rice-bean veg burrito"
+  },
+  {
+    "name": "Loaded Nachos",
+    "note": "cheesy loaded nachos"
+  },
+  {
+    "name": "Hummus",
+    "note": "chickpea-tahini dip"
+  },
+  {
+    "name": "Falafel",
+    "note": "crisp chickpea fritters"
+  },
+  {
+    "name": "Pita Bread",
+    "note": "soft pocket pita"
+  },
+  {
+    "name": "Baba Ganoush",
+    "note": "smoky brinjal dip"
+  },
+  {
+    "name": "Paneer Shawarma",
+    "note": "paneer wrap with garlic sauce"
+  },
+  {
+    "name": "Mushroom Risotto",
+    "note": "creamy mushroom risotto"
+  },
+  {
+    "name": "Veg Lasagna",
+    "note": "layered vegetable lasagna"
+  },
+  {
+    "name": "Mac And Cheese",
+    "note": "baked macaroni cheese"
+  },
+  {
+    "name": "Gnocchi",
+    "note": "potato gnocchi in sauce"
+  },
+  {
+    "name": "Bruschetta",
+    "note": "tomato-basil toast"
+  },
+  {
+    "name": "Focaccia",
+    "note": "herbed olive-oil bread"
+  },
+  {
+    "name": "Minestrone Soup",
+    "note": "italian vegetable soup"
+  },
+  {
+    "name": "Veg Thukpa",
+    "note": "himalayan noodle soup"
+  },
+  {
+    "name": "Veg Dim Sum",
+    "note": "steamed veg dumplings"
+  },
+  {
+    "name": "Bao Buns",
+    "note": "stuffed steamed bao"
+  },
+  {
+    "name": "Veg Pad Thai",
+    "note": "thai stir-fried noodles"
+  },
+  {
+    "name": "Thai Green Curry",
+    "note": "coconut green curry"
+  },
+  {
+    "name": "Thai Red Curry",
+    "note": "coconut red curry"
+  },
+  {
+    "name": "Thai Fried Rice",
+    "note": "basil thai fried rice"
+  },
+  {
+    "name": "Tom Yum Soup",
+    "note": "hot-sour thai soup"
+  },
+  {
+    "name": "Veg Sushi",
+    "note": "cucumber-avocado sushi rolls"
+  },
+  {
+    "name": "Poke Bowl",
+    "note": "hawaiian veg rice bowl"
+  },
+  {
+    "name": "Buddha Bowl",
+    "note": "grain and veg power bowl"
+  },
+  {
+    "name": "Quinoa Bowl",
+    "note": "quinoa salad bowl"
+  },
+  {
+    "name": "Falafel Bowl",
+    "note": "falafel mezze bowl"
+  },
+  {
+    "name": "Veg Enchiladas",
+    "note": "baked tortilla rolls"
+  },
+  {
+    "name": "Veg Fajitas",
+    "note": "sizzling pepper fajitas"
+  },
+  {
+    "name": "Churros",
+    "note": "cinnamon-sugar fried churros"
+  },
+  {
+    "name": "Savory Crepe",
+    "note": "stuffed savory crepe"
+  },
+  {
+    "name": "French Toast",
+    "note": "eggless bread french toast"
+  },
+  {
+    "name": "Bagel Sandwich",
+    "note": "toasted bagel sandwich"
+  },
+  {
+    "name": "Veg Au Gratin",
+    "note": "baked cheesy vegetables"
+  },
+  {
+    "name": "Coleslaw",
+    "note": "creamy cabbage slaw"
+  },
+  {
+    "name": "Caesar Salad",
+    "note": "veg caesar salad"
+  },
+  {
+    "name": "Greek Salad",
+    "note": "feta-olive salad"
+  },
+  {
+    "name": "Pasta Salad",
+    "note": "cold pasta salad"
+  },
+  {
+    "name": "Potato Salad",
+    "note": "creamy potato salad"
+  },
+  {
+    "name": "Veg Teriyaki",
+    "note": "teriyaki glazed vegetables"
+  },
+  {
+    "name": "Kimchi Fried Rice",
+    "note": "korean fried rice"
+  },
+  {
+    "name": "Veg Bibimbap",
+    "note": "korean mixed rice bowl"
+  },
+  {
+    "name": "Veg Ramen",
+    "note": "japanese noodle bowl"
+  },
+  {
+    "name": "Veg Khao Suey",
+    "note": "burmese coconut noodle bowl"
+  },
+  {
+    "name": "Peri Peri Paneer",
+    "note": "spicy grilled paneer"
+  },
+  {
+    "name": "Veg Stir Fry",
+    "note": "asian vegetable stir fry"
+  },
+  {
+    "name": "Veg Tempura",
+    "note": "battered fried vegetables"
+  },
+  {
+    "name": "Corn Ribs",
+    "note": "spiced roasted corn ribs"
+  },
+  {
+    "name": "Loaded Wedges",
+    "note": "cheesy potato wedges"
+  },
+  {
+    "name": "Shakshuka Veg",
+    "note": "eggless spiced tomato skillet"
+  },
+  {
+    "name": "Mujadara",
+    "note": "lentil-rice with onions"
+  },
+  {
+    "name": "Tabbouleh",
+    "note": "parsley-bulgur salad"
+  },
+  {
+    "name": "Aglio Olio Pasta",
+    "note": "garlic-oil spaghetti"
+  },
+  {
+    "name": "Pesto Pasta",
+    "note": "basil pesto pasta"
+  },
+  {
+    "name": "Ratatouille",
+    "note": "french stewed vegetables"
+  },
+  {
+    "name": "Veg Stroganoff",
+    "note": "creamy mushroom stroganoff"
+  },
+  {
+    "name": "Veg Paella",
+    "note": "spanish saffron rice"
+  },
+  {
+    "name": "Haakh",
+    "note": "kashmiri collard greens"
+  },
+  {
+    "name": "Nadru Yakhni",
+    "note": "lotus-stem yogurt curry"
+  },
+  {
+    "name": "Modur Pulao",
+    "note": "kashmiri sweet saffron pulao"
+  },
+  {
+    "name": "Chaman Kaliya",
+    "note": "kashmiri paneer in turmeric gravy"
+  },
+  {
+    "name": "Al Yakhni",
+    "note": "bottle-gourd yogurt curry"
+  },
+  {
+    "name": "Veth Chaman",
+    "note": "fried paneer kashmiri curry"
+  },
+  {
+    "name": "Nadir Palak",
+    "note": "lotus-stem spinach"
+  },
+  {
+    "name": "Manipuri Eromba",
+    "note": "fermented veg-chilli mash"
+  },
+  {
+    "name": "Singju",
+    "note": "manipuri veg salad"
+  },
+  {
+    "name": "Kangshoi",
+    "note": "manipuri vegetable stew"
+  },
+  {
+    "name": "Naga Bamboo Shoot Curry",
+    "note": "bamboo-shoot veg curry"
+  },
+  {
+    "name": "Galho",
+    "note": "naga vegetable khichdi"
+  },
+  {
+    "name": "Gundruk Soup",
+    "note": "fermented-greens soup"
+  },
+  {
+    "name": "Sel Roti",
+    "note": "nepali rice-flour ring"
+  },
+  {
+    "name": "Dhindo",
+    "note": "buckwheat porridge"
+  },
+  {
+    "name": "Mizo Bai",
+    "note": "boiled veg stew"
+  },
+  {
+    "name": "Khatkhate",
+    "note": "konkani mixed-veg stew"
+  },
+  {
+    "name": "Batata Song",
+    "note": "goan spicy potato"
+  },
+  {
+    "name": "Dali Thoy",
+    "note": "konkani everyday dal"
+  },
+  {
+    "name": "Valval",
+    "note": "konkani coconut-milk veg"
+  },
+  {
+    "name": "Bibbe Upkari",
+    "note": "tender-cashew stir fry"
+  },
+  {
+    "name": "Mooga Ghashi",
+    "note": "sprouted-moong coconut curry"
+  },
+  {
+    "name": "Goli Baje",
+    "note": "mangalore maida bajji"
+  },
+  {
+    "name": "Patrode",
+    "note": "colocasia-leaf rolls"
+  },
+  {
+    "name": "Pulissery",
+    "note": "kerala yogurt-coconut curry"
+  },
+  {
+    "name": "Kalan",
+    "note": "kerala yam-plantain curry"
+  },
+  {
+    "name": "Inji Curry",
+    "note": "ginger tamarind curry"
+  },
+  {
+    "name": "Puli Inji",
+    "note": "kerala ginger pickle-curry"
+  },
+  {
+    "name": "Beetroot Pachadi",
+    "note": "beetroot yogurt side"
+  },
+  {
+    "name": "Mango Pachadi",
+    "note": "raw-mango yogurt side"
+  },
+  {
+    "name": "Sambharam",
+    "note": "spiced buttermilk kerala"
+  },
+  {
+    "name": "Gongura Pappu",
+    "note": "sorrel-leaf dal"
+  },
+  {
+    "name": "Punugulu",
+    "note": "andhra fried batter balls"
+  },
+  {
+    "name": "Bhutte Ka Kees",
+    "note": "grated-corn snack MP"
+  },
+  {
+    "name": "Dal Bafla",
+    "note": "baked wheat balls with dal"
+  },
+  {
+    "name": "Chakki Ki Shaak",
+    "note": "wheat-dough sabzi rajasthan"
+  },
+  {
+    "name": "Turiya Patra",
+    "note": "ridge-gourd colocasia sabzi"
+  },
+  {
+    "name": "Lasaniya Batata",
+    "note": "garlic baby potatoes"
+  },
+  {
+    "name": "Dal Pitha",
+    "note": "rice dumplings with dal"
+  },
+  {
+    "name": "Thekua",
+    "note": "bihari wheat-jaggery cookie"
+  },
+  {
+    "name": "Khaja",
+    "note": "layered syrup pastry"
+  },
+  {
+    "name": "Kadhi Bari",
+    "note": "gram-dumpling kadhi"
+  },
+  {
+    "name": "Pua",
+    "note": "fried sweet pancake"
+  },
+  {
+    "name": "Arbi Ka Salan",
+    "note": "colocasia in gravy"
+  },
+  {
+    "name": "Aam Ki Launji",
+    "note": "sweet-sour raw-mango relish"
+  },
+  {
+    "name": "Potoler Dorma",
+    "note": "stuffed pointed gourd"
+  },
+  {
+    "name": "Lau Ghonto",
+    "note": "bengali bottle-gourd mash"
+  },
+  {
+    "name": "Chhanar Payesh",
+    "note": "paneer kheer"
+  },
+  {
+    "name": "Bathua Paratha",
+    "note": "chenopodium stuffed paratha"
+  },
+  {
+    "name": "Kulith Saar",
+    "note": "horsegram soup"
+  },
+  {
+    "name": "Tomato Saar",
+    "note": "konkani tomato soup"
+  },
+  {
+    "name": "Alu Vadi",
+    "note": "steamed colocasia rolls"
+  },
+  {
+    "name": "Ambil",
+    "note": "millet buttermilk porridge"
+  },
+  {
+    "name": "Rajgira Paratha",
+    "note": "amaranth fasting paratha"
+  },
+  {
+    "name": "Phalahari Chivda",
+    "note": "fasting snack mix"
+  },
+  {
+    "name": "Makhana Curry",
+    "note": "foxnut gravy curry"
+  },
+  {
+    "name": "Paneer Jalfrezi",
+    "note": "stir-fried paneer peppers"
+  },
+  {
+    "name": "Sprouts Sabzi",
+    "note": "dry mixed-sprouts sabzi"
   }
 ]
