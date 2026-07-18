@@ -13,12 +13,17 @@ export interface GeneratorSettings {
   enabled: boolean;
   rateLimitPerMin: number;
   groundingThreshold: number;
+  // Cosine floor for a semantic hit to be served directly from the enriched
+  // dataset (zero AI). Stricter than groundingThreshold on purpose: a wrong
+  // grounding still gets rewritten by the model; a wrong direct serve doesn't.
+  exactMatchThreshold: number;
 }
 
 const GENERATOR_DEFAULTS: GeneratorSettings = {
   enabled: true,
   rateLimitPerMin: 15,
   groundingThreshold: 0.5,
+  exactMatchThreshold: 0.7,
 };
 
 const TTL_MS = 30_000;

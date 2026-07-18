@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { generateRecipes, Language, GeneratedRecipe, GroundingHit } from "@/lib/ai-providers";
 import { searchRecipes } from "@/lib/semantic-search";
+import { findEnrichedByQuery, findEnrichedByHitName, getEnrichedSet } from "@/lib/enriched-recipes";
 import { rateLimit, clientIp } from "@/lib/rate-limit";
 import { getGeneratorSettings } from "@/lib/settings";
 
@@ -95,6 +96,18 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Enter a dish name or at least one ingredient" }, { status: 400 });
     }
 
+    // 0) SERVE-FIRST (zero AI): if the user NAMES a dish that exists in the
+    //    pre-authored enriched dataset, serve that rich variation set directly.
+    //    English-only (the enriched content is English), and only when the user
+    //    didn't list their own ingredients — ingredient-driven requests go to AI
+    //    so their pantry is honored.
+    const canServeEnriched = lang === "en" && items.length === 0;
+    if (canServeEnriched && dish) {
+      const slug = findEnrichedByQuery(dish);
+      const set = slug ? getEnrichedSet(slug, lang) : null;
+      if (set) return NextResponse.json({ ...set, source: "dataset-enriched" });
+    }
+
     // 1) RETRIEVE (RAG): find the closest dataset recipe to GROUND generation —
     //    the dish name is the primary signal. Any index failure just means we
     //    generate ungrounded. Applies to both English and Hinglish.
@@ -111,7 +124,18 @@ export async function POST(req: NextRequest) {
       console.warn("Semantic index unavailable, generating ungrounded:", (e as Error).message);
     }
 
-    // 2) GENERATE (always) — grounded when we have a good dataset match.
+    // 1b) SERVE-FIRST via semantic match (zero AI): a high-confidence hit whose
+    //     family is already enriched is served directly. Stricter threshold than
+    //     grounding — a wrong grounding still gets rewritten by the model, a
+    //     wrong direct serve doesn't.
+    if (canServeEnriched && topHits.length && topHits[0].score >= settings.exactMatchThreshold) {
+      const slug = findEnrichedByHitName(topHits[0].name);
+      const set = slug ? getEnrichedSet(slug, lang) : null;
+      if (set) return NextResponse.json({ ...set, source: "dataset-enriched" });
+    }
+
+    // 2) GENERATE — grounded when we have a good dataset match. Runs when no
+    //    enriched family matched (unknown dish, custom ingredients, or Hinglish).
     try {
       const result = await generateRecipes(dish, items, lang, grounding);
       if (result.variations.length > 0) {
@@ -121,9 +145,14 @@ export async function POST(req: NextRequest) {
       console.error("AI generation failed:", (e as Error).message);
     }
 
-    // 3) DEGRADED LAST RESORT — both providers unavailable. Serve top dataset
-    //    rows (English only; they lack measurements) rather than nothing.
+    // 3) DEGRADED LAST RESORT — both providers unavailable. Prefer any enriched
+    //    family among the hits (rich, measured) over raw dataset rows.
     if (lang !== "hi" && topHits.length) {
+      for (const h of topHits) {
+        const slug = findEnrichedByHitName(h.name);
+        const set = slug ? getEnrichedSet(slug, lang) : null;
+        if (set) return NextResponse.json({ ...set, source: "dataset-enriched" });
+      }
       const variations = topHits.slice(0, 3).map((h) => hitToDegradedRecipe(h, lang));
       if (variations.length) {
         return NextResponse.json({

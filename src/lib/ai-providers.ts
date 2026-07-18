@@ -22,6 +22,7 @@ export interface GeneratedRecipe {
   servings: number;
   ingredients: GeneratedIngredient[];
   steps: string[];
+  tips?: string[]; // present on pre-enriched dataset recipes (see lib/enriched-recipes)
   servingSuggestion?: string;
   anveshanProducts: string[];
   provider: string;

@@ -41,3 +41,9 @@ yarn-error.log*
 next-env.d.ts
 
 .vercel
+
+# recipe-database build intermediates (merged into data/indian-recipes-enriched.json)
+/data/enrich-shards/
+/data/new-dish-shards/
+/data/new-dish-inputs/
+/data/enrich-inputs/

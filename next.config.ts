@@ -11,7 +11,11 @@ const nextConfig: NextConfig = {
   // functions that read them at runtime (Next won't trace process.cwd() reads).
   outputFileTracingIncludes: {
     "/api/search": ["./data/recipe-embeddings.bin", "./indian-recipes.json"],
-    "/api/generate-recipe": ["./data/recipe-embeddings.bin", "./indian-recipes.json"],
+    "/api/generate-recipe": [
+      "./data/recipe-embeddings.bin",
+      "./indian-recipes.json",
+      "./data/indian-recipes-enriched.json",
+    ],
   },
   images: {
     formats: ["image/avif", "image/webp"],
