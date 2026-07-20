@@ -16,6 +16,26 @@ function sanitize(s: string): string {
   return s.replace(/\p{Cc}/gu, " ").replace(/\s+/g, " ").trim();
 }
 
+// ─── VEGETARIAN-ONLY GUARD ───────────────────────────────────────────────────
+// Anveshan Kitchen serves only vegetarian recipes. These match on whole words
+// so veg dishes that merely contain a substring are unaffected — e.g. "eggless
+// cake" and "egg-free uttapam" pass (explicitly allowed), as do "veg keema",
+// "soya keema", "paneer tikka", "veg biryani" and "hara bhara kebab".
+// Meat/seafood always disqualifies.
+const MEAT_WORDS =
+  /\b(chicken|murgh|murg|mutton|lamb|goat|beef|pork|bacon|ham|meat|fish|machli|machhli|macher|pomfret|surmai|rohu|tuna|salmon|prawn|prawns|shrimp|crab|lobster|seafood|nihari|paya|kheema)\b/;
+// Egg-family words disqualify UNLESS the dish is explicitly an eggless/egg-free
+// preparation (e.g. "Egg-Free Anda Style Paneer Bhurji", "eggless cake").
+const EGG_WORDS = /\b(egg|eggs|anda|ande|omelette|omelet)\b/;
+const EGG_ALLOWED = /(eggless|egg[\s-]?free|without\s+egg|no\s+egg)/;
+
+function isNonVegRequest(dish: string, items: string[]): boolean {
+  const text = [dish, ...items].join(" ").toLowerCase();
+  if (MEAT_WORDS.test(text)) return true;
+  if (EGG_WORDS.test(text) && !EGG_ALLOWED.test(text)) return true;
+  return false;
+}
+
 // Cosine floor for a dataset row to be trusted enough to GROUND generation is
 // now admin-configurable via settings.groundingThreshold (see getGeneratorSettings).
 
@@ -94,6 +114,20 @@ export async function POST(req: NextRequest) {
 
     if (!dish && items.length === 0) {
       return NextResponse.json({ error: "Enter a dish name or at least one ingredient" }, { status: 400 });
+    }
+
+    // Anveshan Kitchen is a vegetarian collection. Refuse non-veg requests up
+    // front so they never reach the dataset lookup or the AI fallback.
+    if (isNonVegRequest(dish, items)) {
+      return NextResponse.json(
+        {
+          error:
+            lang === "hi"
+              ? "Sorry, hum non-veg recipes serve nahi karte."
+              : "Sorry, we don't serve non-veg recipes.",
+        },
+        { status: 422 }
+      );
     }
 
     // 0) SERVE-FIRST (zero AI): if the user NAMES a dish that exists in the
